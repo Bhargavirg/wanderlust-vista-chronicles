@@ -1,9 +1,11 @@
-
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FeaturedSection from "@/components/home/FeaturedSection";
 import CategorySection from "@/components/home/CategorySection";
 import { BlogPost } from "@/components/blog/BlogCard";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock data - in a real app this would come from an API
 const mockData: {
@@ -306,6 +308,8 @@ const mockData: {
 };
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -321,6 +325,14 @@ const Index = () => {
                   Explore captivating blogs across food, travel, nature, and more. 
                   Share your own adventures with the world.
                 </p>
+                <Button 
+                  onClick={() => navigate('/add-post')} 
+                  size="lg"
+                  className="mt-2 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90"
+                >
+                  <PlusCircle className="mr-2" />
+                  Create New Post
+                </Button>
               </div>
             </div>
           </section>
