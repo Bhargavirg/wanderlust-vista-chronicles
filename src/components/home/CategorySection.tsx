@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BlogPost } from "@/components/blog/BlogCard";
+import { BlogPost } from "@/data/blogData";
 import BlogCard from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";

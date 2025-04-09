@@ -1,5 +1,5 @@
 
-import { BlogPost } from "@/components/blog/BlogCard";
+import { BlogPost } from "@/data/blogData";
 import BlogCard from "@/components/blog/BlogCard";
 import { motion } from "framer-motion";
 

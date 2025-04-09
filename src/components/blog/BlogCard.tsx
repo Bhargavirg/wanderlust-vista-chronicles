@@ -4,19 +4,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  coverImage: string;
-  category: 'food' | 'travel' | 'nature' | 'flowers' | 'space' | 'wildlife';
-  author: {
-    name: string;
-    avatar: string;
-  };
-  publishedAt: string;
-}
+import { BlogPost } from "@/data/blogData";
 
 interface BlogCardProps {
   post: BlogPost;
