@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/home" className="flex items-center space-x-2">
             <span className="text-xl font-bold">BlogVista</span>
           </Link>
           
@@ -171,7 +170,7 @@ const Navbar = () => {
                           variant="outline"
                           onClick={() => {
                             setIsLoggedIn(false);
-                            navigate('/');
+                            navigate('/home');
                           }}
                         >
                           Logout

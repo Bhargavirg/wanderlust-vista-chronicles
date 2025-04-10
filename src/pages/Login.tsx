@@ -30,7 +30,7 @@ const Login = () => {
         description: "Welcome back to BlogVista!",
       });
       
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
       toast({
         title: "Login failed",
@@ -43,14 +43,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 container flex items-center justify-center py-12">
-        <Card className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="flex-1 container flex items-center justify-center py-12">
+        <Card className="w-full max-w-md shadow-xl border-0 bg-white/90 backdrop-blur-sm dark:bg-gray-800/80">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Login</CardTitle>
-            <CardDescription>
-              Enter your email and password to access your account
+            <div className="flex justify-center mb-4">
+              <div className="text-3xl font-bold text-primary bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-500">
+                BlogVista
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center">Welcome Back!</CardTitle>
+            <CardDescription className="text-center">
+              Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
@@ -64,6 +68,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="bg-white/50 dark:bg-gray-900/50"
                 />
               </div>
               <div className="space-y-2">
@@ -82,11 +87,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="bg-white/50 dark:bg-gray-900/50"
                 />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-gradient-to-r from-indigo-600 to-purple-500 hover:opacity-90" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
               <div className="text-center text-sm">
@@ -98,7 +104,7 @@ const Login = () => {
             </CardFooter>
           </form>
         </Card>
-      </main>
+      </div>
       <Footer />
     </div>
   );

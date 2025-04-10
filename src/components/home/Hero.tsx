@@ -1,35 +1,70 @@
 
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   const navigate = useNavigate();
   
   return (
-    <section className="relative py-12 md:py-24 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url(/placeholder.svg)" }}>
+    <section className="relative py-20 md:py-32 overflow-hidden" style={{ backgroundImage: "url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80)", backgroundSize: "cover", backgroundPosition: "center" }}>
       {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
+      
+      {/* Animated dots pattern */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(white 1px, transparent 0)", backgroundSize: "40px 40px" }}></div>
+      </div>
       
       <div className="container relative z-10">
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
-            Discover Amazing Stories
-          </h1>
-          <p className="text-xl text-white/90 mb-8">
-            Explore captivating blogs across food, travel, nature, and more. 
-            Share your own adventures with the world.
-          </p>
-          <div className="flex justify-center gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white leading-tight">
+              Discover <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500">Amazing</span> Stories
+            </h1>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <p className="text-xl text-white/90 mb-8 max-w-xl mx-auto">
+              Explore captivating blogs across food, travel, nature, and more. 
+              Share your own adventures with the world.
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-col sm:flex-row justify-center gap-4 mt-8"
+          >
             <Button 
               onClick={() => navigate('/add-post')} 
               size="lg"
-              className="mt-2 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white border-0 px-8 py-6 text-lg shadow-lg"
             >
               <PlusCircle className="mr-2" />
               Create New Post
             </Button>
-          </div>
+            
+            <Button 
+              onClick={() => navigate('/category/travel')} 
+              variant="outline" 
+              size="lg"
+              className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white px-8 py-6 text-lg"
+            >
+              Explore All Blogs
+              <ArrowRight className="ml-2" />
+            </Button>
+          </motion.div>
         </div>
       </div>
     </section>
