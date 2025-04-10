@@ -11,9 +11,13 @@ const Dashboard = () => {
   // Fix: Combine all posts from the different categories for display
   const allPosts = Object.values(mockData.byCategory).flat();
   // Also include featured and recent posts
-  const combinedPosts = [mockData.featured, ...mockData.recent, ...allPosts];
+  const combinedPosts = [
+    ...(mockData.featured ? [mockData.featured] : []), 
+    ...(mockData.recent || []), 
+    ...allPosts
+  ];
   // Remove duplicates by ID
-  const uniquePosts = Array.from(new Map(combinedPosts.map(post => [post.id, post])).values());
+  const uniquePosts = Array.from(new Map(combinedPosts.map(post => [post?.id, post])).values()).filter(Boolean);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">

@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
+import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BlogPost } from "@/data/blogData";
+import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -21,6 +23,9 @@ const BlogCard = ({ post, className, featured = false }: BlogCardProps) => {
     space: "bg-category-space text-white",
     wildlife: "bg-category-wildlife text-white",
   };
+  
+  const { minutes, seconds } = calculateReadingTime(post.excerpt);
+  const readingTime = formatReadingTime(minutes, seconds);
 
   return (
     <Link to={`/post/${post.id}`}>
@@ -38,9 +43,15 @@ const BlogCard = ({ post, className, featured = false }: BlogCardProps) => {
         </AspectRatio>
         <div className="flex flex-col">
           <CardContent className={cn("p-4", featured ? "md:p-6" : "")}>
-            <Badge className={cn("mb-2", categoryColors[post.category])}>
-              {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
-            </Badge>
+            <div className="flex justify-between items-center mb-2">
+              <Badge className={cn(categoryColors[post.category])}>
+                {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
+              </Badge>
+              <div className="flex items-center text-xs text-gray-500">
+                <Clock size={12} className="mr-1" />
+                <span>{readingTime}</span>
+              </div>
+            </div>
             <h3 className={cn(
               "font-semibold line-clamp-2 mb-2", 
               featured ? "text-xl md:text-2xl" : "text-lg"
