@@ -1,7 +1,21 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // In a real app, this would clear auth tokens, etc.
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of your account.",
+    });
+    navigate("/login");
+  };
+
   return (
     <footer className="border-t bg-background">
       <div className="container py-8 md:py-12">
@@ -79,6 +93,15 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} BlogVista. All rights reserved.
           </p>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleLogout} 
+            className="mt-4 md:mt-0 flex items-center gap-2 text-muted-foreground hover:text-primary hover:bg-muted"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Log Out</span>
+          </Button>
         </div>
       </div>
     </footer>
