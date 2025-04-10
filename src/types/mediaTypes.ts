@@ -7,11 +7,12 @@ export interface MediaContent {
 
 export interface GalleryContent {
   images: string[];
-  caption?: string;
+  captions?: string[];
 }
 
 export interface VideoContent {
   src: string;
   type: "youtube" | "vimeo" | "mp4" | "other";
   title?: string;
+  description?: string;
 }
