@@ -1,13 +1,20 @@
+
 import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-// Fix the import error by using the correct import for BlogPost
 import BlogCard from "@/components/blog/BlogCard";
 import { mockData } from "@/data/blogData";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
+  // Fix: Combine all posts from the different categories for display
+  const allPosts = Object.values(mockData.byCategory).flat();
+  // Also include featured and recent posts
+  const combinedPosts = [mockData.featured, ...mockData.recent, ...allPosts];
+  // Remove duplicates by ID
+  const uniquePosts = Array.from(new Map(combinedPosts.map(post => [post.id, post])).values());
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
@@ -21,7 +28,7 @@ const Dashboard = () => {
           </Link>
         </div>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {mockData.posts.map((post) => (
+          {uniquePosts.map((post) => (
             <BlogCard key={post.id} post={post} />
           ))}
         </div>

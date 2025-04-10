@@ -1,9 +1,9 @@
+
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
-// Fix the import error by using the correct import for BlogPost
 import { mockData } from "@/data/blogData";
 
 const CategoryPage = () => {
@@ -14,8 +14,8 @@ const CategoryPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Filter blog posts based on the category
-  const categoryPosts = mockData.posts.filter(post => post.category === category);
+  // Fix: Access posts for the specific category from the byCategory object
+  const categoryPosts = category ? mockData.byCategory[category] || [] : [];
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
