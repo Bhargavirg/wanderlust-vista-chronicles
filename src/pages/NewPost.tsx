@@ -9,7 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/components/ui/use-toast";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Image, Video } from "lucide-react";
+import MediaUploader from "@/components/blog/MediaUploader";
+import { Image, Video, Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NewPost = () => {
   const [title, setTitle] = useState("");
@@ -18,6 +20,9 @@ const NewPost = () => {
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [additionalImages, setAdditionalImages] = useState<string[]>([]);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoType, setVideoType] = useState<"youtube" | "vimeo" | "mp4" | "other">("youtube");
   const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +37,15 @@ const NewPost = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleImagesSelected = (imageUrls: string[]) => {
+    setAdditionalImages(imageUrls);
+  };
+
+  const handleVideoSelected = (url: string, type: "youtube" | "vimeo" | "mp4" | "other") => {
+    setVideoUrl(url);
+    setVideoType(type);
   };
 
   const handleSubmit = async (e: React.FormEvent, isDraft: boolean = false) => {
@@ -55,7 +69,7 @@ const NewPost = () => {
       return;
     }
     
-    if (!coverImage) {
+    if (!coverImage && !coverImagePreview) {
       toast({
         title: "Cover image required",
         description: "Please upload a cover image for your post.",
@@ -125,56 +139,78 @@ const NewPost = () => {
               </Select>
             </div>
             
-            <div className="space-y-2">
-              <Label>Cover Image</Label>
-              <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
-                {coverImagePreview ? (
-                  <div className="relative">
-                    <img
-                      src={coverImagePreview}
-                      alt="Cover preview"
-                      className="max-h-60 mx-auto rounded-lg"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={() => {
-                        setCoverImage(null);
-                        setCoverImagePreview("");
-                      }}
-                    >
-                      Change
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <Image className="mx-auto h-12 w-12 text-muted-foreground" />
-                    <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
-                      <label
-                        htmlFor="cover-image"
-                        className="relative cursor-pointer rounded-md bg-background px-3 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary hover:bg-primary/10"
+            <Tabs defaultValue="image" className="w-full">
+              <TabsList className="grid grid-cols-2 mb-4">
+                <TabsTrigger value="image" className="flex items-center gap-2">
+                  <Image className="h-4 w-4" />
+                  Cover Image
+                </TabsTrigger>
+                <TabsTrigger value="media" className="flex items-center gap-2">
+                  <Video className="h-4 w-4" />
+                  Additional Media
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="image">
+                <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
+                  {coverImagePreview ? (
+                    <div className="relative">
+                      <img
+                        src={coverImagePreview}
+                        alt="Cover preview"
+                        className="max-h-60 mx-auto rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={() => {
+                          setCoverImage(null);
+                          setCoverImagePreview("");
+                        }}
                       >
-                        <span>Upload image</span>
-                        <input
-                          id="cover-image"
-                          name="cover-image"
-                          type="file"
-                          accept="image/*"
-                          className="sr-only"
-                          onChange={handleImageChange}
-                        />
-                      </label>
-                      <p className="pl-1 pt-2">or drag and drop</p>
+                        Change
+                      </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      PNG, JPG, GIF up to 5MB
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+                  ) : (
+                    <div>
+                      <Image className="mx-auto h-12 w-12 text-muted-foreground" />
+                      <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
+                        <label
+                          htmlFor="cover-image"
+                          className="relative cursor-pointer rounded-md bg-background px-3 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary hover:bg-primary/10"
+                        >
+                          <span>Upload image</span>
+                          <input
+                            id="cover-image"
+                            name="cover-image"
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={handleImageChange}
+                          />
+                        </label>
+                        <p className="pl-1 pt-2">or drag and drop</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        PNG, JPG, GIF up to 5MB
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="media">
+                <div className="border rounded-lg p-6">
+                  <h3 className="font-medium mb-4">Add Additional Media</h3>
+                  <MediaUploader 
+                    onImagesSelected={handleImagesSelected}
+                    onVideoSelected={handleVideoSelected}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
             
             <div className="space-y-2">
               <Label htmlFor="content">Content</Label>
@@ -218,7 +254,14 @@ const NewPost = () => {
                 Save as Draft
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Publishing..." : "Publish Post"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Publishing...
+                  </>
+                ) : (
+                  "Publish Post"
+                )}
               </Button>
             </div>
           </form>

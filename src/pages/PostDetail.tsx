@@ -5,9 +5,11 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
 import FocusMode from "@/components/blog/FocusMode";
+import ImageCarousel from "@/components/blog/ImageCarousel";
+import VideoEmbed from "@/components/blog/VideoEmbed";
 import { mockData } from "@/data/blogData";
 import { Button } from "@/components/ui/button";
-import { BookOpenText } from "lucide-react";
+import { BookOpenText, Image as ImageIcon, Video as VideoIcon } from "lucide-react";
 import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
 import { AnimatePresence } from "framer-motion";
 
@@ -27,6 +29,20 @@ const PostDetail = () => {
   const uniquePosts = Array.from(new Map(combinedPosts.map(post => [post?.id, post])).values()).filter(Boolean);
   // Find the post by ID
   const post = uniquePosts.find((p) => p?.id === postId);
+
+  // Mock media data for demonstration purposes
+  // In a real app, this would come from the backend
+  const sampleImages = post ? [
+    post.coverImage,
+    "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+    "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
+  ] : [];
+  
+  const sampleVideo = {
+    src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    type: "youtube" as const,
+    title: "Sample Video"
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -79,9 +95,31 @@ const PostDetail = () => {
             </div>
           </div>
         </div>
-        <img src={post.coverImage} alt={post.title} className="w-full rounded-md mb-4" />
+
+        {/* Display multiple images using carousel */}
+        <div className="mb-6">
+          <ImageCarousel images={sampleImages} />
+        </div>
+
         <div className="prose dark:prose-invert max-w-none">
           <p>{post.excerpt}</p>
+          
+          {/* Video embed example */}
+          <div className="my-6">
+            <h3 className="text-xl font-medium mb-2 flex items-center gap-2">
+              <VideoIcon size={20} />
+              Featured Video
+            </h3>
+            <VideoEmbed 
+              src={sampleVideo.src}
+              type={sampleVideo.type}
+              title={sampleVideo.title} 
+            />
+          </div>
+
+          <p className="mt-6">
+            {post.excerpt} {/* Duplicate content for demo purposes */}
+          </p>
         </div>
 
         <div className="mt-8">

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
-import { Clock } from "lucide-react";
+import { Clock, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BlogPost } from "@/data/blogData";
 import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
@@ -12,9 +12,10 @@ interface BlogCardProps {
   post: BlogPost;
   className?: string;
   featured?: boolean;
+  hasVideo?: boolean;
 }
 
-const BlogCard = ({ post, className, featured = false }: BlogCardProps) => {
+const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogCardProps) => {
   const categoryColors: Record<string, string> = {
     food: "bg-category-food text-white",
     travel: "bg-category-travel text-white",
@@ -34,13 +35,20 @@ const BlogCard = ({ post, className, featured = false }: BlogCardProps) => {
         featured ? "md:grid md:grid-cols-2" : "",
         className
       )}>
-        <AspectRatio ratio={16 / 9} className={featured ? "md:h-full" : ""}>
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-          />
-        </AspectRatio>
+        <div className="relative">
+          <AspectRatio ratio={16 / 9} className={featured ? "md:h-full" : ""}>
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+            />
+          </AspectRatio>
+          {hasVideo && (
+            <div className="absolute top-2 right-2 bg-black/70 rounded-full p-1.5">
+              <Video className="h-4 w-4 text-white" />
+            </div>
+          )}
+        </div>
         <div className="flex flex-col">
           <CardContent className={cn("p-4", featured ? "md:p-6" : "")}>
             <div className="flex justify-between items-center mb-2">
