@@ -8,7 +8,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Search, X, Globe } from "lucide-react";
+import { Menu, Search, X, Compass } from "lucide-react";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -21,8 +21,8 @@ const Navbar = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
           <Link to="/home" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center">
-              <Globe className="h-5 w-5 text-black" />
+            <div className="w-8 h-8 bg-sky-500 flex items-center justify-center">
+              <Compass className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold">EARTH LENS</span>
           </Link>
@@ -43,11 +43,11 @@ const Navbar = () => {
             <Link to="/category/nature" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Nature
             </Link>
-            <Link to="/category/space" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Space
+            <Link to="/category/art" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Art
             </Link>
-            <Link to="/category/wildlife" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Wildlife
+            <Link to="/category/flowers" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Flowers
             </Link>
           </div>
         </div>
@@ -93,7 +93,7 @@ const Navbar = () => {
                 <Button 
                   variant="default"
                   onClick={() => navigate('/dashboard')}
-                  className="hidden md:flex bg-yellow-500 hover:bg-yellow-600 text-black"
+                  className="hidden md:flex bg-sky-500 hover:bg-sky-600 text-white"
                 >
                   Dashboard
                 </Button>
@@ -110,7 +110,7 @@ const Navbar = () => {
                 <Button 
                   variant="default"
                   onClick={() => navigate('/register')}
-                  className="hidden md:flex bg-yellow-500 hover:bg-yellow-600 text-black"
+                  className="hidden md:flex bg-sky-500 hover:bg-sky-600 text-white"
                 >
                   Subscribe
                 </Button>
@@ -158,16 +158,16 @@ const Navbar = () => {
                       Nature
                     </Link>
                     <Link 
-                      to="/category/space"
+                      to="/category/art"
                       className="text-sm font-medium transition-colors"
                     >
-                      Space
+                      Art
                     </Link>
                     <Link 
-                      to="/category/wildlife"
+                      to="/category/flowers"
                       className="text-sm font-medium transition-colors"
                     >
-                      Wildlife
+                      Flowers
                     </Link>
                   </div>
                   <div className="grid gap-2">
@@ -197,7 +197,7 @@ const Navbar = () => {
                         <Button 
                           variant="default" 
                           onClick={() => navigate('/register')}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-black"
+                          className="bg-sky-500 hover:bg-sky-600 text-white"
                         >
                           Subscribe
                         </Button>

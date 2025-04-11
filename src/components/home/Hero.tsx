@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Globe, Camera, Film, BookOpen, Plus } from "lucide-react";
+import { Compass, Camera, Film, BookOpen, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -12,8 +12,8 @@ const Hero = () => {
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
       
-      {/* Yellow rectangle accent - National Geographic style */}
-      <div className="absolute top-0 left-0 h-full w-1.5 bg-yellow-400"></div>
+      {/* Blue rectangle accent - replacing yellow */}
+      <div className="absolute top-0 left-0 h-full w-1.5 bg-sky-500"></div>
       
       <div className="container relative z-10">
         <div className="max-w-3xl mx-auto text-center">
@@ -23,8 +23,8 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex justify-center items-center mb-6">
-              <div className="w-12 h-12 bg-yellow-400 flex items-center justify-center mr-3">
-                <Globe className="h-8 w-8 text-black" />
+              <div className="w-12 h-12 bg-sky-500 flex items-center justify-center mr-3">
+                <Compass className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight">
                 EARTH LENS
@@ -44,7 +44,7 @@ const Hero = () => {
             <Button 
               onClick={() => navigate('/add-content')} 
               size="lg"
-              className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-6 text-lg shadow-lg"
+              className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-6 text-lg shadow-lg"
             >
               <Plus className="mr-2" />
               Add Content

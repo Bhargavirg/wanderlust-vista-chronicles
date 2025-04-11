@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2 } from "lucide-react";
 
 const Index = () => {
   // Scroll to top when the page loads
@@ -166,8 +166,76 @@ const Index = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent">
+                    <Palette className="mr-2 h-4 w-4" />
+                    Art
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 w-[400px] md:grid-cols-2">
+                      <Link to="/category/art" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">All Art</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Explore human creativity across different mediums
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Visual Arts</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Painting, sculpture and other visual expressions
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Digital Art</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Modern creative expressions using technology
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Art History</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Evolution of artistic movements and styles
+                        </p>
+                      </Link>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent">
+                    <Flower2 className="mr-2 h-4 w-4" />
+                    Flowers
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 w-[400px] md:grid-cols-2">
+                      <Link to="/category/flowers" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">All Flowers</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Discover the beautiful world of flowers
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Rare Species</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Unusual and exotic flowering plants
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Gardening</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Growing and caring for flowers
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Cultural Significance</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Symbolism and meaning of flowers across cultures
+                        </p>
+                      </Link>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
                   <NavigationMenuLink asChild>
-                    <Link to="/add-content" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-600 focus:outline-none">
+                    <Link to="/add-content" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-sky-500 px-4 py-2 text-sm font-medium text-white hover:bg-sky-600 focus:outline-none">
                       <Camera className="mr-2 h-4 w-4" />
                       Add Content
                     </Link>
@@ -178,10 +246,10 @@ const Index = () => {
           </div>
         </div>
         
-        {/* Featured Yellow bar - National Geographic style */}
-        <div className="bg-yellow-400 py-2 my-4">
+        {/* Featured bar - Changed from yellow to sky blue */}
+        <div className="bg-sky-500 py-2 my-4">
           <div className="container">
-            <h2 className="text-black font-bold text-lg">FEATURED CONTENT</h2>
+            <h2 className="text-white font-bold text-lg">FEATURED CONTENT</h2>
           </div>
         </div>
         
@@ -198,11 +266,11 @@ const Index = () => {
           <CategoriesList blogData={mockData} />
         </motion.div>
         
-        {/* Content creation CTA - Similar to National Geographic subscription */}
+        {/* Content creation CTA - Changed from yellow to sky blue */}
         <div className="bg-gray-900 text-white py-16 mt-12">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block bg-yellow-400 px-4 py-1 text-black font-bold mb-6">
+              <div className="inline-block bg-sky-500 px-4 py-1 text-white font-bold mb-6">
                 SHARE YOUR PERSPECTIVE
               </div>
               <h2 className="text-4xl font-bold mb-4">Become a Contributor</h2>
@@ -211,7 +279,7 @@ const Index = () => {
               </p>
               <Link 
                 to="/add-content"
-                className="inline-block bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 font-semibold text-lg transition-colors"
+                className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
               >
                 Add Your Content
               </Link>

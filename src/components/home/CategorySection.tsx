@@ -5,11 +5,11 @@ import { BlogPost } from "@/data/blogData";
 import BlogCard from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ChevronRight, Atom, Rocket, History, Globe, Leaf, BookOpen, Camera } from "lucide-react";
+import { ChevronRight, Atom, Rocket, History, Globe, Leaf, BookOpen, Camera, Palette, Flower2 } from "lucide-react";
 
 interface CategorySectionProps {
   title: string;
-  category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife';
+  category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 'art' | 'flowers';
   posts: BlogPost[];
 }
 
@@ -35,6 +35,10 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
         return <Leaf className="size-5" />;
       case "space":
         return <BookOpen className="size-5" />;
+      case "art":
+        return <Palette className="size-5" />;
+      case "flowers":
+        return <Flower2 className="size-5" />;
       default:
         return <Camera className="size-5" />;
     }
@@ -56,6 +60,10 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
         return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
       case "wildlife":
         return "https://images.unsplash.com/photo-1504173010664-32509aeebb62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "art":
+        return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "flowers":
+        return "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
       default:
         return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
     }
@@ -68,7 +76,9 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
     culture: "from-emerald-500/80 to-emerald-600",
     nature: "from-green-500/80 to-green-600",
     space: "from-indigo-500/80 to-indigo-600",
-    wildlife: "from-orange-500/80 to-orange-600"
+    wildlife: "from-orange-500/80 to-orange-600",
+    art: "from-rose-500/80 to-rose-600",
+    flowers: "from-pink-500/80 to-pink-600"
   };
 
   return (
@@ -84,7 +94,7 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
           }}
         >
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="absolute left-0 top-0 h-full w-2 bg-yellow-400"></div>
+          <div className="absolute left-0 top-0 h-full w-2 bg-sky-500"></div>
           <div className="absolute inset-0 flex items-center p-8">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -103,10 +113,12 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
                 {category === 'nature' && 'Connect with the natural beauty and wonders of our planet.'}
                 {category === 'space' && 'Venture into the cosmos and unlock the mysteries of the universe.'}
                 {category === 'wildlife' && 'Discover the amazing diversity of life on Earth.'}
+                {category === 'art' && 'Experience human creativity and expression across different mediums.'}
+                {category === 'flowers' && 'Discover the beautiful world of flowers and their significance.'}
               </p>
               <Link 
                 to={`/category/${category}`}
-                className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-white border-b border-yellow-400 hover:border-white transition-colors"
+                className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-white border-b border-sky-500 hover:border-white transition-colors"
               >
                 View all articles
                 <ChevronRight className="size-4" />
