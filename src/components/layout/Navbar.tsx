@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, Search, X, Globe } from "lucide-react";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -20,21 +21,27 @@ const Navbar = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
           <Link to="/home" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">BlogVista</span>
+            <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center">
+              <Globe className="h-5 w-5 text-black" />
+            </div>
+            <span className="text-xl font-bold">EARTH LENS</span>
           </Link>
           
           <div className="hidden md:flex gap-6">
-            <Link to="/category/food" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Food
+            <Link to="/category/science" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Science
             </Link>
-            <Link to="/category/travel" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Travel
+            <Link to="/category/technology" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Technology
+            </Link>
+            <Link to="/category/history" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              History
+            </Link>
+            <Link to="/category/culture" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Culture
             </Link>
             <Link to="/category/nature" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Nature
-            </Link>
-            <Link to="/category/flowers" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Flowers
             </Link>
             <Link to="/category/space" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Space
@@ -49,7 +56,7 @@ const Navbar = () => {
           <div className="flex-1 ml-auto mr-4 max-w-sm flex items-center">
             <Input
               type="search"
-              placeholder="Search blogs..."
+              placeholder="Search articles..."
               className="w-full"
             />
             <Button 
@@ -78,15 +85,15 @@ const Navbar = () => {
               <>
                 <Button 
                   variant="ghost"
-                  onClick={() => navigate('/new-post')}
+                  onClick={() => navigate('/add-content')}
                   className="hidden md:flex"
                 >
-                  New Post
+                  Add Content
                 </Button>
                 <Button 
                   variant="default"
                   onClick={() => navigate('/dashboard')}
-                  className="hidden md:flex"
+                  className="hidden md:flex bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
                   Dashboard
                 </Button>
@@ -103,9 +110,9 @@ const Navbar = () => {
                 <Button 
                   variant="default"
                   onClick={() => navigate('/register')}
-                  className="hidden md:flex"
+                  className="hidden md:flex bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  Register
+                  Subscribe
                 </Button>
               </>
             )}
@@ -121,28 +128,34 @@ const Navbar = () => {
                 <div className="grid gap-6 pt-6">
                   <div className="grid gap-3">
                     <Link 
-                      to="/category/food"
+                      to="/category/science"
                       className="text-sm font-medium transition-colors"
                     >
-                      Food
+                      Science
                     </Link>
                     <Link 
-                      to="/category/travel"
+                      to="/category/technology"
                       className="text-sm font-medium transition-colors"
                     >
-                      Travel
+                      Technology
+                    </Link>
+                    <Link 
+                      to="/category/history"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      History
+                    </Link>
+                    <Link 
+                      to="/category/culture"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Culture
                     </Link>
                     <Link 
                       to="/category/nature"
                       className="text-sm font-medium transition-colors"
                     >
                       Nature
-                    </Link>
-                    <Link 
-                      to="/category/flowers"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Flowers
                     </Link>
                     <Link 
                       to="/category/space"
@@ -160,8 +173,8 @@ const Navbar = () => {
                   <div className="grid gap-2">
                     {isLoggedIn ? (
                       <>
-                        <Button variant="outline" onClick={() => navigate('/new-post')}>
-                          New Post
+                        <Button variant="outline" onClick={() => navigate('/add-content')}>
+                          Add Content
                         </Button>
                         <Button variant="outline" onClick={() => navigate('/dashboard')}>
                           Dashboard
@@ -181,8 +194,12 @@ const Navbar = () => {
                         <Button variant="outline" onClick={() => navigate('/login')}>
                           Login
                         </Button>
-                        <Button variant="default" onClick={() => navigate('/register')}>
-                          Register
+                        <Button 
+                          variant="default" 
+                          onClick={() => navigate('/register')}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-black"
+                        >
+                          Subscribe
                         </Button>
                       </>
                     )}

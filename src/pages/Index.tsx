@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { Atom, BookOpen, Globe, History, Rocket } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera } from "lucide-react";
 
 const Index = () => {
   // Scroll to top when the page loads
@@ -167,14 +167,21 @@ const Index = () => {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
-                    <Link to="#" className="group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Education Resources
+                    <Link to="/add-content" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-600 focus:outline-none">
+                      <Camera className="mr-2 h-4 w-4" />
+                      Add Content
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
+          </div>
+        </div>
+        
+        {/* Featured Yellow bar - National Geographic style */}
+        <div className="bg-yellow-400 py-2 my-4">
+          <div className="container">
+            <h2 className="text-black font-bold text-lg">FEATURED CONTENT</h2>
           </div>
         </div>
         
@@ -190,6 +197,27 @@ const Index = () => {
           
           <CategoriesList blogData={mockData} />
         </motion.div>
+        
+        {/* Content creation CTA - Similar to National Geographic subscription */}
+        <div className="bg-gray-900 text-white py-16 mt-12">
+          <div className="container">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-block bg-yellow-400 px-4 py-1 text-black font-bold mb-6">
+                SHARE YOUR PERSPECTIVE
+              </div>
+              <h2 className="text-4xl font-bold mb-4">Become a Contributor</h2>
+              <p className="text-lg mb-8">
+                Join our community of explorers, scientists, and storytellers. Share your knowledge and experiences with the world.
+              </p>
+              <Link 
+                to="/add-content"
+                className="inline-block bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 font-semibold text-lg transition-colors"
+              >
+                Add Your Content
+              </Link>
+            </div>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

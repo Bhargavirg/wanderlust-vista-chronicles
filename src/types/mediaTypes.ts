@@ -29,4 +29,10 @@ export interface EducationalMetadata {
   subjects?: string[]; // e.g., ["Biology", "Environmental Science"]
   keywords?: string[]; // For better search functionality
   citations?: string[]; // Scientific citations or sources
+  factCheck?: boolean; // Whether the content has been fact-checked
+  expertReviewed?: boolean; // Whether the content has been reviewed by experts
+  educationalLevel?: "primary" | "secondary" | "higher" | "professional" | "all"; // Target educational level
+  region?: string; // Geographical region relevant to the content
+  historicalPeriod?: string; // Relevant historical period
+  featuredSpecies?: string[]; // For wildlife content
 }

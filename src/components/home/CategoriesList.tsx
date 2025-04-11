@@ -13,7 +13,7 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
       {Object.entries(blogData.byCategory).map(([category, posts]) => (
         <CategorySection
           key={category}
-          title={`${category.charAt(0).toUpperCase() + category.slice(1)} Blogs`}
+          title={`${category.charAt(0).toUpperCase() + category.slice(1)}`}
           category={category as 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife'}
           posts={posts}
         />

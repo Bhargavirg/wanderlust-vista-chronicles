@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NewPost from "./pages/NewPost";
 import AddPost from "./pages/AddPost";
+import AddContent from "./pages/AddContent";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/new-post" element={<NewPost />} />
           <Route path="/add-post" element={<AddPost />} />
+          <Route path="/add-content" element={<AddContent />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

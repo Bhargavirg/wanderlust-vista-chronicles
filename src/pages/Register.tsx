@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from "@/components/ui/use-toast";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { Globe } from "lucide-react";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -50,7 +51,7 @@ const Register = () => {
       // For demo purposes, just notify and redirect
       toast({
         title: "Registration successful",
-        description: "Welcome to BlogVista!",
+        description: "Welcome to Earth Lens!",
       });
       
       navigate("/dashboard");
@@ -66,14 +67,19 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       <Navbar />
       <main className="flex-1 container flex items-center justify-center py-12">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-            <CardDescription>
-              Enter your information to create your BlogVista account
+            <div className="flex justify-center items-center mb-4">
+              <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center mr-2">
+                <Globe className="h-5 w-5 text-black" />
+              </div>
+              <CardTitle className="text-2xl font-bold">EARTH LENS</CardTitle>
+            </div>
+            <CardDescription className="text-center">
+              Create your account to share and explore educational content
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
@@ -142,7 +148,7 @@ const Register = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-600 text-black" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Create account"}
               </Button>
               <div className="text-center text-sm">

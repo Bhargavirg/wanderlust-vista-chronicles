@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
+import { Camera, Globe, Compass } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 
 const Login = () => {
@@ -24,10 +25,9 @@ const Login = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // For demo purposes, just notify and redirect
       toast({
         title: "Login successful",
-        description: "Welcome back to BlogVista!",
+        description: "Welcome back to Earth Lens!",
       });
       
       navigate("/home");
@@ -47,7 +47,7 @@ const Login = () => {
       <div 
         className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
         style={{ 
-          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80)`,
+          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
@@ -60,20 +60,30 @@ const Login = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl font-bold mb-6 leading-tight">Welcome to BlogVista</h1>
-            <p className="text-xl mb-8 opacity-90">Share your stories, discover new perspectives, and connect with bloggers worldwide.</p>
-            <div className="flex space-x-4">
-              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-xl">
+            <div className="flex items-center gap-2 mb-8">
+              <div className="w-12 h-12 bg-yellow-400 flex items-center justify-center">
+                <Globe className="h-8 w-8 text-black" />
+              </div>
+              <h1 className="text-4xl font-bold">EARTH LENS</h1>
+            </div>
+            <h2 className="text-5xl font-bold mb-6 leading-tight">Explore Our Amazing Planet</h2>
+            <p className="text-xl mb-8 opacity-90">Discover fascinating stories about science, nature, history, and culture from around the globe.</p>
+            
+            <div className="grid grid-cols-3 gap-4 mt-8">
+              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                <Camera className="h-6 w-6 mb-2" />
                 <h3 className="font-medium mb-1">10K+</h3>
-                <p className="text-sm opacity-80">Active Users</p>
+                <p className="text-sm opacity-80">Photos</p>
               </div>
-              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-xl">
-                <h3 className="font-medium mb-1">50K+</h3>
-                <p className="text-sm opacity-80">Blog Posts</p>
+              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                <Globe className="h-6 w-6 mb-2" />
+                <h3 className="font-medium mb-1">195</h3>
+                <p className="text-sm opacity-80">Countries</p>
               </div>
-              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-xl">
-                <h3 className="font-medium mb-1">6</h3>
-                <p className="text-sm opacity-80">Categories</p>
+              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                <Compass className="h-6 w-6 mb-2" />
+                <h3 className="font-medium mb-1">500+</h3>
+                <p className="text-sm opacity-80">Expeditions</p>
               </div>
             </div>
           </motion.div>
@@ -88,11 +98,16 @@ const Login = () => {
             <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-md dark:bg-gray-800/90">
               <CardHeader className="space-y-1">
                 <div className="flex justify-center mb-4">
-                  <div className="text-3xl font-bold text-primary bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-500">
-                    BlogVista
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center md:hidden">
+                      <Globe className="h-5 w-5 text-black" />
+                    </div>
+                    <div className="text-3xl font-bold text-primary bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-amber-600 md:hidden">
+                      EARTH LENS
+                    </div>
                   </div>
                 </div>
-                <CardTitle className="text-2xl font-bold text-center">Welcome Back!</CardTitle>
+                <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
                 <CardDescription className="text-center">
                   Enter your credentials to access your account
                 </CardDescription>
@@ -130,11 +145,16 @@ const Login = () => {
                       className="bg-white/50 dark:bg-gray-900/50"
                     />
                   </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="remember" className="h-4 w-4 border-gray-300 rounded text-primary focus:ring-primary" />
+                    <label htmlFor="remember" className="text-sm text-gray-700 dark:text-gray-300">Remember me</label>
+                  </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-500 hover:opacity-90" 
+                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Signing in..." : "Sign in"}
