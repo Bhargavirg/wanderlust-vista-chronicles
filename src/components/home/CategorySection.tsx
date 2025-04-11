@@ -5,11 +5,11 @@ import { BlogPost } from "@/data/blogData";
 import BlogCard from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Atom, Rocket, History, Globe, Leaf, BookOpen } from "lucide-react";
 
 interface CategorySectionProps {
   title: string;
-  category: 'food' | 'travel' | 'nature' | 'flowers' | 'space' | 'wildlife';
+  category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife';
   posts: BlogPost[];
 }
 
@@ -20,22 +20,47 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
     setVisiblePosts((prev) => Math.min(prev + 3, posts.length));
   };
 
+  const getCategoryIcon = () => {
+    switch (category) {
+      case "science":
+        return <Atom className="size-5" />;
+      case "technology":
+        return <Rocket className="size-5" />;
+      case "history":
+        return <History className="size-5" />;
+      case "culture":
+        return <Globe className="size-5" />;
+      case "nature":
+      case "wildlife":
+        return <Leaf className="size-5" />;
+      case "space":
+        return <BookOpen className="size-5" />;
+      default:
+        return <BookOpen className="size-5" />;
+    }
+  };
+
   const categoryColors: Record<string, string> = {
-    food: "from-category-food/80 to-category-food",
-    travel: "from-category-travel/80 to-category-travel", 
-    nature: "from-category-nature/80 to-category-nature",
-    flowers: "from-category-flowers/80 to-category-flowers",
-    space: "from-category-space/80 to-category-space",
-    wildlife: "from-category-wildlife/80 to-category-wildlife"
+    science: "from-blue-500/80 to-blue-600",
+    technology: "from-purple-500/80 to-purple-600",
+    history: "from-amber-500/80 to-amber-600",
+    culture: "from-emerald-500/80 to-emerald-600",
+    nature: "from-green-500/80 to-green-600",
+    space: "from-indigo-500/80 to-indigo-600",
+    wildlife: "from-orange-500/80 to-orange-600"
   };
 
   return (
     <section className="container py-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r 
-          ${categoryColors[category]}">
-          {title}
-        </h2>
+        <div className="flex items-center gap-2">
+          <div className={`p-2 rounded-full bg-gradient-to-r ${categoryColors[category]} text-white`}>
+            {getCategoryIcon()}
+          </div>
+          <h2 className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${categoryColors[category]}`}>
+            {title}
+          </h2>
+        </div>
         <Link 
           to={`/category/${category}`}
           className="group flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors"

@@ -37,7 +37,7 @@ const ImageCarousel = ({
         <AspectRatio ratio={aspectRatio}>
           <img
             src={images[0]}
-            alt={captions[0] || "Blog content"}
+            alt={captions[0] || "Educational content"}
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
           />
         </AspectRatio>
@@ -68,15 +68,25 @@ const ImageCarousel = ({
     );
   }
 
-  const handleSlideChange = (index: number) => {
-    setCurrentIndex(index);
+  // Fix: Replace onSlideChange with a standard callback using onChange API
+  const handleSlideChange = (api: any) => {
+    if (!api) return;
+    // Get the current index from the embla carousel API
+    setCurrentIndex(api.selectedScrollSnap());
   };
 
   return (
     <div className="space-y-2 relative">
       <Carousel 
         className="w-full"
-        onSlideChange={handleSlideChange}
+        opts={{
+          loop: true,
+        }}
+        setApi={(api) => {
+          if (api) {
+            api.on('select', () => handleSlideChange(api));
+          }
+        }}
       >
         <CarouselContent>
           {images.map((image, index) => (
@@ -85,7 +95,7 @@ const ImageCarousel = ({
                 <AspectRatio ratio={aspectRatio}>
                   <img
                     src={image}
-                    alt={captions[index] || `Blog content ${index + 1}`}
+                    alt={captions[index] || `Educational content ${index + 1}`}
                     className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                   />
                 </AspectRatio>
