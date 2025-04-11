@@ -14,7 +14,7 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
         <CategorySection
           key={category}
           title={`${category.charAt(0).toUpperCase() + category.slice(1)} Blogs`}
-          category={category as 'food' | 'travel' | 'nature' | 'flowers' | 'space' | 'wildlife'}
+          category={category as 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife'}
           posts={posts}
         />
       ))}
