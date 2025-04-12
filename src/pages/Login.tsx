@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import ImageCarousel from "@/components/blog/ImageCarousel";
+import CategorySlider from "@/components/blog/CategorySlider";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -45,21 +46,18 @@ const Login = () => {
   
   // Array of educational images for the carousel
   const educationalImages = [
-    "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80"
   ];
   
   const captions = [
-    "Explore the wonders of the night sky",
-    "Discover breathtaking landscapes and natural phenomena",
     "Journey through Earth's most spectacular waterways",
     "Venture into ancient forests and learn about ecosystems"
   ];
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Main login section with background */}
       <div 
         className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
         style={{ 
@@ -77,20 +75,15 @@ const Login = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="flex items-center gap-2 mb-8">
-              <div className="w-12 h-12 bg-yellow-400 flex items-center justify-center">
-                <Globe className="h-8 w-8 text-black" />
+              <div className="w-12 h-12 bg-sky-500 flex items-center justify-center">
+                <Globe className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-4xl font-bold">EARTH LENS</h1>
             </div>
             <h2 className="text-5xl font-bold mb-6 leading-tight">Explore Our Amazing Planet</h2>
             <p className="text-xl mb-8 opacity-90">Discover fascinating stories about science, nature, history, and culture from around the globe.</p>
             
-            {/* Image Carousel */}
-            <div className="mb-8">
-              <ImageCarousel images={educationalImages} captions={captions} />
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4 mt-8">
+            <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                 <TreePine className="h-6 w-6 mb-2" />
                 <h3 className="font-medium mb-1">10K+</h3>
@@ -107,6 +100,18 @@ const Login = () => {
                 <p className="text-sm opacity-80">Expeditions</p>
               </div>
             </div>
+            
+            {/* Night sky image with larger text */}
+            <div className="mb-8 overflow-hidden rounded-lg relative">
+              <img 
+                src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80" 
+                alt="Night sky" 
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                <h3 className="text-2xl font-bold text-white">Explore the wonders of the night sky</h3>
+              </div>
+            </div>
           </motion.div>
           
           {/* Right side with login form */}
@@ -120,10 +125,10 @@ const Login = () => {
               <CardHeader className="space-y-1">
                 <div className="flex justify-center mb-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-yellow-400 flex items-center justify-center md:hidden">
-                      <Globe className="h-5 w-5 text-black" />
+                    <div className="w-8 h-8 bg-sky-500 flex items-center justify-center md:hidden">
+                      <Globe className="h-5 w-5 text-white" />
                     </div>
-                    <div className="text-3xl font-bold text-primary bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-amber-600 md:hidden">
+                    <div className="text-3xl font-bold text-primary bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-blue-600 md:hidden">
                       EARTH LENS
                     </div>
                   </div>
@@ -175,7 +180,7 @@ const Login = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold" 
+                    className="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Signing in..." : "Sign in"}
@@ -193,28 +198,37 @@ const Login = () => {
         </div>
       </div>
       
-      {/* Additional video or educational content */}
-      <div className="bg-black py-8">
+      {/* Category slider section */}
+      <div className="bg-black py-10">
+        <div className="container">
+          <CategorySlider />
+        </div>
+      </div>
+      
+      {/* Additional video or educational content - Larger size */}
+      <div className="bg-black py-12">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div className="text-white">
-              <h3 className="text-yellow-400 text-xl font-semibold mb-2">LATEST VIDEO</h3>
-              <p className="text-lg font-bold mb-1">Secrets of the Deep Ocean</p>
-              <p className="text-sm opacity-70">Explore the mysteries of the deepest parts of our oceans</p>
-              <Button variant="link" className="text-yellow-400 hover:text-yellow-300 p-0 mt-2">
+              <h3 className="text-sky-400 text-xl font-semibold mb-2">LATEST VIDEO</h3>
+              <p className="text-2xl font-bold mb-2">Secrets of the Deep Ocean</p>
+              <p className="text-base opacity-70">Explore the mysteries of the deepest parts of our oceans</p>
+              <Button variant="link" className="text-sky-400 hover:text-sky-300 p-0 mt-2">
                 Watch Now
               </Button>
             </div>
-            <div className="aspect-w-16 aspect-h-9 overflow-hidden rounded-md col-span-2">
-              <div className="relative w-full h-0 pb-[56.25%]">
-                <iframe 
-                  src="https://www.youtube.com/embed/dIiO8bhqZxQ" 
-                  title="Earth's Natural Wonders"
-                  className="absolute top-0 left-0 w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen>
-                </iframe>
+            <div className="col-span-2">
+              <div className="rounded-lg overflow-hidden shadow-2xl">
+                <div className="relative w-full h-0 pb-[56.25%]">
+                  <iframe 
+                    src="https://www.youtube.com/embed/dIiO8bhqZxQ" 
+                    title="Earth's Natural Wonders"
+                    className="absolute top-0 left-0 w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen>
+                  </iframe>
+                </div>
               </div>
             </div>
           </div>
