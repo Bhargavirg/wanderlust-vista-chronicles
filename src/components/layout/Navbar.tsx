@@ -8,7 +8,13 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Search, X, Compass } from "lucide-react";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen } from "lucide-react";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -40,15 +46,52 @@ const Navbar = () => {
             <Link to="/category/culture" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Culture
             </Link>
-            <Link to="/category/nature" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Nature
-            </Link>
-            <Link to="/category/art" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Art
-            </Link>
-            <Link to="/category/flowers" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Flowers
-            </Link>
+            
+            {/* More categories dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1">
+                More
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="bg-white dark:bg-gray-800">
+                <DropdownMenuItem asChild>
+                  <Link to="/category/nature" className="flex items-center w-full cursor-pointer">Nature</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/space" className="flex items-center w-full cursor-pointer">Space</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/art" className="flex items-center w-full cursor-pointer">Art</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/flowers" className="flex items-center w-full cursor-pointer">Flowers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/anime" className="flex items-center w-full cursor-pointer">
+                    <Film className="h-4 w-4 mr-2" />
+                    Anime
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/politics" className="flex items-center w-full cursor-pointer">
+                    <Flag className="h-4 w-4 mr-2" />
+                    Politics
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/sports" className="flex items-center w-full cursor-pointer">
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Sports
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/stories" className="flex items-center w-full cursor-pointer">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    Stories
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -158,6 +201,12 @@ const Navbar = () => {
                       Nature
                     </Link>
                     <Link 
+                      to="/category/space"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Space
+                    </Link>
+                    <Link 
                       to="/category/art"
                       className="text-sm font-medium transition-colors"
                     >
@@ -168,6 +217,30 @@ const Navbar = () => {
                       className="text-sm font-medium transition-colors"
                     >
                       Flowers
+                    </Link>
+                    <Link 
+                      to="/category/anime"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Anime
+                    </Link>
+                    <Link 
+                      to="/category/politics"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Politics
+                    </Link>
+                    <Link 
+                      to="/category/sports"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Sports
+                    </Link>
+                    <Link 
+                      to="/category/stories"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Stories
                     </Link>
                   </div>
                   <div className="grid gap-2">

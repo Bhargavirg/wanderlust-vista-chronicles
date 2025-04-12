@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2 } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown } from "lucide-react";
 
 const Index = () => {
   // Scroll to top when the page loads
@@ -165,74 +165,91 @@ const Index = () => {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                
+                {/* New "More" dropdown in the navigation menu */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent">
-                    <Palette className="mr-2 h-4 w-4" />
-                    Art
+                    <ChevronDown className="mr-2 h-4 w-4" />
+                    More
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[400px] md:grid-cols-2">
+                    <div className="grid gap-3 p-4 w-[600px] md:grid-cols-3">
+                      <Link to="/category/nature" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Leaf className="h-4 w-4 mr-2" />
+                          Nature
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Explore the wonders of our natural world
+                        </p>
+                      </Link>
+                      <Link to="/category/space" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Rocket className="h-4 w-4 mr-2" />
+                          Space
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Journey to the cosmos and beyond
+                        </p>
+                      </Link>
                       <Link to="/category/art" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">All Art</div>
+                        <div className="font-medium flex items-center">
+                          <Palette className="h-4 w-4 mr-2" />
+                          Art
+                        </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Explore human creativity across different mediums
+                          Human creativity across mediums
                         </p>
                       </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Visual Arts</div>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Painting, sculpture and other visual expressions
-                        </p>
-                      </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Digital Art</div>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Modern creative expressions using technology
-                        </p>
-                      </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Art History</div>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Evolution of artistic movements and styles
-                        </p>
-                      </Link>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent">
-                    <Flower2 className="mr-2 h-4 w-4" />
-                    Flowers
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[400px] md:grid-cols-2">
                       <Link to="/category/flowers" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">All Flowers</div>
+                        <div className="font-medium flex items-center">
+                          <Flower2 className="h-4 w-4 mr-2" />
+                          Flowers
+                        </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Discover the beautiful world of flowers
+                          Botanical wonders around the world
                         </p>
                       </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Rare Species</div>
+                      <Link to="/category/anime" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Film className="h-4 w-4 mr-2" />
+                          Anime
+                        </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Unusual and exotic flowering plants
+                          Japanese animation and culture
                         </p>
                       </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Gardening</div>
+                      <Link to="/category/politics" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Flag className="h-4 w-4 mr-2" />
+                          Politics
+                        </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Growing and caring for flowers
+                          Global affairs and governance
                         </p>
                       </Link>
-                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
-                        <div className="font-medium">Cultural Significance</div>
+                      <Link to="/category/sports" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Trophy className="h-4 w-4 mr-2" />
+                          Sports
+                        </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
-                          Symbolism and meaning of flowers across cultures
+                          Athletic competitions worldwide
+                        </p>
+                      </Link>
+                      <Link to="/category/stories" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          Stories
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Compelling narratives and tales
                         </p>
                       </Link>
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link to="/add-content" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-sky-500 px-4 py-2 text-sm font-medium text-white hover:bg-sky-600 focus:outline-none">

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2 } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -69,6 +69,34 @@ const CategorySlider = () => {
       icon: <Flower2 className="h-6 w-6" />,
       link: "/category/flowers",
       description: "Botanical beauty around us"
+    },
+    {
+      name: "Anime",
+      image: "https://images.unsplash.com/photo-1567016507665-356928ac6679?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <Film className="h-6 w-6" />,
+      link: "/category/anime",
+      description: "Japanese animation culture"
+    },
+    {
+      name: "Politics",
+      image: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <Flag className="h-6 w-6" />,
+      link: "/category/politics",
+      description: "Global affairs and governance"
+    },
+    {
+      name: "Sports",
+      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <Trophy className="h-6 w-6" />,
+      link: "/category/sports",
+      description: "Athletic competitions worldwide"
+    },
+    {
+      name: "Stories",
+      image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <StoryIcon className="h-6 w-6" />,
+      link: "/category/stories",
+      description: "Compelling narratives and tales"
     }
   ];
 

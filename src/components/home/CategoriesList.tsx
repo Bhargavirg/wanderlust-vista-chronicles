@@ -9,7 +9,11 @@ interface CategoriesListProps {
 
 const CategoriesList = ({ blogData }: CategoriesListProps) => {
   // Define the allowed categories that match the CategorySection component's expected types
-  const allowedCategories = ['science', 'technology', 'history', 'culture', 'nature', 'space', 'wildlife', 'art', 'flowers'] as const;
+  const allowedCategories = [
+    'science', 'technology', 'history', 'culture', 'nature', 'space', 'wildlife', 
+    'art', 'flowers', 'anime', 'politics', 'sports', 'stories'
+  ] as const;
+  
   type AllowedCategory = typeof allowedCategories[number];
   
   return (
