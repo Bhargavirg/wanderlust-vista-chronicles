@@ -1,9 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info, Maximize2, Minimize2, Share2 } from "lucide-react";
+import { Info, Maximize2, Minimize2, Share2, Play } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface VideoEmbedProps {
@@ -20,7 +20,14 @@ const VideoEmbed = ({
   type = "other" 
 }: VideoEmbedProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
+  }, [src]);
   
   // Extract YouTube video ID from URL
   const getYoutubeEmbedUrl = (url: string) => {
@@ -81,7 +88,38 @@ const VideoEmbed = ({
     }
   };
 
+  const handleVideoLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleVideoError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
+
   const renderVideo = () => {
+    if (isLoading || hasError) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+          {isLoading ? (
+            <div className="animate-pulse">Loading video...</div>
+          ) : (
+            <div className="text-center p-4">
+              <div className="text-red-500 mb-2">Failed to load video</div>
+              <Button 
+                variant="outline"
+                onClick={() => window.open(src, '_blank')}
+                className="flex items-center"
+              >
+                <Play className="mr-2 h-4 w-4" />
+                Open in new tab
+              </Button>
+            </div>
+          )}
+        </div>
+      );
+    }
+    
     switch (type) {
       case "youtube":
         return (
@@ -91,6 +129,8 @@ const VideoEmbed = ({
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="absolute top-0 left-0 w-full h-full rounded-md"
+            onLoad={handleVideoLoad}
+            onError={handleVideoError}
           />
         );
       case "vimeo":
@@ -101,6 +141,8 @@ const VideoEmbed = ({
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
             className="absolute top-0 left-0 w-full h-full rounded-md"
+            onLoad={handleVideoLoad}
+            onError={handleVideoError}
           />
         );
       case "mp4":
@@ -110,16 +152,50 @@ const VideoEmbed = ({
             controls
             className="absolute top-0 left-0 w-full h-full rounded-md"
             title={title}
+            onLoadedData={handleVideoLoad}
+            onError={handleVideoError}
+            playsInline
           />
         );
       default:
         // For other video types, try to embed as generic video
+        if (src.includes("youtube") || src.includes("youtu.be")) {
+          return (
+            <iframe
+              src={getYoutubeEmbedUrl(src)}
+              title={title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute top-0 left-0 w-full h-full rounded-md"
+              onLoad={handleVideoLoad}
+              onError={handleVideoError}
+            />
+          );
+        }
+        
+        if (src.includes("vimeo")) {
+          return (
+            <iframe
+              src={getVimeoEmbedUrl(src)}
+              title={title}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className="absolute top-0 left-0 w-full h-full rounded-md"
+              onLoad={handleVideoLoad}
+              onError={handleVideoError}
+            />
+          );
+        }
+        
         return (
           <video
             src={src}
             controls
             className="absolute top-0 left-0 w-full h-full rounded-md"
             title={title}
+            onLoadedData={handleVideoLoad}
+            onError={handleVideoError}
+            playsInline
           >
             Your browser doesn't support this video format.
           </video>

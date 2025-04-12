@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -104,6 +104,13 @@ const CategorySlider = () => {
       icon: <StoryIcon className="h-6 w-6" />,
       link: "/category/stories",
       description: "Compelling narratives and tales"
+    },
+    {
+      name: "Food",
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <Utensils className="h-6 w-6" />,
+      link: "/category/food",
+      description: "Culinary delights and recipes"
     }
   ];
 

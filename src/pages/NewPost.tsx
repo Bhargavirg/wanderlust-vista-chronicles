@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { toast } from "@/components/ui/use-toast";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MediaUploader from "@/components/blog/MediaUploader";
-import { Image, Video, Loader2 } from "lucide-react";
+import { Image, Video, Loader2, Upload } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NewPost = () => {
@@ -23,6 +23,7 @@ const NewPost = () => {
   const [additionalImages, setAdditionalImages] = useState<string[]>([]);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoType, setVideoType] = useState<"youtube" | "vimeo" | "mp4" | "other">("youtube");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +37,35 @@ const NewPost = () => {
         setCoverImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        setCoverImage(file);
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCoverImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload only image files",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -131,10 +161,19 @@ const NewPost = () => {
                 <SelectContent>
                   <SelectItem value="food">Food</SelectItem>
                   <SelectItem value="travel">Travel</SelectItem>
+                  <SelectItem value="science">Science</SelectItem>
+                  <SelectItem value="technology">Technology</SelectItem>
+                  <SelectItem value="history">History</SelectItem>
+                  <SelectItem value="culture">Culture</SelectItem>
                   <SelectItem value="nature">Nature</SelectItem>
-                  <SelectItem value="flowers">Flowers</SelectItem>
-                  <SelectItem value="space">Space</SelectItem>
                   <SelectItem value="wildlife">Wildlife</SelectItem>
+                  <SelectItem value="space">Space</SelectItem>
+                  <SelectItem value="art">Art</SelectItem>
+                  <SelectItem value="flowers">Flowers</SelectItem>
+                  <SelectItem value="anime">Anime</SelectItem>
+                  <SelectItem value="politics">Politics</SelectItem>
+                  <SelectItem value="sports">Sports</SelectItem>
+                  <SelectItem value="stories">Stories</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -152,7 +191,11 @@ const NewPost = () => {
               </TabsList>
               
               <TabsContent value="image">
-                <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
+                <div 
+                  className="border-2 border-dashed border-muted rounded-lg p-6 text-center"
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                >
                   {coverImagePreview ? (
                     <div className="relative">
                       <img
@@ -176,7 +219,7 @@ const NewPost = () => {
                   ) : (
                     <div>
                       <Image className="mx-auto h-12 w-12 text-muted-foreground" />
-                      <div className="mt-4 flex text-sm leading-6 text-muted-foreground">
+                      <div className="mt-4 flex flex-col items-center text-sm leading-6 text-muted-foreground">
                         <label
                           htmlFor="cover-image"
                           className="relative cursor-pointer rounded-md bg-background px-3 py-2 text-sm font-semibold text-primary ring-1 ring-inset ring-primary hover:bg-primary/10"
@@ -186,12 +229,42 @@ const NewPost = () => {
                             id="cover-image"
                             name="cover-image"
                             type="file"
+                            ref={fileInputRef}
                             accept="image/*"
                             className="sr-only"
                             onChange={handleImageChange}
                           />
                         </label>
-                        <p className="pl-1 pt-2">or drag and drop</p>
+                        <p className="mt-2">or drag and drop</p>
+                        <p className="mt-1">or paste image URL</p>
+                        <div className="mt-2 flex w-full max-w-xs gap-2">
+                          <Input 
+                            placeholder="Image URL" 
+                            className="flex-1"
+                            value={coverImagePreview}
+                            onChange={(e) => setCoverImagePreview(e.target.value)}
+                          />
+                          <Button 
+                            type="button" 
+                            size="sm" 
+                            disabled={!coverImagePreview}
+                            onClick={() => {
+                              // Validate URL
+                              try {
+                                new URL(coverImagePreview);
+                              } catch (e) {
+                                toast({
+                                  title: "Invalid URL",
+                                  description: "Please enter a valid image URL",
+                                  variant: "destructive",
+                                });
+                                return;
+                              }
+                            }}
+                          >
+                            Add
+                          </Button>
+                        </div>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
                         PNG, JPG, GIF up to 5MB

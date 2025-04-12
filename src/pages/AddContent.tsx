@@ -13,6 +13,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Camera, Video, FileText, Upload, Loader2, Globe, MapPin, BookOpen, Users, Check } from "lucide-react";
 import MediaUploader from "@/components/blog/MediaUploader";
 import { EducationalMetadata } from "@/types/mediaTypes";
+import VideoEmbed from "@/components/blog/VideoEmbed";
 
 const AddContent = () => {
   const navigate = useNavigate();
@@ -39,6 +40,28 @@ const AddContent = () => {
     factCheck: false,
     expertReviewed: false,
   });
+
+  // Demo videos
+  const sampleVideos = [
+    {
+      title: "Earth's Natural Wonders",
+      src: "https://www.youtube.com/watch?v=Qw6uXh9yM54",
+      type: "youtube" as const,
+      description: "Explore the most breathtaking landscapes on our planet"
+    },
+    {
+      title: "Deep Ocean Exploration",
+      src: "https://www.youtube.com/watch?v=Y2tm40uMhDI",
+      type: "youtube" as const,
+      description: "Journey to the depths of our mysterious oceans"
+    },
+    {
+      title: "Wildlife in Natural Habitats",
+      src: "https://www.youtube.com/watch?v=35RQ_h6gVOA",
+      type: "youtube" as const,
+      description: "Observe animals in their natural environments"
+    }
+  ];
 
   const handleImagesSelected = (imageUrls: string[]) => {
     setImages(imageUrls);
@@ -148,8 +171,15 @@ const AddContent = () => {
                           <SelectItem value="history">History</SelectItem>
                           <SelectItem value="culture">Culture</SelectItem>
                           <SelectItem value="nature">Nature</SelectItem>
-                          <SelectItem value="space">Space</SelectItem>
                           <SelectItem value="wildlife">Wildlife</SelectItem>
+                          <SelectItem value="space">Space</SelectItem>
+                          <SelectItem value="art">Art</SelectItem>
+                          <SelectItem value="food">Food</SelectItem>
+                          <SelectItem value="flowers">Flowers</SelectItem>
+                          <SelectItem value="anime">Anime</SelectItem>
+                          <SelectItem value="politics">Politics</SelectItem>
+                          <SelectItem value="sports">Sports</SelectItem>
+                          <SelectItem value="stories">Stories</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -324,16 +354,43 @@ const AddContent = () => {
                             <div className="space-y-2">
                               <Camera className="mx-auto h-12 w-12 text-gray-400" />
                               <p className="text-sm text-gray-500">
-                                Enter the URL for your cover image
+                                Enter the URL for your cover image or upload from your device
                               </p>
                               <div className="flex gap-2 max-w-md mx-auto">
                                 <Input 
-                                  placeholder="Enter image URL" 
+                                  placeholder="Enter image URL (Pixabay, Unsplash, etc.)" 
                                   value={coverImage}
                                   onChange={(e) => setCoverImage(e.target.value)}
                                 />
                                 <Button type="button" className="whitespace-nowrap">
                                   Add Cover
+                                </Button>
+                              </div>
+                              <div className="mt-2">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  id="cover-upload"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      const reader = new FileReader();
+                                      reader.onload = (e) => {
+                                        if (e.target?.result) {
+                                          setCoverImage(e.target.result.toString());
+                                        }
+                                      };
+                                      reader.readAsDataURL(e.target.files[0]);
+                                    }
+                                  }}
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="outline"
+                                  onClick={() => document.getElementById('cover-upload')?.click()}
+                                >
+                                  <Upload className="mr-2 h-4 w-4" />
+                                  Upload from device
                                 </Button>
                               </div>
                             </div>
@@ -355,7 +412,7 @@ const AddContent = () => {
                       <div className="space-y-2">
                         <Label>Video Content</Label>
                         <p className="text-sm text-gray-500 mb-4">
-                          Add a video to enhance your educational content. You can use YouTube, Vimeo or direct video links.
+                          Add a video to enhance your educational content. You can use YouTube, Vimeo, Pixabay or upload directly.
                         </p>
                         
                         <MediaUploader
@@ -367,12 +424,29 @@ const AddContent = () => {
                         {videoUrl && (
                           <div className="mt-4">
                             <h4 className="font-medium mb-2">Video Preview</h4>
-                            <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                              <Video className="h-12 w-12 text-gray-400" />
-                              <span className="ml-2 text-gray-500">{videoUrl}</span>
-                            </div>
+                            <VideoEmbed 
+                              src={videoUrl} 
+                              type={videoType} 
+                              title="Your uploaded video" 
+                            />
                           </div>
                         )}
+                        
+                        <div className="mt-8 space-y-4">
+                          <h4 className="font-medium mb-2 text-lg border-b pb-2">Featured Educational Videos</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {sampleVideos.map((video, index) => (
+                              <div key={index} className="border rounded-lg p-3">
+                                <VideoEmbed 
+                                  src={video.src} 
+                                  type={video.type} 
+                                  title={video.title} 
+                                  description={video.description}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </TabsContent>
                   </Tabs>

@@ -1,8 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Image, X, Video, Plus } from "lucide-react";
+import { Image, X, Video, Plus, Upload } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { toast } from "@/hooks/use-toast";
 
 interface MediaUploaderProps {
   onImagesSelected: (imageUrls: string[]) => void;
@@ -21,6 +22,8 @@ const MediaUploader = ({
   const [showImageInput, setShowImageInput] = useState(false);
   const [showVideoInput, setShowVideoInput] = useState(false);
   const [currentImageInput, setCurrentImageInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddImage = () => {
     if (!currentImageInput.trim()) return;
@@ -40,6 +43,11 @@ const MediaUploader = ({
     } catch (e) {
       // Invalid URL, handle error
       console.error("Invalid URL:", currentImageInput);
+      toast({
+        title: "Invalid URL",
+        description: "Please enter a valid image URL",
+        variant: "destructive"
+      });
     }
   };
 
@@ -58,6 +66,11 @@ const MediaUploader = ({
       setShowVideoInput(false);
     } catch (e) {
       console.error("Invalid URL:", videoUrl);
+      toast({
+        title: "Invalid URL",
+        description: "Please enter a valid video URL",
+        variant: "destructive"
+      });
     }
   };
 
@@ -72,7 +85,62 @@ const MediaUploader = ({
       return "other";
     }
   };
-
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const filesArray = Array.from(e.target.files);
+      
+      if (imageUrls.length + filesArray.length > maxImages) {
+        toast({
+          title: "Too many images",
+          description: `You can only upload a maximum of ${maxImages} images`,
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      // Convert files to data URLs
+      filesArray.forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target?.result) {
+              const newImages = [...imageUrls, e.target.result.toString()];
+              setImageUrls(newImages);
+              onImagesSelected(newImages);
+            }
+          };
+          reader.readAsDataURL(file);
+        } else {
+          toast({
+            title: "Invalid file type",
+            description: "Please upload only image files",
+            variant: "destructive"
+          });
+        }
+      });
+    }
+  };
+  
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      
+      if (file.type.startsWith('video/')) {
+        const localVideoUrl = URL.createObjectURL(file);
+        setVideoUrl(localVideoUrl);
+        onVideoSelected(localVideoUrl, "mp4");
+        setShowVideoInput(false);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload only video files",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
   return (
     <div className="space-y-4">
       {/* Image Gallery Preview */}
@@ -106,21 +174,42 @@ const MediaUploader = ({
 
       {/* Image Upload Controls */}
       {showImageInput ? (
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={currentImageInput}
-            onChange={(e) => setCurrentImageInput(e.target.value)}
-            placeholder="Enter image URL"
-            className="flex-1 px-3 py-2 border rounded-md"
-          />
-          <Button onClick={handleAddImage}>Add</Button>
-          <Button 
-            variant="outline" 
-            onClick={() => setShowImageInput(false)}
-          >
-            Cancel
-          </Button>
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={currentImageInput}
+              onChange={(e) => setCurrentImageInput(e.target.value)}
+              placeholder="Enter image URL (from Pixabay, Unsplash, etc.)"
+              className="flex-1 px-3 py-2 border rounded-md"
+            />
+            <Button onClick={handleAddImage}>Add URL</Button>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500">or</div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <Button 
+              variant="outline" 
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Upload from device
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowImageInput(false)}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       ) : (
         imageUrls.length < maxImages && (
@@ -143,12 +232,28 @@ const MediaUploader = ({
               type="text"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="Enter YouTube, Vimeo or MP4 video URL"
+              placeholder="Enter YouTube, Vimeo or video URL"
               className="flex-1 px-3 py-2 border rounded-md"
             />
+            <Button onClick={handleAddVideo}>Add URL</Button>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={handleAddVideo}>Add Video</Button>
+          
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500">or</div>
+            <input
+              ref={videoFileInputRef}
+              type="file"
+              accept="video/*"
+              className="hidden"
+              onChange={handleVideoFileChange}
+            />
+            <Button 
+              variant="outline" 
+              onClick={() => videoFileInputRef.current?.click()}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Upload video file
+            </Button>
             <Button 
               variant="outline" 
               onClick={() => setShowVideoInput(false)}
