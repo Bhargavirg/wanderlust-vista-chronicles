@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { Camera, Video, FileText, Upload, Loader2, Globe, MapPin, BookOpen, Users, Check } from "lucide-react";
 import MediaUploader from "@/components/blog/MediaUploader";
 import { EducationalMetadata } from "@/types/mediaTypes";
@@ -60,6 +60,24 @@ const AddContent = () => {
       src: "https://www.youtube.com/watch?v=35RQ_h6gVOA",
       type: "youtube" as const,
       description: "Observe animals in their natural environments"
+    },
+    {
+      title: "Space: The Final Frontier",
+      src: "https://www.youtube.com/watch?v=udAL48P5NJU",
+      type: "youtube" as const,
+      description: "Explore the wonders of our universe"
+    },
+    {
+      title: "Cultural Traditions Around the World",
+      src: "https://www.youtube.com/watch?v=O-t2h2UDEys",
+      type: "youtube" as const,
+      description: "Discover diverse cultural practices from different societies"
+    },
+    {
+      title: "Amazing Animal Facts",
+      src: "https://www.youtube.com/watch?v=VWEvj3N40JA",
+      type: "youtube" as const,
+      description: "Learn fascinating facts about animals from around the world"
     }
   ];
 
@@ -412,7 +430,7 @@ const AddContent = () => {
                       <div className="space-y-2">
                         <Label>Video Content</Label>
                         <p className="text-sm text-gray-500 mb-4">
-                          Add a video to enhance your educational content. You can use YouTube, Vimeo, Pixabay or upload directly.
+                          Add a video to enhance your educational content. You can use YouTube, Vimeo, Pixabay or upload directly from your device.
                         </p>
                         
                         <MediaUploader

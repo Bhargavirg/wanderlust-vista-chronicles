@@ -127,10 +127,17 @@ const MediaUploader = ({
       const file = e.target.files[0];
       
       if (file.type.startsWith('video/')) {
-        const localVideoUrl = URL.createObjectURL(file);
-        setVideoUrl(localVideoUrl);
-        onVideoSelected(localVideoUrl, "mp4");
-        setShowVideoInput(false);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            // For local file preview
+            const localVideoUrl = URL.createObjectURL(file);
+            setVideoUrl(localVideoUrl);
+            onVideoSelected(localVideoUrl, "mp4");
+            setShowVideoInput(false);
+          }
+        };
+        reader.readAsArrayBuffer(file); // Just to trigger the onload event
       } else {
         toast({
           title: "Invalid file type",
@@ -141,8 +148,53 @@ const MediaUploader = ({
     }
   };
   
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      if (e.dataTransfer.files[0].type.startsWith('image/')) {
+        // Handle as image
+        const filesArray = Array.from(e.dataTransfer.files);
+        filesArray.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target?.result) {
+              const newImages = [...imageUrls, e.target.result.toString()];
+              setImageUrls(newImages);
+              onImagesSelected(newImages);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      } else if (e.dataTransfer.files[0].type.startsWith('video/')) {
+        // Handle as video
+        const file = e.dataTransfer.files[0];
+        const localVideoUrl = URL.createObjectURL(file);
+        setVideoUrl(localVideoUrl);
+        onVideoSelected(localVideoUrl, "mp4");
+        setShowVideoInput(false);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload only image or video files",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
   return (
-    <div className="space-y-4">
+    <div 
+      className="space-y-4" 
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       {/* Image Gallery Preview */}
       {imageUrls.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -174,7 +226,7 @@ const MediaUploader = ({
 
       {/* Image Upload Controls */}
       {showImageInput ? (
-        <div className="space-y-2">
+        <div className="space-y-4 border rounded-md p-4">
           <div className="flex gap-2">
             <input
               type="text"
@@ -186,8 +238,11 @@ const MediaUploader = ({
             <Button onClick={handleAddImage}>Add URL</Button>
           </div>
           
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">or</div>
+          <div className="text-center text-sm text-gray-500">- OR -</div>
+          
+          <div className="border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center">
+            <Upload className="h-10 w-10 text-gray-400 mb-2" />
+            <p className="text-sm text-gray-500 mb-3">Drag and drop image files here</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -201,8 +256,12 @@ const MediaUploader = ({
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="mr-2 h-4 w-4" />
-              Upload from device
+              Browse files
             </Button>
+            <p className="text-xs text-gray-400 mt-2">Supports: JPG, PNG, GIF, WebP</p>
+          </div>
+          
+          <div className="flex justify-end">
             <Button 
               variant="outline" 
               onClick={() => setShowImageInput(false)}
@@ -226,7 +285,7 @@ const MediaUploader = ({
 
       {/* Video Upload Controls */}
       {showVideoInput ? (
-        <div className="space-y-2">
+        <div className="space-y-4 border rounded-md p-4">
           <div className="flex gap-2">
             <input
               type="text"
@@ -238,8 +297,11 @@ const MediaUploader = ({
             <Button onClick={handleAddVideo}>Add URL</Button>
           </div>
           
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">or</div>
+          <div className="text-center text-sm text-gray-500">- OR -</div>
+          
+          <div className="border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center">
+            <Video className="h-10 w-10 text-gray-400 mb-2" />
+            <p className="text-sm text-gray-500 mb-3">Drag and drop video files here</p>
             <input
               ref={videoFileInputRef}
               type="file"
@@ -252,8 +314,12 @@ const MediaUploader = ({
               onClick={() => videoFileInputRef.current?.click()}
             >
               <Upload className="mr-2 h-4 w-4" />
-              Upload video file
+              Browse files
             </Button>
+            <p className="text-xs text-gray-400 mt-2">Supports: MP4, WebM, OGG</p>
+          </div>
+          
+          <div className="flex justify-end">
             <Button 
               variant="outline" 
               onClick={() => setShowVideoInput(false)}

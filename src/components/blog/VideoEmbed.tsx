@@ -47,7 +47,10 @@ const VideoEmbed = ({
     return videoId ? `https://player.vimeo.com/video/${videoId}` : url;
   };
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default link behavior
+    e.stopPropagation(); // Stop event propagation
+    
     const videoElement = document.getElementById('video-container');
     
     if (!document.fullscreenElement) {
@@ -65,7 +68,10 @@ const VideoEmbed = ({
     }
   };
   
-  const shareVideo = () => {
+  const shareVideo = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default link behavior
+    e.stopPropagation(); // Stop event propagation
+    
     if (navigator.share) {
       navigator.share({
         title: title,
@@ -97,6 +103,11 @@ const VideoEmbed = ({
     setHasError(true);
   };
 
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default link behavior
+    e.stopPropagation(); // Stop event propagation
+  };
+
   const renderVideo = () => {
     if (isLoading || hasError) {
       return (
@@ -108,7 +119,10 @@ const VideoEmbed = ({
               <div className="text-red-500 mb-2">Failed to load video</div>
               <Button 
                 variant="outline"
-                onClick={() => window.open(src, '_blank')}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(src, '_blank');
+                }}
                 className="flex items-center"
               >
                 <Play className="mr-2 h-4 w-4" />
@@ -205,7 +219,7 @@ const VideoEmbed = ({
 
   return (
     <div className="space-y-2">
-      <div className="relative w-full overflow-hidden rounded-md shadow-md group" id="video-container">
+      <div className="relative w-full overflow-hidden rounded-md shadow-md group" id="video-container" onClick={handleButtonClick}>
         <AspectRatio ratio={16 / 9}>
           {renderVideo()}
         </AspectRatio>
@@ -235,10 +249,14 @@ const VideoEmbed = ({
                     variant="outline" 
                     size="icon" 
                     className="h-8 w-8 bg-black/60 border-none text-white hover:bg-black/80"
-                    onClick={() => toast({
-                      title: "Video Information",
-                      description: description,
-                    })}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toast({
+                        title: "Video Information",
+                        description: description,
+                      });
+                    }}
                   >
                     <Info size={16} />
                   </Button>
