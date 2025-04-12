@@ -50,6 +50,13 @@ const CategorySlider = () => {
       description: "Wonders of our natural world"
     },
     {
+      name: "Wildlife",
+      image: "https://images.unsplash.com/photo-1504173010664-32509aeebb62?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      icon: <Leaf className="h-6 w-6" />,
+      link: "/category/wildlife",
+      description: "Amazing animal species"
+    },
+    {
       name: "Space",
       image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Rocket className="h-6 w-6" />,

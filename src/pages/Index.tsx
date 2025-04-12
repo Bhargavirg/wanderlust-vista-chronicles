@@ -183,6 +183,15 @@ const Index = () => {
                           Explore the wonders of our natural world
                         </p>
                       </Link>
+                      <Link to="/category/wildlife" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Leaf className="h-4 w-4 mr-2" />
+                          Wildlife
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Discover amazing animal species around the globe
+                        </p>
+                      </Link>
                       <Link to="/category/space" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
                         <div className="font-medium flex items-center">
                           <Rocket className="h-4 w-4 mr-2" />

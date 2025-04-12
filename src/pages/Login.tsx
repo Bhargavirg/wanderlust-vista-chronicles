@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,6 @@ import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop } from "lucide-react";
 import Footer from "@/components/layout/Footer";
-import ImageCarousel from "@/components/blog/ImageCarousel";
 import CategorySlider from "@/components/blog/CategorySlider";
 
 const Login = () => {
@@ -43,17 +41,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  
-  // Array of educational images for the carousel
-  const educationalImages = [
-    "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80"
-  ];
-  
-  const captions = [
-    "Journey through Earth's most spectacular waterways",
-    "Venture into ancient forests and learn about ecosystems"
-  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -67,7 +54,7 @@ const Login = () => {
         }}
       >
         <div className="w-full flex">
-          {/* Left side with animated text and image carousel */}
+          {/* Left side with animated text and stats */}
           <motion.div 
             className="hidden md:flex md:w-1/2 flex-col justify-center text-white pr-8"
             initial={{ opacity: 0, x: -50 }}
@@ -98,18 +85,6 @@ const Login = () => {
                 <Mountain className="h-6 w-6 mb-2" />
                 <h3 className="font-medium mb-1">500+</h3>
                 <p className="text-sm opacity-80">Expeditions</p>
-              </div>
-            </div>
-            
-            {/* Night sky image with larger text */}
-            <div className="mb-8 overflow-hidden rounded-lg relative">
-              <img 
-                src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80" 
-                alt="Night sky" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                <h3 className="text-2xl font-bold text-white">Explore the wonders of the night sky</h3>
               </div>
             </div>
           </motion.div>

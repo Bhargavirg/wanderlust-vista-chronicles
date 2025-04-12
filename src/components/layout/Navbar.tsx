@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen } from "lucide-react";
+import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf } from "lucide-react";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -59,6 +59,12 @@ const Navbar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/category/space" className="flex items-center w-full cursor-pointer">Space</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/wildlife" className="flex items-center w-full cursor-pointer">
+                    <Leaf className="h-4 w-4 mr-2" />
+                    Wildlife
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/category/art" className="flex items-center w-full cursor-pointer">Art</Link>
