@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop } from "lucide-react";
+import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import CategorySlider from "@/components/blog/CategorySlider";
 
@@ -39,6 +40,16 @@ const Login = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleJoinCommunity = () => {
+    // If user is logged in, redirect to home page, otherwise to login
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (isLoggedIn) {
+      navigate("/home");
+    } else {
+      navigate("/login");
     }
   };
 
@@ -206,6 +217,100 @@ const Login = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* OUR MISSION Section */}
+      <div className="bg-gray-100 py-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-6 text-gray-900">OUR MISSION</h2>
+            <div className="max-w-3xl mx-auto">
+              <p className="text-lg text-gray-700 mb-4">
+                At Earth Lens, our mission is to inspire curiosity and foster a deeper connection with our planet. We believe in the power of visual storytelling to educate, inspire, and drive positive change in how we interact with the natural world.
+              </p>
+              <p className="text-lg text-gray-700">
+                Through captivating photography, expert insights, and immersive experiences, we aim to highlight the beauty of Earth's ecosystems while raising awareness about conservation efforts and environmental challenges facing our world today.
+              </p>
+            </div>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div 
+              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Night sky with stars" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+              </div>
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Discover</h3>
+                <p className="text-sm text-gray-600">Exploring our universe's wonders</p>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+              </div>
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Protect</h3>
+                <p className="text-sm text-gray-600">Preserving our natural heritage</p>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Diverse community" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+              </div>
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Connect</h3>
+                <p className="text-sm text-gray-600">Building global communities</p>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+            >
+              <div className="relative h-56 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1592388748465-8c756747660c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Educational environment" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+              </div>
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-gray-900">Educate</h3>
+                <p className="text-sm text-gray-600">Sharing knowledge for all</p>
+              </div>
+            </motion.div>
+          </div>
+          
+          <div className="text-center mt-12">
+            <Button 
+              onClick={handleJoinCommunity}
+              className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-3 rounded-lg text-lg font-semibold"
+            >
+              <Users className="mr-2" />
+              Join Our Community
+            </Button>
           </div>
         </div>
       </div>
