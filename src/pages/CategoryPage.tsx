@@ -21,23 +21,30 @@ const CategoryPage = () => {
   useEffect(() => {
     if (category) {
       // Get posts from mockData
-      const categoryPosts = mockData.byCategory[category] || [];
+      const categoryPosts = mockData.byCategory[category as keyof typeof mockData.byCategory] || [];
       
       // Get user submitted posts from localStorage
       const userPostsJSON = localStorage.getItem('earthLensUserPosts');
       let userPosts: Record<string, BlogPost> = {};
       
       if (userPostsJSON) {
-        userPosts = JSON.parse(userPostsJSON);
+        try {
+          userPosts = JSON.parse(userPostsJSON);
+          
+          // Filter user posts by the current category
+          const userCategoryPosts = Object.values(userPosts).filter(
+            post => post.category === category
+          );
+          
+          // Combine and set all posts
+          setPosts([...categoryPosts, ...userCategoryPosts]);
+        } catch (error) {
+          console.error("Error parsing user posts:", error);
+          setPosts([...categoryPosts]);
+        }
+      } else {
+        setPosts([...categoryPosts]);
       }
-      
-      // Filter user posts by the current category
-      const userCategoryPosts = Object.values(userPosts).filter(
-        post => post.category === category
-      );
-      
-      // Combine and set all posts
-      setPosts([...categoryPosts, ...userCategoryPosts]);
     }
   }, [category]);
   

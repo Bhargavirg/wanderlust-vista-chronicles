@@ -14,14 +14,14 @@ import { Camera, Video, FileText, Upload, Loader2, Globe, MapPin, BookOpen, User
 import MediaUploader from "@/components/blog/MediaUploader";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import VideoEmbed from "@/components/blog/VideoEmbed";
-import { mockData } from "@/data/blogData";
+import { mockData, BlogPost } from "@/data/blogData";
 import { v4 as uuidv4 } from 'uuid';
 
 const AddContent = () => {
   const navigate = useNavigate();
   
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<"science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife">("nature");
   const [description, setDescription] = useState("");
   const [mainContent, setMainContent] = useState("");
   const [location, setLocation] = useState("");
@@ -115,19 +115,25 @@ const AddContent = () => {
     
     setIsSubmitting(true);
 
-    // Create a new post object
-    const newPost = {
+    // Create a new post object that matches the BlogPost interface
+    const newPost: BlogPost = {
       id: uuidv4(),
       title: title,
-      author: "User Contributor",
-      date: new Date().toISOString(),
       excerpt: description || `${mainContent.substring(0, 120)}...`,
-      content: mainContent,
+      coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
       category: category,
-      image: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
-      tags: tags.split(',').map(tag => tag.trim()),
-      readTime: Math.ceil(mainContent.split(' ').length / 200), // Approximate read time
-      location: location || ""
+      author: {
+        name: "User Contributor",
+        avatar: "https://i.pravatar.cc/150?img=32", // Default avatar
+      },
+      publishedAt: new Date().toISOString(),
+      // Optional properties
+      subCategory: tags.split(',')[0] || undefined,
+      educationalContent: educationalMetadata.difficulty ? {
+        difficulty: educationalMetadata.difficulty,
+        ageGroup: educationalMetadata.ageRange,
+        learningObjectives: []
+      } : undefined
     };
 
     try {
@@ -141,14 +147,21 @@ const AddContent = () => {
       
       mockData.byCategory[category].unshift(newPost);
       
-      // Also add to recent posts
+      // Also add to recent posts if that exists
       if (mockData.recent) {
         mockData.recent.unshift(newPost);
       }
       
       // Save to localStorage to persist between page refreshes
+      const existingPostsJSON = localStorage.getItem('earthLensUserPosts');
+      let existingPosts: Record<string, BlogPost> = {};
+      
+      if (existingPostsJSON) {
+        existingPosts = JSON.parse(existingPostsJSON);
+      }
+      
       localStorage.setItem('earthLensUserPosts', JSON.stringify({
-        ...JSON.parse(localStorage.getItem('earthLensUserPosts') || '{}'),
+        ...existingPosts,
         [newPost.id]: newPost
       }));
       
