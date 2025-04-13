@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf, Anchor, Landmark, BookText, Utensils } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -26,23 +27,34 @@ const Navbar = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Check if search query matches any category
+      // Define all available categories for search
       const categories = [
         "science", "technology", "travel", "history", "culture", 
         "nature", "space", "wildlife", "marine-life", "monuments", 
         "literature", "art", "flowers", "food", "anime", 
-        "politics", "sports", "stories"
+        "politics", "sports", "stories", "videos"
       ];
       
+      // Check if search query matches any category (case insensitive)
       const matchedCategory = categories.find(category => 
-        category.toLowerCase() === searchQuery.toLowerCase() || 
-        searchQuery.toLowerCase().includes(category)
+        category.toLowerCase() === searchQuery.toLowerCase() ||
+        searchQuery.toLowerCase().includes(category.toLowerCase())
       );
       
       if (matchedCategory) {
+        // If it's a valid category, navigate to that category page
         navigate(`/category/${matchedCategory}`);
+        toast({
+          title: "Category Found",
+          description: `Showing results for ${matchedCategory} category`,
+        });
       } else {
         // If not a category, treat as general search
+        toast({
+          title: "Search Results",
+          description: `No specific category found for "${searchQuery}"`,
+          variant: "destructive",
+        });
         navigate(`/category/search?q=${encodeURIComponent(searchQuery)}`);
       }
       

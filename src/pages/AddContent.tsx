@@ -14,6 +14,8 @@ import { Camera, Video, FileText, Upload, Loader2, Globe, MapPin, BookOpen, User
 import MediaUploader from "@/components/blog/MediaUploader";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import VideoEmbed from "@/components/blog/VideoEmbed";
+import { mockData } from "@/data/blogData";
+import { v4 as uuidv4 } from 'uuid';
 
 const AddContent = () => {
   const navigate = useNavigate();
@@ -113,11 +115,44 @@ const AddContent = () => {
     
     setIsSubmitting(true);
 
-    // In a real app, this would save the content to a database
+    // Create a new post object
+    const newPost = {
+      id: uuidv4(),
+      title: title,
+      author: "User Contributor",
+      date: new Date().toISOString(),
+      excerpt: description || `${mainContent.substring(0, 120)}...`,
+      content: mainContent,
+      category: category,
+      image: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
+      tags: tags.split(',').map(tag => tag.trim()),
+      readTime: Math.ceil(mainContent.split(' ').length / 200), // Approximate read time
+      location: location || ""
+    };
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // In a real app, this would save to a database
+      // For now we're adding to the mock data and storing in localStorage
       
+      // Add new post to appropriate category
+      if (!mockData.byCategory[category]) {
+        mockData.byCategory[category] = [];
+      }
+      
+      mockData.byCategory[category].unshift(newPost);
+      
+      // Also add to recent posts
+      if (mockData.recent) {
+        mockData.recent.unshift(newPost);
+      }
+      
+      // Save to localStorage to persist between page refreshes
+      localStorage.setItem('earthLensUserPosts', JSON.stringify({
+        ...JSON.parse(localStorage.getItem('earthLensUserPosts') || '{}'),
+        [newPost.id]: newPost
+      }));
+      
+      // Show success message
       toast({
         title: isDraft ? "Draft saved" : "Content published",
         description: isDraft 
@@ -125,13 +160,15 @@ const AddContent = () => {
           : "Your content has been published successfully.",
       });
       
-      navigate("/dashboard");
+      // Navigate to the category page to see the new post
+      navigate(`/category/${category}`);
     } catch (error) {
       toast({
         title: "Error",
         description: "There was an error saving your content. Please try again.",
         variant: "destructive",
       });
+      console.error("Error saving content:", error);
     } finally {
       setIsSubmitting(false);
     }

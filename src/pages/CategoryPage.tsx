@@ -1,23 +1,45 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
 import { mockData } from "@/data/blogData";
+import { BlogPost } from "@/data/blogData";
 import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera } from "lucide-react";
 import { motion } from "framer-motion";
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
+  const [posts, setPosts] = useState<BlogPost[]>([]);
 
   // Scroll to top when the page loads
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Access posts for the specific category from the byCategory object
-  const categoryPosts = category ? mockData.byCategory[category] || [] : [];
+  useEffect(() => {
+    if (category) {
+      // Get posts from mockData
+      const categoryPosts = mockData.byCategory[category] || [];
+      
+      // Get user submitted posts from localStorage
+      const userPostsJSON = localStorage.getItem('earthLensUserPosts');
+      let userPosts: Record<string, BlogPost> = {};
+      
+      if (userPostsJSON) {
+        userPosts = JSON.parse(userPostsJSON);
+      }
+      
+      // Filter user posts by the current category
+      const userCategoryPosts = Object.values(userPosts).filter(
+        post => post.category === category
+      );
+      
+      // Combine and set all posts
+      setPosts([...categoryPosts, ...userCategoryPosts]);
+    }
+  }, [category]);
   
   // Get category-specific header image
   const getCategoryBackground = () => {
@@ -124,9 +146,9 @@ const CategoryPage = () => {
       
       <main className="flex-1 py-12">
         <div className="container">
-          {categoryPosts.length > 0 ? (
+          {posts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {categoryPosts.map((post, index) => (
+              {posts.map((post, index) => (
                 <motion.div
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -148,7 +170,7 @@ const CategoryPage = () => {
       </main>
       
       {/* Related topics section */}
-      {categoryPosts.length > 0 && (
+      {posts.length > 0 && (
         <section className="py-12 bg-white dark:bg-gray-800">
           <div className="container">
             <h2 className="text-2xl font-bold mb-8">Related Topics</h2>
