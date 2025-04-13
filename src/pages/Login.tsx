@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,9 @@ const Login = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
+      // Store login state in localStorage for the demo
+      localStorage.setItem("isLoggedIn", "true");
+      
       toast({
         title: "Login successful",
         description: "Welcome back to Earth Lens!",
@@ -49,7 +51,11 @@ const Login = () => {
     if (isLoggedIn) {
       navigate("/home");
     } else {
-      navigate("/login");
+      // Since we're already on login page, just scroll to the login form
+      const loginForm = document.querySelector(".login-form");
+      if (loginForm) {
+        loginForm.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -124,7 +130,7 @@ const Login = () => {
                   Enter your credentials to access your account
                 </CardDescription>
               </CardHeader>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="login-form">
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>

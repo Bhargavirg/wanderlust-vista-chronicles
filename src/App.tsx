@@ -14,6 +14,7 @@ import NewPost from "./pages/NewPost";
 import AddPost from "./pages/AddPost";
 import AddContent from "./pages/AddContent";
 import NotFound from "./pages/NotFound";
+import VideosPage from "./pages/VideosPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/home" element={<Index />} />
           <Route path="/post/:postId" element={<PostDetail />} />
           <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/category/videos" element={<VideosPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />

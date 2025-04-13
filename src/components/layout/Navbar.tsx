@@ -18,9 +18,38 @@ import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Le
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   // This would be connected to auth in the full implementation
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Check if search query matches any category
+      const categories = [
+        "science", "technology", "travel", "history", "culture", 
+        "nature", "space", "wildlife", "marine-life", "monuments", 
+        "literature", "art", "flowers", "food", "anime", 
+        "politics", "sports", "stories"
+      ];
+      
+      const matchedCategory = categories.find(category => 
+        category.toLowerCase() === searchQuery.toLowerCase() || 
+        searchQuery.toLowerCase().includes(category)
+      );
+      
+      if (matchedCategory) {
+        navigate(`/category/${matchedCategory}`);
+      } else {
+        // If not a category, treat as general search
+        navigate(`/category/search?q=${encodeURIComponent(searchQuery)}`);
+      }
+      
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
@@ -129,22 +158,26 @@ const Navbar = () => {
         </div>
 
         {isSearchOpen ? (
-          <div className="flex-1 ml-auto mr-4 max-w-sm flex items-center">
+          <form onSubmit={handleSearch} className="flex-1 ml-auto mr-4 max-w-sm flex items-center">
             <Input
               type="search"
               placeholder="Search articles..."
               className="w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
             />
             <Button 
               variant="ghost" 
               size="icon" 
+              type="button"
               onClick={() => setIsSearchOpen(false)}
               className="ml-2"
             >
               <X className="h-4 w-4" />
               <span className="sr-only">Close search</span>
             </Button>
-          </div>
+          </form>
         ) : (
           <div className="flex items-center gap-4">
             <Button 
