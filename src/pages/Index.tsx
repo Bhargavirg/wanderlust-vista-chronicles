@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FeaturedSection from "@/components/home/FeaturedSection";
@@ -9,7 +8,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown, Landmark, BookText, Anchor, Utensils, Plane } from "lucide-react";
 
 const Index = () => {
   // Scroll to top when the page loads
@@ -99,6 +98,40 @@ const Index = () => {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent">
+                    <Plane className="mr-2 h-4 w-4" />
+                    Travel
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 w-[400px] md:grid-cols-2">
+                      <Link to="/category/travel" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">All Travel</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Explore destinations around the globe
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Adventures</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Thrilling experiences for the adventurous soul
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Cultural Experiences</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Immersive cultural experiences around the world
+                        </p>
+                      </Link>
+                      <Link to="#" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium">Travel Tips</div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Practical advice for better journeys
+                        </p>
+                      </Link>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent">
                     <History className="mr-2 h-4 w-4" />
                     History
                   </NavigationMenuTrigger>
@@ -166,7 +199,7 @@ const Index = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 
-                {/* New "More" dropdown in the navigation menu */}
+                {/* Updated "More" dropdown in the navigation menu */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent">
                     <ChevronDown className="mr-2 h-4 w-4" />
@@ -190,6 +223,33 @@ const Index = () => {
                         </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
                           Discover amazing animal species around the globe
+                        </p>
+                      </Link>
+                      <Link to="/category/marine-life" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Anchor className="h-4 w-4 mr-2" />
+                          Marine Life
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Discover the fascinating world beneath the waves
+                        </p>
+                      </Link>
+                      <Link to="/category/monuments" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Landmark className="h-4 w-4 mr-2" />
+                          Monuments
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Historical structures and architectural marvels
+                        </p>
+                      </Link>
+                      <Link to="/category/literature" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <BookText className="h-4 w-4 mr-2" />
+                          Literature
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          The world of books and written expression
                         </p>
                       </Link>
                       <Link to="/category/space" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
@@ -217,6 +277,15 @@ const Index = () => {
                         </div>
                         <p className="line-clamp-2 text-sm text-muted-foreground">
                           Botanical wonders around the world
+                        </p>
+                      </Link>
+                      <Link to="/category/food" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">
+                        <div className="font-medium flex items-center">
+                          <Utensils className="h-4 w-4 mr-2" />
+                          Food
+                        </div>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          Culinary arts and global cuisines
                         </p>
                       </Link>
                       <Link to="/category/anime" className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground">

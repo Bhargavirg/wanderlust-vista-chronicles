@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf } from "lucide-react";
+import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf, Anchor, Landmark, BookText, Utensils } from "lucide-react";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -39,6 +39,9 @@ const Navbar = () => {
             </Link>
             <Link to="/category/technology" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Technology
+            </Link>
+            <Link to="/category/travel" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Travel
             </Link>
             <Link to="/category/history" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               History
@@ -67,10 +70,34 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link to="/category/marine-life" className="flex items-center w-full cursor-pointer">
+                    <Anchor className="h-4 w-4 mr-2" />
+                    Marine Life
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/monuments" className="flex items-center w-full cursor-pointer">
+                    <Landmark className="h-4 w-4 mr-2" />
+                    Monuments
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/literature" className="flex items-center w-full cursor-pointer">
+                    <BookText className="h-4 w-4 mr-2" />
+                    Literature
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link to="/category/art" className="flex items-center w-full cursor-pointer">Art</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/category/flowers" className="flex items-center w-full cursor-pointer">Flowers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/category/food" className="flex items-center w-full cursor-pointer">
+                    <Utensils className="h-4 w-4 mr-2" />
+                    Food
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/category/anime" className="flex items-center w-full cursor-pointer">
@@ -189,6 +216,12 @@ const Navbar = () => {
                       Technology
                     </Link>
                     <Link 
+                      to="/category/travel"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Travel
+                    </Link>
+                    <Link 
                       to="/category/history"
                       className="text-sm font-medium transition-colors"
                     >
@@ -213,6 +246,30 @@ const Navbar = () => {
                       Space
                     </Link>
                     <Link 
+                      to="/category/wildlife"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Wildlife
+                    </Link>
+                    <Link 
+                      to="/category/marine-life"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Marine Life
+                    </Link>
+                    <Link 
+                      to="/category/monuments"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Monuments
+                    </Link>
+                    <Link 
+                      to="/category/literature"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Literature
+                    </Link>
+                    <Link 
                       to="/category/art"
                       className="text-sm font-medium transition-colors"
                     >
@@ -223,6 +280,12 @@ const Navbar = () => {
                       className="text-sm font-medium transition-colors"
                     >
                       Flowers
+                    </Link>
+                    <Link 
+                      to="/category/food"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Food
                     </Link>
                     <Link 
                       to="/category/anime"
