@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -17,11 +16,14 @@ import VideoEmbed from "@/components/blog/VideoEmbed";
 import { mockData, BlogPost } from "@/data/blogData";
 import { v4 as uuidv4 } from 'uuid';
 
+// Define the CategoryType to match the BlogPost interface
+type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife";
+
 const AddContent = () => {
   const navigate = useNavigate();
   
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState<"science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife">("nature");
+  const [category, setCategory] = useState<CategoryType>("nature");
   const [description, setDescription] = useState("");
   const [mainContent, setMainContent] = useState("");
   const [location, setLocation] = useState("");
@@ -92,6 +94,12 @@ const AddContent = () => {
     setVideoType(type);
   };
 
+  // Fixed the category type handling
+  const handleCategoryChange = (value: string) => {
+    // Cast the string value to our CategoryType
+    setCategory(value as CategoryType);
+  };
+
   const handleSubmit = async (e: React.FormEvent, isDraft: boolean = false) => {
     e.preventDefault();
     
@@ -131,7 +139,7 @@ const AddContent = () => {
       subCategory: tags.split(',')[0] || undefined,
       educationalContent: educationalMetadata.difficulty ? {
         difficulty: educationalMetadata.difficulty,
-        ageGroup: educationalMetadata.ageRange,
+        ageRange: educationalMetadata.ageRange,
         learningObjectives: []
       } : undefined
     };
@@ -229,7 +237,8 @@ const AddContent = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="category">Category</Label>
-                      <Select value={category} onValueChange={setCategory}>
+                      {/* Fixed the onValueChange to use our new handler function */}
+                      <Select value={category} onValueChange={handleCategoryChange}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
