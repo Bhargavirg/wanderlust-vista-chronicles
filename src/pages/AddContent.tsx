@@ -139,7 +139,7 @@ const AddContent = () => {
       subCategory: tags.split(',')[0] || undefined,
       educationalContent: educationalMetadata.difficulty ? {
         difficulty: educationalMetadata.difficulty,
-        ageRange: educationalMetadata.ageRange,
+        ageGroup: educationalMetadata.ageRange, // Changed from ageRange to ageGroup to match the BlogPost interface
         learningObjectives: []
       } : undefined
     };
