@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -206,7 +205,6 @@ const AddContent = () => {
         ...originalPost,
         title,
         excerpt: description || `${mainContent.substring(0, 120)}...`,
-        content: mainContent,
         coverImage: coverImage || originalPost.coverImage,
         category,
         subCategory: tags.split(',')[0] || undefined,
@@ -221,7 +219,6 @@ const AddContent = () => {
         id: uuidv4(),
         title: title,
         excerpt: description || `${mainContent.substring(0, 120)}...`,
-        content: mainContent,
         coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
         category: category,
         author: {
@@ -251,7 +248,10 @@ const AddContent = () => {
       // Add or update post in localStorage
       localStorage.setItem('earthLensUserPosts', JSON.stringify({
         ...existingPosts,
-        [postData.id]: postData
+        [postData.id]: {
+          ...postData,
+          mainContentData: mainContent
+        }
       }));
       
       // Update mock data
