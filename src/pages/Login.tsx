@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users } from "lucide-react";
+import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import CategorySlider from "@/components/blog/CategorySlider";
 
@@ -87,7 +88,7 @@ const Login = () => {
             <h2 className="text-5xl font-bold mb-6 leading-tight">Explore Our Amazing Planet</h2>
             <p className="text-xl mb-8 opacity-90">Discover fascinating stories about science, nature, history, and culture from around the globe.</p>
             
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-4 gap-4 mb-8">
               <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                 <TreePine className="h-6 w-6 mb-2" />
                 <h3 className="font-medium mb-1">10K+</h3>
@@ -102,6 +103,11 @@ const Login = () => {
                 <Mountain className="h-6 w-6 mb-2" />
                 <h3 className="font-medium mb-1">500+</h3>
                 <p className="text-sm opacity-80">Expeditions</p>
+              </div>
+              <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                <Book className="h-6 w-6 mb-2" />
+                <h3 className="font-medium mb-1">2K+</h3>
+                <p className="text-sm opacity-80">Articles</p>
               </div>
             </div>
           </motion.div>
@@ -197,6 +203,65 @@ const Login = () => {
         </div>
       </div>
       
+      {/* Featured images from different categories */}
+      <div className="bg-black pb-12">
+        <div className="container mx-auto px-4">
+          <h3 className="text-2xl font-bold mb-6 text-white">Featured Discoveries</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                  alt="Monument interior"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Landmark className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Monuments</h4>
+                  </div>
+                  <p className="text-white/80">Architectural wonders from across the world</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                  alt="Whale breaching"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Ship className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Marinelife</h4>
+                  </div>
+                  <p className="text-white/80">Discover the wonders beneath the waves</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                  alt="Travel landscape"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Map className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Travel</h4>
+                  </div>
+                  <p className="text-white/80">Explore destinations around the globe</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Additional video or educational content - Larger size */}
       <div className="bg-black py-12">
         <div className="container">
@@ -254,7 +319,7 @@ const Login = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Night sky with stars" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
@@ -269,7 +334,7 @@ const Login = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
@@ -284,7 +349,7 @@ const Login = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
             >
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Diverse community" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
@@ -299,7 +364,7 @@ const Login = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1592388748465-8c756747660c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Educational environment" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">

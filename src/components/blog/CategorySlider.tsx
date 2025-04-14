@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -111,6 +111,34 @@ const CategorySlider = () => {
       icon: <Utensils className="h-6 w-6" />,
       link: "/category/food",
       description: "Culinary delights and recipes"
+    },
+    {
+      name: "Literature",
+      image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
+      icon: <Book className="h-6 w-6" />,
+      link: "/category/literature",
+      description: "Books, poems, and written art"
+    },
+    {
+      name: "Travel",
+      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
+      icon: <Map className="h-6 w-6" />,
+      link: "/category/travel",
+      description: "Adventures around the globe"
+    },
+    {
+      name: "Marinelife",
+      image: "https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
+      icon: <Ship className="h-6 w-6" />,
+      link: "/category/marinelife",
+      description: "Exploring ocean ecosystems"
+    },
+    {
+      name: "Monuments",
+      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
+      icon: <Landmark className="h-6 w-6" />,
+      link: "/category/monuments",
+      description: "Historical landmarks worldwide"
     }
   ];
 
@@ -126,9 +154,9 @@ const CategorySlider = () => {
       >
         <CarouselContent className="-ml-2">
           {categories.map((category, index) => (
-            <CarouselItem key={index} className="pl-2 md:basis-1/2 lg:basis-1/3">
+            <CarouselItem key={index} className="pl-2 md:basis-1/3 lg:basis-1/4">
               <Link to={category.link} className="block">
-                <div className="overflow-hidden rounded-lg h-48 relative group">
+                <div className="overflow-hidden rounded-lg h-56 relative group">
                   <img 
                     src={category.image} 
                     alt={category.name} 
