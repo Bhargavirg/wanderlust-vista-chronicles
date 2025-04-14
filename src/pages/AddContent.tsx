@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -10,7 +11,8 @@ import PageHeader from "@/components/content/PageHeader";
 import ContentForm from "@/components/content/ContentForm";
 
 // Define the CategoryType to match the BlogPost interface
-type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife";
+type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories";
 
 const AddContent = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const AddContent = () => {
   // Current user info - in a real app, this would come from authentication
   const currentUser = {
     id: localStorage.getItem('userId') || "user-123", // Simulate logged in user
-    name: "User Contributor",
+    name: localStorage.getItem('userName') || "User Contributor",
     avatar: "https://i.pravatar.cc/150?img=32"
   };
   
@@ -126,10 +128,11 @@ const AddContent = () => {
       if (post) {
         // Populate form with post data
         setTitle(post.title);
-        setCategory(post.category);
+        setCategory(post.category as CategoryType);
         setDescription(post.excerpt || "");
         setCoverImage(post.coverImage);
         setTags(post.subCategory || "");
+        setMainContent(post.content || "");
         
         // Set educational metadata if available
         if (post.educationalContent) {
@@ -203,6 +206,7 @@ const AddContent = () => {
         ...originalPost,
         title,
         excerpt: description || `${mainContent.substring(0, 120)}...`,
+        content: mainContent,
         coverImage: coverImage || originalPost.coverImage,
         category,
         subCategory: tags.split(',')[0] || undefined,
@@ -210,12 +214,14 @@ const AddContent = () => {
           difficulty: educationalMetadata.difficulty,
           ageGroup: educationalMetadata.ageRange, 
           learningObjectives: []
-        } : undefined
+        } : undefined,
+        updatedAt: new Date().toISOString()
       } : 
       {
         id: uuidv4(),
         title: title,
         excerpt: description || `${mainContent.substring(0, 120)}...`,
+        content: mainContent,
         coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
         category: category,
         author: {

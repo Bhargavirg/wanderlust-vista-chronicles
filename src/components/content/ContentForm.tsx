@@ -7,7 +7,8 @@ import ContentFormActions from "./ContentFormActions";
 import { EducationalMetadata } from "@/types/mediaTypes";
 
 // Define the CategoryType to match the BlogPost interface
-type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife";
+type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories";
 
 interface ContentFormProps {
   title: string;

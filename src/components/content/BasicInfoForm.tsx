@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -6,8 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin } from "lucide-react";
 
-// Define the CategoryType to match the BlogPost interface
-type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife";
+type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories";
 
 interface BasicInfoFormProps {
   title: string;
@@ -35,9 +34,7 @@ const BasicInfoForm = ({
   setTags
 }: BasicInfoFormProps) => {
   
-  // Handle the category change
   const handleCategoryChange = (value: string) => {
-    // Cast the string value to CategoryType
     setCategory(value as CategoryType);
   };
   
@@ -56,20 +53,49 @@ const BasicInfoForm = ({
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label htmlFor="category">Category</Label>
-          <Select value={category} onValueChange={handleCategoryChange}>
-            <SelectTrigger>
+          <Select value={category} onValueChange={(value) => setCategory(value as CategoryType)}>
+            <SelectTrigger id="category">
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="science">Science</SelectItem>
-              <SelectItem value="technology">Technology</SelectItem>
-              <SelectItem value="history">History</SelectItem>
-              <SelectItem value="culture">Culture</SelectItem>
-              <SelectItem value="nature">Nature</SelectItem>
-              <SelectItem value="wildlife">Wildlife</SelectItem>
-              <SelectItem value="space">Space</SelectItem>
+              <SelectGroup>
+                <SelectLabel>Nature</SelectLabel>
+                <SelectItem value="nature">Nature</SelectItem>
+                <SelectItem value="wildlife">Wildlife</SelectItem>
+                <SelectItem value="flowers">Flowers</SelectItem>
+                <SelectItem value="marinelife">Marine Life</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Science & Technology</SelectLabel>
+                <SelectItem value="science">Science</SelectItem>
+                <SelectItem value="technology">Technology</SelectItem>
+                <SelectItem value="space">Space</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Culture & History</SelectLabel>
+                <SelectItem value="culture">Culture</SelectItem>
+                <SelectItem value="history">History</SelectItem>
+                <SelectItem value="monuments">Monuments</SelectItem>
+                <SelectItem value="literature">Literature</SelectItem>
+                <SelectItem value="art">Art</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Lifestyle</SelectLabel>
+                <SelectItem value="travel">Travel</SelectItem>
+                <SelectItem value="food">Food</SelectItem>
+                <SelectItem value="sports">Sports</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Entertainment</SelectLabel>
+                <SelectItem value="anime">Anime</SelectItem>
+                <SelectItem value="stories">Stories</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Others</SelectLabel>
+                <SelectItem value="politics">Politics</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>

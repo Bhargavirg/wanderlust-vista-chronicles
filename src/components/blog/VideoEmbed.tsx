@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info, Maximize2, Minimize2, Share2, Play, AlertTriangle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Info, Maximize2, Minimize2, Share2, Play, AlertTriangle, ExternalLink } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface VideoEmbedProps {
   src: string;
@@ -36,7 +36,7 @@ const VideoEmbed = ({
         setIsLoading(false);
         console.log("Video load timeout reached");
       }
-    }, 10000); // 10 seconds timeout
+    }, 5000); // Reduced to 5 seconds timeout for better UX
     
     setLoadTimeout(timeout);
     
@@ -47,20 +47,35 @@ const VideoEmbed = ({
   
   // Extract YouTube video ID from URL
   const getYoutubeEmbedUrl = (url: string) => {
+    if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
-    const videoId = match && match[2].length === 11 ? match[2] : null;
+    const videoId = match && match[2] && match[2].length === 11 ? match[2] : null;
     
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
   };
   
   // Extract Vimeo video ID from URL
   const getVimeoEmbedUrl = (url: string) => {
+    if (!url) return '';
     const regExp = /vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|)(\d+)(?:|\/\?)/;
     const match = url.match(regExp);
     const videoId = match ? match[2] : null;
     
-    return videoId ? `https://player.vimeo.com/video/${videoId}` : url;
+    return videoId ? `https://player.vimeo.com/video/${videoId}` : '';
+  };
+
+  // Check if URL is a Pinterest URL
+  const isPinterestUrl = (url: string) => {
+    return url.includes('pinterest.com') || url.includes('pin.it');
+  };
+
+  // Handle Pinterest URLs specifically
+  const handlePinterestUrl = (url: string) => {
+    return {
+      isValid: false,
+      message: "Pinterest videos are not supported. Please use YouTube, Vimeo or direct video links."
+    };
   };
 
   const toggleFullscreen = (e: React.MouseEvent) => {
@@ -127,6 +142,45 @@ const VideoEmbed = ({
   };
 
   const renderVideo = () => {
+    if (!src) {
+      return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800">
+          <div className="text-center p-4">
+            <div className="flex items-center justify-center text-amber-500 mb-3">
+              <Info className="mr-2 h-5 w-5" />
+              <span>No video URL provided</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-3">Please enter a valid video URL</p>
+          </div>
+        </div>
+      );
+    }
+    
+    if (isPinterestUrl(src)) {
+      const result = handlePinterestUrl(src);
+      return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800">
+          <div className="text-center p-4">
+            <div className="flex items-center justify-center text-red-500 mb-3">
+              <AlertTriangle className="mr-2 h-5 w-5" />
+              <span>{result.message}</span>
+            </div>
+            <Button 
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(src, '_blank');
+              }}
+              className="flex items-center"
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Open original link
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
     if (isLoading || hasError) {
       return (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800">
