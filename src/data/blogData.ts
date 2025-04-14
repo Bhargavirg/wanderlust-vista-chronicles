@@ -12,6 +12,8 @@ export interface BlogPost {
     credentials?: string; // Academic credentials or expertise
   };
   publishedAt: string;
+  updatedAt?: string; // Adding this property to fix the TypeScript error
+  mainContentData?: string; // Adding this to store the main content
   educationalContent?: {
     difficulty: "beginner" | "intermediate" | "advanced";
     ageGroup?: string;
