@@ -40,6 +40,10 @@ interface ContentFormProps {
     description: string;
   }[];
   handleSubmit: (e: FormEvent, isDraft?: boolean) => void;
+  isEditMode?: boolean;
+  onDelete?: (e: MouseEvent) => void;
+  authorId?: string;
+  currentUserId?: string;
 }
 
 const ContentForm = ({
@@ -68,6 +72,10 @@ const ContentForm = ({
   isSubmitting,
   sampleVideos,
   handleSubmit,
+  isEditMode = false,
+  onDelete,
+  authorId,
+  currentUserId
 }: ContentFormProps) => {
   
   const handleSaveDraft = (e: MouseEvent) => {
@@ -117,6 +125,10 @@ const ContentForm = ({
         isSubmitting={isSubmitting}
         onSaveDraft={handleSaveDraft}
         onPublish={(e) => handleSubmit(e)}
+        onDelete={onDelete}
+        isEditMode={isEditMode}
+        authorId={authorId}
+        currentUserId={currentUserId}
       />
     </form>
   );

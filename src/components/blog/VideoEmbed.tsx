@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info, Maximize2, Minimize2, Share2, Play } from "lucide-react";
+import { Info, Maximize2, Minimize2, Share2, Play, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface VideoEmbedProps {
@@ -22,11 +22,27 @@ const VideoEmbed = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [loadTimeout, setLoadTimeout] = useState<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
   
   useEffect(() => {
     setIsLoading(true);
     setHasError(false);
+    
+    // Set a timeout to detect hanging video loads
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setHasError(true);
+        setIsLoading(false);
+        console.log("Video load timeout reached");
+      }
+    }, 10000); // 10 seconds timeout
+    
+    setLoadTimeout(timeout);
+    
+    return () => {
+      if (loadTimeout) clearTimeout(loadTimeout);
+    };
   }, [src]);
   
   // Extract YouTube video ID from URL
@@ -95,10 +111,12 @@ const VideoEmbed = ({
   };
 
   const handleVideoLoad = () => {
+    if (loadTimeout) clearTimeout(loadTimeout);
     setIsLoading(false);
   };
 
   const handleVideoError = () => {
+    if (loadTimeout) clearTimeout(loadTimeout);
     setIsLoading(false);
     setHasError(true);
   };
@@ -111,12 +129,19 @@ const VideoEmbed = ({
   const renderVideo = () => {
     if (isLoading || hasError) {
       return (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800">
           {isLoading ? (
-            <div className="animate-pulse">Loading video...</div>
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mb-3"></div>
+              <div>Loading video...</div>
+            </div>
           ) : (
             <div className="text-center p-4">
-              <div className="text-red-500 mb-2">Failed to load video</div>
+              <div className="flex items-center justify-center text-red-500 mb-3">
+                <AlertTriangle className="mr-2 h-5 w-5" />
+                <span>Failed to load video</span>
+              </div>
+              <p className="text-sm text-gray-500 mb-3">The video URL might be invalid or not supported</p>
               <Button 
                 variant="outline"
                 onClick={(e) => {
@@ -172,7 +197,7 @@ const VideoEmbed = ({
           />
         );
       default:
-        // For other video types, try to embed as generic video
+        // For other video types, try to detect and use the appropriate embed type
         if (src.includes("youtube") || src.includes("youtu.be")) {
           return (
             <iframe

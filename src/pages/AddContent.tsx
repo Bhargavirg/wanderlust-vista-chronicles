@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { toast } from "@/hooks/use-toast";
@@ -15,6 +14,7 @@ type CategoryType = "science" | "technology" | "history" | "culture" | "nature" 
 
 const AddContent = () => {
   const navigate = useNavigate();
+  const { postId } = useParams(); // Get postId from URL if in edit mode
   
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<CategoryType>("nature");
@@ -24,6 +24,15 @@ const AddContent = () => {
   const [tags, setTags] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [originalPost, setOriginalPost] = useState<BlogPost | null>(null);
+  
+  // Current user info - in a real app, this would come from authentication
+  const currentUser = {
+    id: localStorage.getItem('userId') || "user-123", // Simulate logged in user
+    name: "User Contributor",
+    avatar: "https://i.pravatar.cc/150?img=32"
+  };
   
   // Media states
   const [images, setImages] = useState<string[]>([]);
@@ -79,6 +88,82 @@ const AddContent = () => {
     }
   ];
 
+  // Load post data if in edit mode
+  useEffect(() => {
+    if (postId) {
+      // In a real app, this would be an API call to get post data
+      const loadPostForEditing = () => {
+        // Try to get from localStorage first
+        const existingPostsJSON = localStorage.getItem('earthLensUserPosts');
+        if (existingPostsJSON) {
+          const existingPosts = JSON.parse(existingPostsJSON);
+          if (existingPosts[postId]) {
+            return existingPosts[postId];
+          }
+        }
+        
+        // Otherwise look in mockData
+        let foundPost: BlogPost | null = null;
+        
+        // Check in recent posts
+        if (mockData.recent) {
+          foundPost = mockData.recent.find(post => post.id === postId) || null;
+        }
+        
+        // Check in categories if not found
+        if (!foundPost) {
+          for (const category in mockData.byCategory) {
+            const categoryPosts = mockData.byCategory[category];
+            foundPost = categoryPosts.find(post => post.id === postId) || null;
+            if (foundPost) break;
+          }
+        }
+        
+        return foundPost;
+      };
+      
+      const post = loadPostForEditing();
+      if (post) {
+        // Populate form with post data
+        setTitle(post.title);
+        setCategory(post.category);
+        setDescription(post.excerpt || "");
+        setCoverImage(post.coverImage);
+        setTags(post.subCategory || "");
+        
+        // Set educational metadata if available
+        if (post.educationalContent) {
+          setEducationalMetadata({
+            difficulty: post.educationalContent.difficulty,
+            ageRange: post.educationalContent.ageGroup || "All ages",
+            subjects: [],
+            factCheck: false,
+            expertReviewed: false,
+          });
+        }
+        
+        // Set original post for reference
+        setOriginalPost(post);
+        setIsEditMode(true);
+      } else {
+        // Post not found - redirect to dashboard
+        toast({
+          title: "Post not found",
+          description: "The post you are trying to edit could not be found.",
+          variant: "destructive",
+        });
+        navigate("/dashboard");
+      }
+    }
+  }, [postId, navigate]);
+
+  const isAuthor = () => {
+    if (!originalPost) return true; // If creating new post
+    
+    // In a real app, this would check against authenticated user ID
+    return originalPost.author.name === currentUser.name;
+  };
+
   const handleSubmit = async (e: React.FormEvent, isDraft: boolean = false) => {
     e.preventDefault();
     
@@ -100,46 +185,56 @@ const AddContent = () => {
       return;
     }
     
+    // Check if user is author when editing
+    if (isEditMode && !isAuthor()) {
+      toast({
+        title: "Permission denied",
+        description: "You can only edit your own content.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
 
-    // Create a new post object that matches the BlogPost interface
-    const newPost: BlogPost = {
-      id: uuidv4(),
-      title: title,
-      excerpt: description || `${mainContent.substring(0, 120)}...`,
-      coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
-      category: category,
-      author: {
-        name: "User Contributor",
-        avatar: "https://i.pravatar.cc/150?img=32", // Default avatar
-      },
-      publishedAt: new Date().toISOString(),
-      // Optional properties
-      subCategory: tags.split(',')[0] || undefined,
-      educationalContent: educationalMetadata.difficulty ? {
-        difficulty: educationalMetadata.difficulty,
-        ageGroup: educationalMetadata.ageRange, // Changed from ageRange to ageGroup to match the BlogPost interface
-        learningObjectives: []
-      } : undefined
-    };
+    // Prepare post object
+    const postData: BlogPost = isEditMode && originalPost ? 
+      { 
+        ...originalPost,
+        title,
+        excerpt: description || `${mainContent.substring(0, 120)}...`,
+        coverImage: coverImage || originalPost.coverImage,
+        category,
+        subCategory: tags.split(',')[0] || undefined,
+        educationalContent: educationalMetadata.difficulty ? {
+          difficulty: educationalMetadata.difficulty,
+          ageGroup: educationalMetadata.ageRange, 
+          learningObjectives: []
+        } : undefined
+      } : 
+      {
+        id: uuidv4(),
+        title: title,
+        excerpt: description || `${mainContent.substring(0, 120)}...`,
+        coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
+        category: category,
+        author: {
+          name: currentUser.name,
+          avatar: currentUser.avatar,
+        },
+        publishedAt: new Date().toISOString(),
+        subCategory: tags.split(',')[0] || undefined,
+        educationalContent: educationalMetadata.difficulty ? {
+          difficulty: educationalMetadata.difficulty,
+          ageGroup: educationalMetadata.ageRange, 
+          learningObjectives: []
+        } : undefined
+      };
 
     try {
-      // In a real app, this would save to a database
-      // For now we're adding to the mock data and storing in localStorage
+      // In a real app, this would be an API call to save or update the post
       
-      // Add new post to appropriate category
-      if (!mockData.byCategory[category]) {
-        mockData.byCategory[category] = [];
-      }
-      
-      mockData.byCategory[category].unshift(newPost);
-      
-      // Also add to recent posts if that exists
-      if (mockData.recent) {
-        mockData.recent.unshift(newPost);
-      }
-      
-      // Save to localStorage to persist between page refreshes
+      // Get existing posts from localStorage
       const existingPostsJSON = localStorage.getItem('earthLensUserPosts');
       let existingPosts: Record<string, BlogPost> = {};
       
@@ -147,20 +242,54 @@ const AddContent = () => {
         existingPosts = JSON.parse(existingPostsJSON);
       }
       
+      // Add or update post in localStorage
       localStorage.setItem('earthLensUserPosts', JSON.stringify({
         ...existingPosts,
-        [newPost.id]: newPost
+        [postData.id]: postData
       }));
+      
+      // Update mock data
+      if (!isEditMode) {
+        // Add new post
+        if (!mockData.byCategory[category]) {
+          mockData.byCategory[category] = [];
+        }
+        
+        mockData.byCategory[category].unshift(postData);
+        
+        // Also add to recent posts if that exists
+        if (mockData.recent) {
+          mockData.recent.unshift(postData);
+        }
+      } else {
+        // Update existing post in mockData categories
+        Object.keys(mockData.byCategory).forEach(cat => {
+          const index = mockData.byCategory[cat].findIndex(post => post.id === postData.id);
+          if (index !== -1) {
+            mockData.byCategory[cat][index] = postData;
+          }
+        });
+        
+        // Update in recent posts if exists
+        if (mockData.recent) {
+          const recentIndex = mockData.recent.findIndex(post => post.id === postData.id);
+          if (recentIndex !== -1) {
+            mockData.recent[recentIndex] = postData;
+          }
+        }
+      }
       
       // Show success message
       toast({
-        title: isDraft ? "Draft saved" : "Content published",
-        description: isDraft 
-          ? "Your draft has been saved successfully." 
-          : "Your content has been published successfully.",
+        title: isEditMode 
+          ? "Content updated" 
+          : isDraft ? "Draft saved" : "Content published",
+        description: isEditMode 
+          ? "Your content has been updated successfully." 
+          : isDraft ? "Your draft has been saved successfully." : "Your content has been published successfully.",
       });
       
-      // Navigate to the category page to see the new post
+      // Navigate to the category page to see the post
       navigate(`/category/${category}`);
     } catch (error) {
       toast({
@@ -174,20 +303,78 @@ const AddContent = () => {
     }
   };
 
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!originalPost || !isAuthor()) {
+      toast({
+        title: "Permission denied",
+        description: "You can only delete your own content.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    try {
+      // In a real app, this would be an API call to delete the post
+      
+      // Remove from localStorage
+      const existingPostsJSON = localStorage.getItem('earthLensUserPosts');
+      if (existingPostsJSON) {
+        const existingPosts = JSON.parse(existingPostsJSON);
+        if (existingPosts[originalPost.id]) {
+          delete existingPosts[originalPost.id];
+          localStorage.setItem('earthLensUserPosts', JSON.stringify(existingPosts));
+        }
+      }
+      
+      // Remove from mockData categories
+      Object.keys(mockData.byCategory).forEach(cat => {
+        mockData.byCategory[cat] = mockData.byCategory[cat].filter(post => post.id !== originalPost.id);
+      });
+      
+      // Remove from recent posts if exists
+      if (mockData.recent) {
+        mockData.recent = mockData.recent.filter(post => post.id !== originalPost.id);
+      }
+      
+      toast({
+        title: "Content deleted",
+        description: "Your content has been deleted successfully.",
+      });
+      
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error deleting your content. Please try again.",
+        variant: "destructive",
+      });
+      console.error("Error deleting content:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
       <PageHeader 
-        title="Share Your Perspective" 
-        subtitle="Add educational content to inspire and inform others about our amazing world."
+        title={isEditMode ? "Edit Your Content" : "Share Your Perspective"} 
+        subtitle={isEditMode 
+          ? "Update your educational content to make it even better" 
+          : "Add educational content to inspire and inform others about our amazing world."
+        }
+        showBackLink={true}
       />
       
       <main className="flex-1 py-12">
         <div className="container">
           <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
             <div className="bg-yellow-400 py-4 px-6">
-              <h2 className="text-xl font-bold text-black">Create New Content</h2>
+              <h2 className="text-xl font-bold text-black">
+                {isEditMode ? "Edit Content" : "Create New Content"}
+              </h2>
             </div>
             
             <ContentForm
@@ -216,6 +403,10 @@ const AddContent = () => {
               isSubmitting={isSubmitting}
               sampleVideos={sampleVideos}
               handleSubmit={handleSubmit}
+              isEditMode={isEditMode}
+              onDelete={handleDelete}
+              authorId={originalPost?.author?.name}
+              currentUserId={currentUser.name}
             />
           </div>
         </div>

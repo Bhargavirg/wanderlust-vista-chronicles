@@ -36,6 +36,7 @@ const App = () => (
           <Route path="/new-post" element={<NewPost />} />
           <Route path="/add-post" element={<AddPost />} />
           <Route path="/add-content" element={<AddContent />} />
+          <Route path="/edit-content/:postId" element={<AddContent />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
