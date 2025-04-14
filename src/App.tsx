@@ -15,6 +15,7 @@ import AddPost from "./pages/AddPost";
 import AddContent from "./pages/AddContent";
 import NotFound from "./pages/NotFound";
 import VideosPage from "./pages/VideosPage";
+import JoinCommunity from "./pages/JoinCommunity";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/add-post" element={<AddPost />} />
           <Route path="/add-content" element={<AddContent />} />
           <Route path="/edit-content/:postId" element={<AddContent />} />
+          <Route path="/join-community" element={<JoinCommunity />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

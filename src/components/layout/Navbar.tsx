@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf, Anchor, Landmark, BookText, Utensils } from "lucide-react";
+import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf, Anchor, Landmark, BookText, Utensils, Users, Mail } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
@@ -202,6 +201,24 @@ const Navbar = () => {
               <span className="sr-only">Search</span>
             </Button>
 
+            <Button 
+              variant="ghost"
+              onClick={() => navigate('/join-community')}
+              className="hidden md:flex items-center gap-1"
+            >
+              <Users className="h-4 w-4 mr-1" />
+              Join
+            </Button>
+
+            <Button 
+              variant="ghost"
+              onClick={() => navigate('/join-community')}
+              className="hidden md:flex items-center gap-1"
+            >
+              <Mail className="h-4 w-4 mr-1" />
+              Subscribe
+            </Button>
+
             {isLoggedIn ? (
               <>
                 <Button 
@@ -355,6 +372,12 @@ const Navbar = () => {
                       className="text-sm font-medium transition-colors"
                     >
                       Stories
+                    </Link>
+                    <Link 
+                      to="/join-community"
+                      className="text-sm font-medium transition-colors"
+                    >
+                      Join Community
                     </Link>
                   </div>
                   <div className="grid gap-2">
