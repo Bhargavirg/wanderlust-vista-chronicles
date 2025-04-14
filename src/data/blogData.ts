@@ -1,10 +1,10 @@
-
 export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
   coverImage: string;
-  category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife';
+  category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 
+    'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories';
   subCategory?: string; // For more specific categorization
   author: {
     name: string;
