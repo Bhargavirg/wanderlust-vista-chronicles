@@ -31,7 +31,8 @@ const Navbar = () => {
         "science", "technology", "travel", "history", "culture", 
         "nature", "space", "wildlife", "marine-life", "monuments", 
         "literature", "art", "flowers", "food", "anime", 
-        "politics", "sports", "stories", "videos"
+        "politics", "sports", "stories","archealogy", "psychology","mythology","deep-earth","ancientcivilizations" ,"biodiversity",
+        "climatechange", "videos"
       ];
       
       // Check if search query matches any category (case insensitive)

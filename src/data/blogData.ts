@@ -3,6 +3,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   coverImage: string;
+  screenSizeImage?: string;
   category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 
     'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories';
   subCategory?: string; // For more specific categorization
@@ -366,7 +367,7 @@ export const mockData: BlogData = {
         id: "21",
         title: "The Secret Life of Urban Foxes",
         excerpt: "How these adaptable predators are thriving in cities around the world.",
-        coverImage: "https://images.unsplash.com/photo-1616627052149-22c4329f9ccc",
+        coverImage: "https://cdn.pixabay.com/photo/2019/11/26/19/57/animal-4655388_1280.jpg",
         category: "wildlife",
         author: {
           name: "Jessica Brown",
@@ -388,9 +389,45 @@ export const mockData: BlogData = {
       },
       {
         id: "23",
-        title: "Underwater Wonders: The Great Barrier Reef",
-        excerpt: "Exploring the incredible diversity of the world's largest coral reef ecosystem.",
-        coverImage: "https://images.unsplash.com/photo-1613339027862-359bdff064b4",
+        title: "Animal kingdom hirarchy",
+        excerpt: "Understanding the complex social structures of animal species.",
+        coverImage: "https://i.pinimg.com/736x/eb/83/70/eb8370e5c5e9b2b5c0247e4cf7155031.jpg",
+        category: "wildlife",
+        author: {
+          name: "Olivia Taylor",
+          avatar: "https://i.pravatar.cc/150?img=27",
+        },
+        publishedAt: "2025-03-16T09:30:00Z",
+      },
+      {
+        id: "23",
+        title: "Snake Island: A Hidden Gem of Biodiversity",
+        excerpt: "Discover the unique wildlife and ecosystems of this remote island.",
+        coverImage: "https://cdn.pixabay.com/photo/2021/10/28/10/49/red-bellied-black-snake-6749361_1280.jpg",
+        category: "wildlife",
+        author: {
+          name: "Olivia Taylor",
+          avatar: "https://i.pravatar.cc/150?img=27",
+        },
+        publishedAt: "2025-03-16T09:30:00Z",
+      },
+      {
+        id: "23",
+        title: "Elephant Migration: Nature's Great Journey",
+        excerpt: "Witnessing the majestic migration of elephants across the African savannah.",
+        coverImage: "https://cdn.pixabay.com/photo/2020/01/02/14/53/elephant-4736008_1280.jpg",
+        category: "wildlife",
+        author: {
+          name: "Olivia Taylor",
+          avatar: "https://i.pravatar.cc/150?img=27",
+        },
+        publishedAt: "2025-03-16T09:30:00Z",
+      },
+      {
+        id: "23",
+        title: "Loin king of the jungle",
+        excerpt: "Forests are home to many species of wildlife, including lions, tigers, and bears.",
+        coverImage: "https://i.pinimg.com/736x/43/c2/c1/43c2c16d57298b41196c4562cb52f384.jpg",
         category: "wildlife",
         author: {
           name: "Olivia Taylor",
@@ -399,5 +436,237 @@ export const mockData: BlogData = {
         publishedAt: "2025-03-16T09:30:00Z",
       },
     ],
+    art: [
+      {
+        id: "24",
+        title: "Impressionism: The Art Movement That Changed the World",
+        excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        category: "art",
+        author: {
+          name: "Anna Lee",
+          avatar: "https://i.pravatar.cc/150?img=28",
+          credentials: "Art Historian"
+        },
+        publishedAt: "2025-03-15T10:00:00Z",
+      },
+      {
+        id: "24",
+        title: "Impressionism: The Art Movement That Changed the World",
+        excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        category: "art",
+        author: {
+          name: "Anna Lee",
+          avatar: "https://i.pravatar.cc/150?img=28",
+          credentials: "Art Historian"
+        },
+        publishedAt: "2025-03-15T10:00:00Z",
+      },
+      {
+        id: "24",
+        title: "Impressionism: The Art Movement That Changed the World",
+        excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        category: "art",
+        author: {
+          name: "Anna Lee",
+          avatar: "https://i.pravatar.cc/150?img=28",
+          credentials: "Art Historian"
+        },
+        publishedAt: "2025-03-15T10:00:00Z",
+      },
+      {
+        id: "24",
+        title: "Impressionism: The Art Movement That Changed the World",
+        excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        category: "art",
+        author: {
+          name: "Anna Lee",
+          avatar: "https://i.pravatar.cc/150?img=28",
+          credentials: "Art Historian"
+        },
+        publishedAt: "2025-03-15T10:00:00Z",
+      },
+      {
+        id: "24",
+        title: "Impressionism: The Art Movement That Changed the World",
+        excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+        category: "art",
+        author: {
+          name: "Anna Lee",
+          avatar: "https://i.pravatar.cc/150?img=28",
+          credentials: "Art Historian"
+        },
+        publishedAt: "2025-03-15T10:00:00Z",
+      }
+    ],
+    flowers: [
+      {
+        id: "25",
+        title: "The Language of Flowers: Meanings and Symbolism",
+        excerpt: "Discover the hidden meanings behind popular flowers.",
+        coverImage: "https://i.pinimg.com/736x/c6/e8/c8/c6e8c8621642ebb22c0372fe3ee9f53c.jpg",
+        category: "flowers",
+        author: {
+          name: "Emily Clark",
+          avatar: "https://i.pravatar.cc/150?img=29",
+          credentials: "Botanist"
+        },
+        publishedAt: "2025-03-14T09:00:00Z",
+      }
+    ],
+    anime: [
+      {
+        id: "26",
+        title: "The Evolution of Anime: From Classic to Modern",
+        excerpt: "A look at how anime has changed over the decades.",
+        coverImage: "https://i.pinimg.com/736x/40/21/e0/4021e0512ac11ea228bacdc4e19f933d.jpg",
+        category: "anime",
+        author: {
+          name: "Kenji Yamamoto",
+          avatar: "https://i.pravatar.cc/150?img=30",
+          credentials: "Anime Critic"
+        },
+        publishedAt: "2025-03-13T11:00:00Z",
+      }
+    ],
+    politics: [
+      {
+        id: "27",
+        title: "The Role of Democracy in Modern Society",
+        excerpt: "Understanding the importance and challenges of democracy today.",
+        coverImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf",
+        category: "politics",
+        author: {
+          name: "Sarah Johnson",
+          avatar: "https://i.pravatar.cc/150?img=31",
+          credentials: "Political Scientist"
+        },
+        publishedAt: "2025-03-12T14:00:00Z",
+      }
+    ],
+    sports: [
+      {
+        id: "28",
+        title: "The Greatest Moments in Olympic History",
+        excerpt: "Relive some of the most memorable Olympic events.",
+        coverImage: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf",
+        category: "sports",
+        author: {
+          name: "Michael Brown",
+          avatar: "https://i.pravatar.cc/150?img=32",
+          credentials: "Sports Analyst"
+        },
+        publishedAt: "2025-03-11T13:00:00Z",
+      }
+    ],
+    stories: [
+      {
+        id: "29",
+        title: "Folk Tales from Around the World",
+        excerpt: "Explore traditional stories passed down through generations.",
+        coverImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15",
+        category: "stories",
+        author: {
+          name: "Laura Green",
+          avatar: "https://i.pravatar.cc/150?img=33",
+          credentials: "Storyteller"
+        },
+        publishedAt: "2025-03-10T12:00:00Z",
+      }
+    ],
+    travel: [
+      {
+        id: "30",
+        title: "Top Destinations for Adventure Travel",
+        excerpt: "Discover exciting places for your next adventure.",
+        coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+        category: "travel",
+        author: {
+          name: "David Wilson",
+          avatar: "https://i.pravatar.cc/150?img=34",
+          credentials: "Travel Blogger"
+        },
+        publishedAt: "2025-03-09T11:00:00Z",
+      }
+    ],
+    food: [
+      {
+        id: "31",
+        title: "Exploring World Cuisines: A Culinary Journey",
+        excerpt: "Taste the flavors of different cultures.",
+        coverImage: "https://images.unsplash.com/photo-1490645935967-10de6ba17061",
+        category: "food",
+        author: {
+          name: "Sophia Martinez",
+          avatar: "https://i.pravatar.cc/150?img=35",
+          credentials: "Chef"
+        },
+        publishedAt: "2025-03-08T10:00:00Z",
+      }
+    ],
+    monuments: [
+      {
+        id: "32",
+        title: "The Most Iconic Monuments Around the World",
+        excerpt: "Discover the history behind famous landmarks.",
+        coverImage: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29",
+        category: "monuments",
+        author: {
+          name: "James Anderson",
+          avatar: "https://i.pravatar.cc/150?img=36",
+          credentials: "Historian"
+        },
+        publishedAt: "2025-03-07T09:00:00Z",
+      }
+    ],
+    marinelife: [
+      {
+        id: "33",
+        title: "Coral Reefs: The Rainforests of the Sea",
+        excerpt: "Explore the vibrant ecosystems of coral reefs.",
+        coverImage: "https://i.pinimg.com/736x/e6/a7/87/e6a78748d900c1fa121f69829299ec21.jpg",
+        category: "marinelife",
+        author: {
+          name: "Olivia White",
+          avatar: "https://i.pravatar.cc/150?img=37",
+          credentials: "Marine Biologist"
+        },
+        publishedAt: "2025-03-06T08:00:00Z",
+      }
+    ],
+    literature: [
+      {
+        id: "34",
+        title: "Classic Literature That Shaped the World",
+        excerpt: "A look at timeless literary masterpieces.",
+        coverImage: "https://i.pinimg.com/736x/4c/be/72/4cbe72bd4c75c1fa36fd416d1601c816.jpg",
+        category: "literature",
+        author: {
+          name: "William Harris",
+          avatar: "https://i.pravatar.cc/150?img=38",
+          credentials: "Literary Critic"
+        },
+        publishedAt: "2025-03-05T07:00:00Z",
+      },
+      {
+        id: "34",
+        title: "Classic Literature That Shaped the World",
+        excerpt: "A look at timeless literary masterpieces.",
+        coverImage: "https://i.pinimg.com/736x/71/64/aa/7164aa49fca58e79e7014e67a5a99869.jpg",
+        category: "literature",
+        author: {
+          name: "William Harris",
+          avatar: "https://i.pravatar.cc/150?img=38",
+          credentials: "Literary Critic"
+        },
+        publishedAt: "2025-03-05T07:00:00Z",
+      }
+
+    ],
+    
   },
 };

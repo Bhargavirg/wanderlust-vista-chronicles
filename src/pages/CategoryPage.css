@@ -1,0 +1,158 @@
+/* Full viewport height and width header */
+.category-header {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Left side: full screen background image */
+  .category-header__image {
+    flex: 1 1 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  /* Removed overlay to allow full image visibility */
+  /* .category-header__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+  } */
+  
+  /* Right side: slider container */
+  .category-header__slider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    background-color: transparent; /* Changed from dark background to transparent */
+    overflow: hidden;
+    z-index: 10;
+  }
+  
+  /* Horizontal scroll container for blog cards */
+  .category-slider__scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  /* Hide scrollbar for Webkit browsers */
+  .category-slider__scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Each blog card wrapper */
+  .category-slider__card {
+    flex: 0 0 340px; /* Increased from 280px to 340px for bigger blog cards */
+    scroll-snap-align: start;
+  }
+  
+  /* Scroll navigation buttons */
+  .category-slider__nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    padding: 0.5rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 20;
+  }
+  
+  .category-slider__nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .category-slider__nav-button--left {
+    left: 0.5rem;
+  }
+  
+  .category-slider__nav-button--right {
+    right: 0.5rem;
+  }
+  
+  /* Category header content on image side (optional) */
+  .category-header__content {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    color: white;
+    max-width: 400px;
+    z-index: 15;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .category-header {
+      flex-direction: column;
+      height: auto;
+    }
+    .category-header__image {
+      flex: none;
+      width: 100%;
+      height: 50vh;
+    }
+    .category-header__slider {
+      position: relative;
+      width: 100%;
+      height: auto;
+      padding: 1rem;
+    }
+    .category-slider__scroll-container {
+      gap: 0.75rem;
+    }
+    .category-slider__card {
+      flex: 0 0 280px; /* Increased from 220px to 280px for bigger blog cards on mobile */
+    }
+    .category-slider__nav-button {
+      top: auto;
+      bottom: 1rem;
+      transform: none;
+    }
+    .category-slider__nav-button--left {
+      left: 2rem;
+    }
+    .category-slider__nav-button--right {
+      right: 2rem;
+    }
+  }
+  /* Gallery grid styles */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    }
+    
+    .gallery-grid img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+    object-fit: cover;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    }
+    
+    .gallery-grid img:hover {
+    transform: scale(1.05);
+    }
+    
+    /* Responsive adjustments for gallery images */
+    @media (max-width: 768px) {
+    .gallery-grid img {
+    height: 180px;
+    }
+    }

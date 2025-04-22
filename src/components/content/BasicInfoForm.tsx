@@ -15,7 +15,8 @@ import {
 import { MapPin } from "lucide-react";
 
 type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
-  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories";
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | 
+  "sports" | "stories" ;
 
 interface BasicInfoFormProps {
   title: string;
@@ -104,6 +105,7 @@ const BasicInfoForm = ({
               <SelectGroup>
                 <SelectLabel>Others</SelectLabel>
                 <SelectItem value="politics">Politics</SelectItem>
+                
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -14,7 +14,7 @@ const Hero = () => {
   };
   
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden" style={{ backgroundImage: "url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80)", backgroundSize: "cover", backgroundPosition: "center" }}>
+    <section className="relative py-20 md:py-32 overflow-hidden" style={{ backgroundImage: "url(https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg??ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80)", backgroundSize: "cover", backgroundPosition: "center" }}>
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
       

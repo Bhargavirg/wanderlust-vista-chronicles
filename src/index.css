@@ -98,4 +98,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  html, body, #root {
+    height: 100%;
+  }
+}
+
+@layer components {
+  .footer-bg-image {
+    background-image: url('https://cdn.pixabay.com/photo/2024/05/15/01/38/feather-8762426_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 }

@@ -1,6 +1,5 @@
-
-import { BlogPost } from "@/data/blogData";
-import BlogCard from "@/components/blog/BlogCard";
+import { BlogPost } from "../../data/blogData";
+import BlogCard from "../blog/BlogCard";
 import { motion } from "framer-motion";
 
 interface FeaturedSectionProps {

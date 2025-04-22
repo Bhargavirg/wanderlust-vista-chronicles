@@ -64,11 +64,10 @@ const Login = () => {
     <div className="min-h-screen flex flex-col">
       {/* Main login section with background */}
       <div 
-        className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
+        className="h-screen w-screen flex items-center justify-center bg-cover bg-center"
         style={{ 
-          backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundImage: "url(https://cdn.pixabay.com/photo/2023/10/26/08/24/autumn-8342089_1280.jpg?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80)", backgroundSize: "cover", backgroundPosition: "center" 
+         
         }}
       >
         <div className="w-full flex">
@@ -211,7 +210,7 @@ const Login = () => {
             <div className="rounded-lg overflow-hidden shadow-xl h-72">
               <div className="relative w-full h-full group">
                 <img 
-                  src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                  src="https://i.pinimg.com/736x/af/70/8f/af708fe0315bfb554c55758ea7ad84c6.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
                   alt="Monument interior"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -245,7 +244,7 @@ const Login = () => {
             <div className="rounded-lg overflow-hidden shadow-xl h-72">
               <div className="relative w-full h-full group">
                 <img 
-                  src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                  src="https://i.pinimg.com/736x/d7/c3/0f/d7c30f51352c5f7793a90fd98640a71d.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
                   alt="Travel landscape"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -278,7 +277,7 @@ const Login = () => {
               <div className="rounded-lg overflow-hidden shadow-2xl">
                 <div className="relative w-full h-0 pb-[56.25%]">
                   <iframe 
-                    src="https://www.youtube.com/embed/dIiO8bhqZxQ" 
+                    src="https://cdn.pixabay.com/video/2021/08/19/85674-591865490_large.mp4" 
                     title="Earth's Natural Wonders"
                     className="absolute top-0 left-0 w-full h-full"
                     frameBorder="0"
@@ -320,7 +319,7 @@ const Login = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Night sky with stars" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+                <img src="https://i.pinimg.com/736x/d7/d7/34/d7d734cc480aa49609131f1cd29d3b20.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Night sky with stars" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Discover</h3>
@@ -350,7 +349,7 @@ const Login = () => {
               transition={{ duration: 0.5, delay: 0.6 }}
             >
               <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Diverse community" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+                <img src="https://i.pinimg.com/736x/97/6e/07/976e07bb3d401b8f587771277137d9d1.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Diverse community" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Connect</h3>
@@ -365,7 +364,7 @@ const Login = () => {
               transition={{ duration: 0.5, delay: 0.8 }}
             >
               <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1592388748465-8c756747660c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Educational environment" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+                <img src="https://i.pinimg.com/736x/b8/71/e9/b871e986257d183f82f46da06e2e9360.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Educational environment" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Educate</h3>
@@ -382,6 +381,28 @@ const Login = () => {
               <Users className="mr-2" />
               Join Our Community
             </Button>
+          </div>
+          <div className="mt-8 grid grid-cols-2 gap-4 max-w-full mx-auto">
+            <img 
+              src="https://i.pinimg.com/736x/59/df/b0/59dfb02d36fc4733eea72f7d61131626.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+              alt="Nature 1" 
+              className="w-full h-[50vh] object-cover rounded-lg shadow-md"
+            />
+            <img 
+              src="https://i.pinimg.com/736x/47/85/d5/4785d57c50f308203332bfb78366713e.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+              alt="Nature 2" 
+              className="w-full h-[50vh] object-cover rounded-lg shadow-md"
+            />
+            <img 
+              src="https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+              alt="Nature 3" 
+              className="w-full h-[50vh] object-cover rounded-lg shadow-md"
+            />
+            <img 
+              src="https://cdn.pixabay.com/photo/2024/05/25/20/19/planet-8787642_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+              alt="Nature 4" 
+              className="w-full h-[50vh] object-cover rounded-lg shadow-md"
+            />
           </div>
         </div>
       </div>

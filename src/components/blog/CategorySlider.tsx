@@ -16,7 +16,7 @@ const CategorySlider = () => {
   const categories: CategorySlide[] = [
     {
       name: "Science",
-      image: "https://images.unsplash.com/photo-1532094349884-543019f6a73c?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/3d/85/7f/3d857fe040510267884a3c03f78dabbe.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Atom className="h-6 w-6" />,
       link: "/category/science",
       description: "Discoveries and breakthroughs"
@@ -30,21 +30,21 @@ const CategorySlider = () => {
     },
     {
       name: "History",
-      image: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://cdn.pixabay.com/photo/2018/05/17/16/03/compass-3408928_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <History className="h-6 w-6" />,
       link: "/category/history",
       description: "Our shared human past"
     },
     {
       name: "Culture",
-      image: "https://images.unsplash.com/photo-1493676304190-35560a325c4e?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/d8/c3/78/d8c37889799640a06408caeaf34a38fa.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Globe className="h-6 w-6" />,
       link: "/category/culture",
       description: "Human traditions worldwide"
     },
     {
       name: "Nature",
-      image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/1f/81/e6/1f81e6e79e6a6322b1bcea03fab08c95.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Leaf className="h-6 w-6" />,
       link: "/category/nature",
       description: "Wonders of our natural world"
@@ -58,28 +58,28 @@ const CategorySlider = () => {
     },
     {
       name: "Space",
-      image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://cdn.pixabay.com/photo/2023/08/16/16/32/ai-generated-8194508_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Rocket className="h-6 w-6" />,
       link: "/category/space",
       description: "Cosmic exploration"
     },
     {
       name: "Art",
-      image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/5d/5c/25/5d5c2556fcec282d7a82722b8dae5385.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Palette className="h-6 w-6" />,
       link: "/category/art",
       description: "Human creativity & expression"
     },
     {
       name: "Flowers",
-      image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/d5/5a/8e/d55a8e48bc020292ca8a8b7b0b5bb01a.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Flower2 className="h-6 w-6" />,
       link: "/category/flowers",
       description: "Botanical beauty around us"
     },
     {
       name: "Anime",
-      image: "https://images.unsplash.com/photo-1567016507665-356928ac6679?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/9e/07/92/9e0792fa4d1bc15db2e1b1440d0ef66b.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Film className="h-6 w-6" />,
       link: "/category/anime",
       description: "Japanese animation culture"
@@ -93,21 +93,21 @@ const CategorySlider = () => {
     },
     {
       name: "Sports",
-      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/4c/ea/6d/4cea6d4a6d970fa15156e5faeb595a4f.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Trophy className="h-6 w-6" />,
       link: "/category/sports",
       description: "Athletic competitions worldwide"
     },
     {
       name: "Stories",
-      image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/74/dc/eb/74dceb2ac5dc044e3f54ae4325a361a0.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <StoryIcon className="h-6 w-6" />,
       link: "/category/stories",
       description: "Compelling narratives and tales"
     },
     {
       name: "Food",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
+      image: "https://i.pinimg.com/736x/16/92/b3/1692b3193ce168983c05e8f42b2997c6.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80",
       icon: <Utensils className="h-6 w-6" />,
       link: "/category/food",
       description: "Culinary delights and recipes"
@@ -135,11 +135,13 @@ const CategorySlider = () => {
     },
     {
       name: "Monuments",
-      image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
+      image: "https://i.pinimg.com/736x/b2/0b/97/b20b977813320fcb9524cc8d37a3049c.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=2500&h=1600",
       icon: <Landmark className="h-6 w-6" />,
       link: "/category/monuments",
       description: "Historical landmarks worldwide"
     }
+   
+    
   ];
 
   return (
