@@ -7,7 +7,7 @@ import { mockData, BlogPost } from "../data/blogData";
 import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera } from "lucide-react";
 import { motion } from "framer-motion";
 import VideoEmbed from "../components/blog/VideoEmbed";
-import "./categoryPage.css";
+import "./CategoryPage.css";
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
