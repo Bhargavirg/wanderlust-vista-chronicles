@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark, Cloud, Brain, Shovel, Smile, Arch, DollarSign, Music } from "lucide-react";
+import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import CategorySlider from "@/components/blog/CategorySlider";
 

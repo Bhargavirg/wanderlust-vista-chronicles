@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Arch, DollarSign, Music } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 

@@ -4,7 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import BlogCard from "../components/blog/BlogCard";
 import { mockData, BlogPost } from "../data/blogData";
-import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Arch, DollarSign, Music } from "lucide-react";
+import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
 import { motion } from "framer-motion";
 import VideoEmbed from "../components/blog/VideoEmbed";
 import "./CategoryPage.css";
@@ -60,7 +60,7 @@ const CategoryPage = () => {
       case "food":
         return "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
       case "literature":
-        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
       case "art":
         return "https://cdn.pixabay.com/photo/2013/02/24/18/33/vincent-van-gogh-85799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
       case "flowers":
