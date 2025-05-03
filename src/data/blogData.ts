@@ -5,7 +5,8 @@ export interface BlogPost {
   coverImage: string;
   screenSizeImage?: string;
   category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 
-    'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories';
+    'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories' |
+    'deep-earth-geology' | 'ancient-civilization' | 'climate' | 'psychology' | 'archaeology' | 'mythology' | 'business-economics' | 'music' | 'current-affairs';
   subCategory?: string; // For more specific categorization
   author: {
     name: string;
@@ -650,23 +651,3 @@ export const mockData: BlogData = {
           avatar: "https://i.pravatar.cc/150?img=38",
           credentials: "Literary Critic"
         },
-        publishedAt: "2025-03-05T07:00:00Z",
-      },
-      {
-        id: "34",
-        title: "Classic Literature That Shaped the World",
-        excerpt: "A look at timeless literary masterpieces.",
-        coverImage: "https://i.pinimg.com/736x/71/64/aa/7164aa49fca58e79e7014e67a5a99869.jpg",
-        category: "literature",
-        author: {
-          name: "William Harris",
-          avatar: "https://i.pravatar.cc/150?img=38",
-          credentials: "Literary Critic"
-        },
-        publishedAt: "2025-03-05T07:00:00Z",
-      }
-
-    ],
-    
-  },
-};

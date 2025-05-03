@@ -4,7 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import BlogCard from "../components/blog/BlogCard";
 import { mockData, BlogPost } from "../data/blogData";
-import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera } from "lucide-react";
+import { Atom, Rocket, History, Globe, Leaf, BookOpen, Camera, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Arch, DollarSign, Music } from "lucide-react";
 import { motion } from "framer-motion";
 import VideoEmbed from "../components/blog/VideoEmbed";
 import "./CategoryPage.css";
@@ -53,6 +53,7 @@ const CategoryPage = () => {
   const getCategoryBackground = () => {
     switch (category) {
       case "marine-life":
+      case "marinelife":
         return "https://cdn.pixabay.com/photo/2013/11/01/11/13/dolphin-203875_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
       case "monuments":
         return "https://cdn.pixabay.com/photo/2019/12/28/14/29/tajmahal-4724799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
@@ -88,7 +89,26 @@ const CategoryPage = () => {
         return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
       case "wildlife":
         return "https://images.unsplash.com/photo-1504173010664-32509aeebb62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
-       default:
+      // New categories
+      case "deep-earth-geology":
+        return "https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg";
+      case "ancient-civilization":
+        return "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg";
+      case "climate":
+        return "https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg";
+      case "psychology":
+        return "https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg";
+      case "archaeology":
+        return "https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg";
+      case "mythology":
+        return "https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg";
+      case "business-economics":
+        return "https://cdn.pixabay.com/photo/2018/02/08/10/22/desk-3139127_1280.jpg";
+      case "music":
+        return "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg";
+      case "current-affairs":
+        return "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg";
+      default:
         return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
     }
   };
@@ -110,6 +130,25 @@ const CategoryPage = () => {
         return <BookOpen className="h-8 w-8" />;
       case "wildlife":
         return <Leaf className="h-8 w-8" />;
+      // New categories
+      case "deep-earth-geology":
+        return <Mountain className="h-8 w-8" />;
+      case "ancient-civilization":
+        return <Scroll className="h-8 w-8" />;
+      case "climate":
+        return <Cloud className="h-8 w-8" />;
+      case "psychology":
+        return <Brain className="h-8 w-8" />;
+      case "archaeology":
+        return <Shovel className="h-8 w-8" />;
+      case "mythology":
+        return <Smile className="h-8 w-8" />;
+      case "business-economics":
+        return <DollarSign className="h-8 w-8" />;
+      case "music":
+        return <Music className="h-8 w-8" />;
+      case "current-affairs":
+        return <Globe className="h-8 w-8" />;
       default:
         return <Camera className="h-8 w-8" />;
     }
@@ -132,6 +171,47 @@ const CategoryPage = () => {
         return "Venture into the cosmos and unlock the mysteries of the universe beyond our atmosphere.";
       case "wildlife":
         return "Discover the amazing diversity of life on Earth and learn about conservation efforts.";
+      case "literature":
+        return "Explore the world of books, poetry, and written expression throughout history.";
+      case "travel":
+        return "Journey to fascinating destinations and experience the diversity of our world.";
+      case "marinelife":
+        return "Dive into the depths of our oceans and discover the wonders beneath the waves.";
+      case "monuments":
+        return "Explore the architectural wonders and historical landmarks that define human achievement.";
+      case "food":
+        return "Savor the flavors and culinary traditions from cultures around the world.";
+      case "art":
+        return "Appreciate the beauty and meaning behind artistic expression across mediums and eras.";
+      case "flowers":
+        return "Discover the diversity and splendor of botanical wonders from around the globe.";
+      case "anime":
+        return "Explore the rich visual storytelling and cultural impact of Japanese animation.";
+      case "politics":
+        return "Understand the systems and events that shape governance and policy worldwide.";
+      case "sports":
+        return "Follow athletic achievements and the passion that drives competition around the world.";
+      case "stories":
+        return "Immerse yourself in narratives that entertain, educate, and connect us across cultures.";
+      // New categories
+      case "deep-earth-geology":
+        return "Explore Earth's structure, geological formations, and the forces that shape our planet.";
+      case "ancient-civilization":
+        return "Uncover the mysteries of lost cultures, hidden knowledge, and forgotten civilizations.";
+      case "climate":
+        return "Understand weather patterns, climate science, and environmental challenges facing our world.";
+      case "psychology":
+        return "Delve into the complexities of the human mind, behavior, and emotional experiences.";
+      case "archaeology":
+        return "Discover how scientists piece together human history through the study of artifacts and sites.";
+      case "mythology":
+        return "Journey through legends, myths, and ancient stories that have shaped human cultures.";
+      case "business-economics":
+        return "Stay informed about markets, financial trends, and economic developments worldwide.";
+      case "music":
+        return "Explore the universal language of melody, rhythm, and sonic expression across cultures.";
+      case "current-affairs":
+        return "Keep up with the most important events and issues shaping our world today.";
       default:
         return "Explore fascinating stories and educational content about our world.";
     }
@@ -147,6 +227,23 @@ const CategoryPage = () => {
         scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
       }
     }
+  };
+
+  // Format category display name
+  const getCategoryDisplayName = () => {
+    if (!category) return "";
+    
+    // Handle special cases like "deep-earth-geology" -> "Deep Earth & Geology"
+    if (category === "deep-earth-geology") return "Deep Earth & Geology";
+    if (category === "business-economics") return "Business & Economics";
+    if (category === "ancient-civilization") return "Ancient Civilization";
+    if (category === "current-affairs") return "Current Affairs";
+    
+    // Default: capitalize each word
+    return category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (
@@ -166,7 +263,7 @@ const CategoryPage = () => {
                 {getCategoryIcon()}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white">
-                {category && category.charAt(0).toUpperCase() + category.slice(1)}
+                {getCategoryDisplayName()}
               </h1>
             </div>
             <p className="text-xl text-white/90 max-w-2xl">
@@ -208,10 +305,11 @@ const CategoryPage = () => {
       {/* Yellow bar - National Geographic style */}
       <div className="bg-yellow-400 py-2">
         <div className="container">
-          <h2 className="text-black font-bold text-lg">EXPLORE {category && category.toUpperCase()}</h2>
+          <h2 className="text-black font-bold text-lg">EXPLORE {getCategoryDisplayName().toUpperCase()}</h2>
         </div>
       </div>
       
+      {/* Main content area - We've already moved the posts to the slider */}
       <main className="flex-1 py-12">
         <div className="container">
           {/* Removed old grid of posts since slider is now in header */}
@@ -231,7 +329,7 @@ const CategoryPage = () => {
                 >
                   <h3 className="font-medium">{topic}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {category && `${category.charAt(0).toUpperCase() + category.slice(1)} ${topic.toLowerCase()}`}
+                    {getCategoryDisplayName()} {topic.toLowerCase()}
                   </p>
                 </div>
               ))}
@@ -245,6 +343,7 @@ const CategoryPage = () => {
         <div className="container">
           <h2 className="text-2xl font-bold mb-8">Gallery</h2>
           <div className="gallery-grid">
+            {/* Keep existing gallery images */}
             <img src="https://cdn.pixabay.com/photo/2023/12/12/13/28/waterfall-8445292_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 1" />
             <img src="https://cdn.pixabay.com/photo/2020/02/01/20/05/hummingbird-hawkmoth-4811285_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 2" />
             <img src="https://cdn.pixabay.com/photo/2011/12/15/11/37/galaxy-11188_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 3" />
@@ -275,10 +374,6 @@ const CategoryPage = () => {
             <img src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="" />
             <img src="https://cdn.pixabay.com/photo/2023/08/15/03/25/great-wall-of-china-8191166_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="" />
             <img src="https://cdn.pixabay.com/photo/2018/02/28/20/19/nature-3188987_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="" />
-            
-           
-           
-           
           </div>
         </div>
       </section>
