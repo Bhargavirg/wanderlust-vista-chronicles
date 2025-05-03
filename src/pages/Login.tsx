@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,27 +6,53 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
+import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import CategorySlider from "@/components/blog/CategorySlider";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [session, setSession] = useState(null);
   const navigate = useNavigate();
+
+  // Check for existing session on component mount
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        navigate("/home");
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        if (session) {
+          navigate("/home");
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // In a real app, this would connect to an authentication service
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // Store login state in localStorage for the demo
-      localStorage.setItem("isLoggedIn", "true");
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Login successful",
@@ -34,10 +60,10 @@ const Login = () => {
       });
       
       navigate("/home");
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
@@ -46,17 +72,7 @@ const Login = () => {
   };
 
   const handleJoinCommunity = () => {
-    // If user is logged in, redirect to home page, otherwise to login
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    if (isLoggedIn) {
-      navigate("/home");
-    } else {
-      // Since we're already on login page, just scroll to the login form
-      const loginForm = document.querySelector(".login-form");
-      if (loginForm) {
-        loginForm.scrollIntoView({ behavior: "smooth" });
-      }
-    }
+    navigate("/register");
   };
 
   return (
@@ -158,14 +174,23 @@ const Login = () => {
                         Forgot password?
                       </Link>
                     </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="bg-white/50 dark:bg-gray-900/50"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="bg-white/50 dark:bg-gray-900/50 pr-10"
+                      />
+                      <button 
+                        type="button" 
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="flex items-center space-x-2">

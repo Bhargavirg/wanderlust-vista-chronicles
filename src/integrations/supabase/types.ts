@@ -9,7 +9,197 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      author_profiles: {
+        Row: {
+          created_at: string
+          expertise: string[] | null
+          featured: boolean | null
+          id: string
+          publications_count: number | null
+          qualification: string | null
+          social_links: Json | null
+          updated_at: string
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          expertise?: string[] | null
+          featured?: boolean | null
+          id: string
+          publications_count?: number | null
+          qualification?: string | null
+          social_links?: Json | null
+          updated_at?: string
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          expertise?: string[] | null
+          featured?: boolean | null
+          id?: string
+          publications_count?: number | null
+          qualification?: string | null
+          social_links?: Json | null
+          updated_at?: string
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "author_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      content: {
+        Row: {
+          additional_images: string[] | null
+          author_id: string | null
+          category_id: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          educational_metadata: Json | null
+          featured: boolean | null
+          id: string
+          likes_count: number | null
+          location: string | null
+          main_content: string | null
+          published: boolean | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          video_type: string | null
+          video_url: string | null
+          views_count: number | null
+        }
+        Insert: {
+          additional_images?: string[] | null
+          author_id?: string | null
+          category_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          educational_metadata?: Json | null
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          location?: string | null
+          main_content?: string | null
+          published?: boolean | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          video_type?: string | null
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          additional_images?: string[] | null
+          author_id?: string | null
+          category_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          educational_metadata?: Json | null
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          location?: string | null
+          main_content?: string | null
+          published?: boolean | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          video_type?: string | null
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "author_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          location: string | null
+          updated_at: string
+          username: string | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          location?: string | null
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          location?: string | null
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
