@@ -284,7 +284,7 @@ const Login = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
                   <div className="flex items-center mb-2">
-                    <Arch className="h-6 w-6 text-sky-400 mr-2" />
+                    <Building className="h-6 w-6 text-sky-400 mr-2" />
                     <h4 className="text-xl font-bold text-white">Ancient Civilization</h4>
                   </div>
                   <p className="text-white/80">Discover lost cultures and forgotten wisdom</p>
