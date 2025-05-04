@@ -13,7 +13,7 @@ export interface ContentCreateData {
   videoUrl?: string;
   videoType?: string;
   location?: string;
-  tags?: string[];
+  tags?: string[] | string;
   educationalMetadata?: EducationalMetadata;
 }
 
@@ -76,7 +76,7 @@ export async function updateContent(contentId: string, contentData: Partial<Cont
     if (contentData.tags !== undefined) {
       if (typeof contentData.tags === 'string') {
         tags = contentData.tags.split(',').map(tag => tag.trim()).filter(Boolean);
-      } else {
+      } else if (Array.isArray(contentData.tags)) {
         tags = contentData.tags;
       }
     }

@@ -132,14 +132,31 @@ const AddContent = () => {
             // Handle educational metadata properly with type checking
             if (post.educational_metadata) {
               const metadata = post.educational_metadata;
-              // Create a properly typed educational metadata object
+              
+              // Create a properly typed educational metadata object with safe type checks
               const typedMetadata: EducationalMetadata = {
-                difficulty: typeof metadata.difficulty === 'string' ? 
-                  metadata.difficulty as "beginner" | "intermediate" | "advanced" : "beginner",
-                ageRange: typeof metadata.ageRange === 'string' ? metadata.ageRange : "All ages",
-                subjects: Array.isArray(metadata.subjects) ? metadata.subjects : [],
-                factCheck: Boolean(metadata.factCheck),
-                expertReviewed: Boolean(metadata.expertReviewed),
+                difficulty: typeof metadata === 'object' && metadata !== null && 'difficulty' in metadata && 
+                  typeof metadata.difficulty === 'string' ? 
+                  metadata.difficulty as "beginner" | "intermediate" | "advanced" : 
+                  "beginner",
+                  
+                ageRange: typeof metadata === 'object' && metadata !== null && 'ageRange' in metadata && 
+                  typeof metadata.ageRange === 'string' ? 
+                  metadata.ageRange : 
+                  "All ages",
+                  
+                subjects: typeof metadata === 'object' && metadata !== null && 'subjects' in metadata && 
+                  Array.isArray(metadata.subjects) ? 
+                  metadata.subjects as string[] : 
+                  [],
+                  
+                factCheck: typeof metadata === 'object' && metadata !== null && 'factCheck' in metadata ? 
+                  Boolean(metadata.factCheck) : 
+                  false,
+                  
+                expertReviewed: typeof metadata === 'object' && metadata !== null && 'expertReviewed' in metadata ? 
+                  Boolean(metadata.expertReviewed) : 
+                  false,
               };
               
               setEducationalMetadata(typedMetadata);
