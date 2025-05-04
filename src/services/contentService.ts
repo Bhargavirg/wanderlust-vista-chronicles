@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -81,7 +80,10 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
       category_id: contentData.categoryId || null,
       author_id: authorId,
       educational_metadata: contentData.educationalMetadata ? contentData.educationalMetadata as unknown as Json : null,
-      published: !isDraft
+      published: !isDraft,
+      // Set default views and likes count
+      views_count: 0,
+      likes_count: 0
     };
     
     const { data, error } = await supabase
@@ -102,7 +104,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
   }
 }
 
-export async function updateContent(contentId: string, contentData: Partial<ContentCreateData>, isDraft?: boolean) {
+export async function updateContent(contentData: Partial<ContentCreateData>, contentId: string, isDraft?: boolean) {
   try {
     // Prepare tags array if provided
     let tags: string[] | undefined = undefined;
@@ -173,19 +175,56 @@ export async function getContentById(contentId: string) {
 }
 
 export async function getContentByCategory(categorySlug: string) {
+  // First get the category ID by slug
+  const { data: categoryData, error: categoryError } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', categorySlug)
+    .single();
+    
+  if (categoryError) {
+    console.error('Error fetching category:', categoryError);
+    return [];
+  }
+  
+  if (!categoryData) {
+    console.error('Category not found:', categorySlug);
+    return [];
+  }
+  
+  // Then get content by category ID
   const { data, error } = await supabase
     .from('content')
     .select(`
       *,
-      category:categories(name, slug),
-      author:author_id(id, profiles(username, avatar_url, full_name))
+      category:categories(*),
+      author:author_profiles(*)
     `)
-    .eq('categories.slug', categorySlug)
+    .eq('category_id', categoryData.id)
     .eq('published', true)
     .order('created_at', { ascending: false });
   
   if (error) {
     console.error('Error fetching content by category:', error);
+    return [];
+  }
+  
+  return data;
+}
+
+export async function getAllPublishedContent() {
+  const { data, error } = await supabase
+    .from('content')
+    .select(`
+      *,
+      category:categories(*),
+      author:author_profiles(*)
+    `)
+    .eq('published', true)
+    .order('created_at', { ascending: false });
+  
+  if (error) {
+    console.error('Error fetching all published content:', error);
     return [];
   }
   

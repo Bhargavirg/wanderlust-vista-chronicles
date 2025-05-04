@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
@@ -12,50 +12,106 @@ import { Button } from "@/components/ui/button";
 import { BookOpenText, Image as ImageIcon, Video as VideoIcon, ArrowLeft } from "lucide-react";
 import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { getContentById, getAllPublishedContent } from "@/services/contentService";
+import { toast } from "@/hooks/use-toast";
 
 const PostDetail = () => {
   const { postId } = useParams<{ postId: string }>();
   const [focusModeActive, setFocusModeActive] = useState(false);
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   
-  // Fix: Access the posts from the byCategory object, combining all categories
-  const allPosts = Object.values(mockData.byCategory || {}).flat();
-  // Also include featured and recent posts to ensure we find all posts
-  const combinedPosts = [
-    ...(mockData.featured ? [mockData.featured] : []), 
-    ...(mockData.recent || []), 
-    ...allPosts
-  ];
-  // Remove duplicates by ID
-  const uniquePosts = Array.from(new Map(combinedPosts.map(post => [post?.id, post])).values()).filter(Boolean);
-  // Find the post by ID
-  const post = uniquePosts.find((p) => p?.id === postId);
-
-  // Mock media data for demonstration purposes
-  // In a real app, this would come from the backend
-  const sampleImages = post ? [
-    post.coverImage,
-    "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
-  ] : [];
-  
-  const sampleCaptions = [
-    "Featured image for this blog post",
-    "Illustration of technology concept",
-    "Close-up of computer components"
-  ];
-  
-  const sampleVideo = {
-    src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    type: "youtube" as const,
-    title: "Key concepts explained",
-    description: "This video explains the core concepts discussed in this article in detail."
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    async function loadPost() {
+      if (!postId) return;
+      
+      setLoading(true);
+      try {
+        const contentData = await getContentById(postId);
+        console.log("Fetched post content:", contentData);
+        
+        if (contentData) {
+          setPost(contentData);
+          
+          // Load related content
+          const allContent = await getAllPublishedContent();
+          const related = allContent
+            .filter(item => item.id !== postId && item.category_id === contentData.category_id)
+            .slice(0, 3);
+            
+          setRelatedPosts(related);
+        } else {
+          // Fall back to mock data
+          const combinedPosts = [
+            ...(mockData.featured ? [mockData.featured] : []), 
+            ...(mockData.recent || []), 
+            ...Object.values(mockData.byCategory || {}).flat()
+          ];
+          const uniquePosts = Array.from(new Map(combinedPosts.map(p => [p?.id, p])).values()).filter(Boolean);
+          const foundPost = uniquePosts.find((p) => p?.id === postId);
+          
+          setPost(foundPost || null);
+          
+          if (foundPost) {
+            // Find related posts with the same category from mock data
+            const mockRelatedPosts = uniquePosts
+              .filter((p) => p?.category === foundPost.category && p?.id !== foundPost.id)
+              .slice(0, 3);
+              
+            setRelatedPosts(mockRelatedPosts);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load post content",
+          variant: "destructive",
+        });
+        
+        // Fall back to mock data
+        const combinedPosts = [
+          ...(mockData.featured ? [mockData.featured] : []), 
+          ...(mockData.recent || []), 
+          ...Object.values(mockData.byCategory || {}).flat()
+        ];
+        const uniquePosts = Array.from(new Map(combinedPosts.map(p => [p?.id, p])).values()).filter(Boolean);
+        const foundPost = uniquePosts.find((p) => p?.id === postId);
+        
+        setPost(foundPost || null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadPost();
   }, [postId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1 container mx-auto py-6 px-4">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-8"></div>
+            <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded mb-6"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -65,6 +121,13 @@ const PostDetail = () => {
           <div className="text-center text-gray-500 py-12">
             <h1 className="text-2xl font-bold mb-4">Post Not Found</h1>
             <p>Sorry, the post you are looking for could not be found.</p>
+            <Button 
+              variant="outline" 
+              className="mt-4" 
+              onClick={() => window.history.back()}
+            >
+              Go Back
+            </Button>
           </div>
         </main>
         <Footer />
@@ -72,13 +135,23 @@ const PostDetail = () => {
     );
   }
 
-  const { minutes, seconds } = calculateReadingTime(post.excerpt);
+  // Format the post content for display
+  const postContent = post.main_content || post.excerpt || post.description || "No content available.";
+  
+  // Calculate reading time
+  const { minutes, seconds } = calculateReadingTime(postContent);
   const readingTime = formatReadingTime(minutes, seconds);
 
-  // Find related posts with the same category
-  const relatedPosts = uniquePosts
-    .filter((p) => p?.category === post.category && p?.id !== post.id)
-    .slice(0, 3);
+  // Get post images for carousel
+  const postImages = [
+    post.cover_image,
+    ...(post.additional_images || [])
+  ].filter(Boolean);
+
+  // Get image captions
+  const imageCaptions = postImages.map((_, index) => 
+    index === 0 ? "Featured image for this post" : `Additional image ${index}`
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -108,11 +181,9 @@ const PostDetail = () => {
           </motion.h1>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <p className="text-gray-600 dark:text-gray-400">
-              Published on {new Date(post.publishedAt).toLocaleDateString()} in{" "}
-              <span 
-                className="text-primary font-medium hover:underline"
-              >
-                {post.category}
+              Published on {new Date(post.created_at || post.publishedAt).toLocaleDateString()} in{" "}
+              <span className="text-primary font-medium hover:underline">
+                {post.category?.name || post.category}
               </span>
             </p>
             <div className="flex items-center gap-3">
@@ -145,18 +216,20 @@ const PostDetail = () => {
           </div>
         </div>
 
-        {/* Display multiple images using carousel */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="mb-6"
-        >
-          <ImageCarousel 
-            images={sampleImages} 
-            captions={sampleCaptions} 
-          />
-        </motion.div>
+        {/* Display post images using carousel */}
+        {postImages.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="mb-6"
+          >
+            <ImageCarousel 
+              images={postImages} 
+              captions={imageCaptions} 
+            />
+          </motion.div>
+        )}
 
         <motion.div 
           initial={{ opacity: 0 }}
@@ -164,50 +237,51 @@ const PostDetail = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="prose dark:prose-invert max-w-none"
         >
-          <p>{post.excerpt}</p>
+          {/* Display post content */}
+          <div dangerouslySetInnerHTML={{ __html: postContent }} />
           
-          {/* Video embed example */}
-          <div className="my-8 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 border border-gray-100 dark:border-gray-700">
-            <h3 className="text-xl font-medium mb-3 flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <VideoIcon size={20} className="text-primary" />
-              Featured Video
-            </h3>
-            <VideoEmbed 
-              src={sampleVideo.src}
-              type={sampleVideo.type}
-              title={sampleVideo.title}
-              description={sampleVideo.description}
-            />
-          </div>
-
-          <p className="mt-6">
-            {post.excerpt} {/* Duplicate content for demo purposes */}
-          </p>
+          {/* Video embed if available */}
+          {post.video_url && (
+            <div className="my-8 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-xl font-medium mb-3 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <VideoIcon size={20} className="text-primary" />
+                Featured Video
+              </h3>
+              <VideoEmbed 
+                src={post.video_url}
+                type={post.video_type || "youtube"}
+                title="Featured video for this post"
+              />
+            </div>
+          )}
         </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="mt-12"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-            <span className="w-8 h-1 bg-primary block rounded-full"></span>
-            More Like This
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {relatedPosts.map((relatedPost) => (
-              <BlogCard key={relatedPost.id} post={relatedPost} />
-            ))}
-          </div>
-        </motion.div>
+        {/* Related posts section */}
+        {relatedPosts.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="mt-12"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+              <span className="w-8 h-1 bg-primary block rounded-full"></span>
+              More Like This
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {relatedPosts.map((relatedPost) => (
+                <BlogCard key={relatedPost.id} post={relatedPost} />
+              ))}
+            </div>
+          </motion.div>
+        )}
       </motion.main>
       <Footer />
       
       <AnimatePresence>
         {focusModeActive && (
           <FocusMode 
-            content={post.excerpt}
+            content={postContent}
             title={post.title}
             onExit={() => setFocusModeActive(false)}
           />

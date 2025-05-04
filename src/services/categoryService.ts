@@ -57,6 +57,67 @@ const defaultCategories: Category[] = [
     name: "Mythology",
     slug: "mythology",
     description: "Ancient stories, legendary beings, and cultural beliefs."
+  },
+  // Add more categories to match those in CategorySection
+  {
+    name: "Science",
+    slug: "science",
+    description: "Exploring scientific discoveries and advancements."
+  },
+  {
+    name: "Technology",
+    slug: "technology",
+    description: "Innovations and technological developments changing our world."
+  },
+  {
+    name: "History",
+    slug: "history",
+    description: "Journey through time to understand our shared human past."
+  },
+  {
+    name: "Culture",
+    slug: "culture",
+    description: "Experience traditions and expressions from around the world."
+  },
+  {
+    name: "Nature",
+    slug: "nature",
+    description: "Connect with the natural beauty and wonders of our planet."
+  },
+  {
+    name: "Space",
+    slug: "space",
+    description: "Venture into the cosmos and unlock the mysteries of the universe."
+  },
+  {
+    name: "Art",
+    slug: "art",
+    description: "Experience human creativity and expression across different mediums."
+  },
+  {
+    name: "Flowers",
+    slug: "flowers",
+    description: "Discover the beautiful world of flowers and their significance."
+  },
+  {
+    name: "Anime",
+    slug: "anime",
+    description: "Explore Japanese animation and its cultural impact worldwide."
+  },
+  {
+    name: "Politics",
+    slug: "politics",
+    description: "Stay informed about global affairs, governance, and policy developments."
+  },
+  {
+    name: "Sports",
+    slug: "sports",
+    description: "Follow athletic competitions and sporting events from around the globe."
+  },
+  {
+    name: "Stories",
+    slug: "stories",
+    description: "Immerse yourself in compelling narratives and meaningful tales."
   }
 ];
 
@@ -71,19 +132,32 @@ export async function initializeCategories() {
       throw countError;
     }
     
-    // If no categories exist, insert the default ones
-    if (count === 0) {
+    // If no categories exist or additional categories should be added
+    const { data: existingCategories, error: fetchError } = await supabase
+      .from('categories')
+      .select('slug');
+      
+    if (fetchError) {
+      throw fetchError;
+    }
+    
+    const existingSlugs = new Set((existingCategories || []).map(cat => cat.slug));
+    const missingCategories = defaultCategories.filter(cat => !existingSlugs.has(cat.slug));
+    
+    if (missingCategories.length > 0) {
+      console.log(`Adding ${missingCategories.length} missing categories`);
       const { error } = await supabase
         .from('categories')
-        .insert(defaultCategories);
+        .insert(missingCategories);
       
       if (error) {
+        console.error('Error adding categories:', error);
         throw error;
       }
       
-      console.log('Default categories added successfully');
+      console.log('Missing categories added successfully');
     } else {
-      console.log('Categories already exist, skipping initialization');
+      console.log('All categories already exist');
     }
     
     return true;
