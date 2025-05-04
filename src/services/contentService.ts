@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
+import { Json } from "@/integrations/supabase/types";
 
 export interface ContentCreateData {
   title: string;
@@ -32,7 +33,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
       tags = contentData.tags;
     }
     
-    // Create content object
+    // Create content object with proper typing for JSON data
     const contentObject = {
       title: contentData.title,
       slug,
@@ -46,7 +47,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
       tags: tags.length > 0 ? tags : null,
       category_id: contentData.categoryId || null,
       author_id: authorId || null,
-      educational_metadata: contentData.educationalMetadata || null,
+      educational_metadata: contentData.educationalMetadata ? contentData.educationalMetadata as unknown as Json : null,
       published: !isDraft
     };
     
@@ -57,6 +58,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
       .single();
     
     if (error) {
+      console.error('Error insert details:', error);
       throw error;
     }
     
@@ -92,7 +94,9 @@ export async function updateContent(contentId: string, contentData: Partial<Cont
     if (contentData.location !== undefined) updateObject.location = contentData.location;
     if (tags !== undefined) updateObject.tags = tags.length > 0 ? tags : null;
     if (contentData.categoryId !== undefined) updateObject.category_id = contentData.categoryId;
-    if (contentData.educationalMetadata !== undefined) updateObject.educational_metadata = contentData.educationalMetadata;
+    if (contentData.educationalMetadata !== undefined) {
+      updateObject.educational_metadata = contentData.educationalMetadata as unknown as Json;
+    }
     if (isDraft !== undefined) updateObject.published = !isDraft;
     
     // Always update the updated_at timestamp

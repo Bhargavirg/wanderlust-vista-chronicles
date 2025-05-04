@@ -129,15 +129,20 @@ const AddContent = () => {
               setLocation(post.location);
             }
             
-            // Set educational metadata if available
+            // Handle educational metadata properly with type checking
             if (post.educational_metadata) {
-              setEducationalMetadata({
-                difficulty: post.educational_metadata.difficulty || "beginner",
-                ageRange: post.educational_metadata.ageRange || "All ages",
-                subjects: post.educational_metadata.subjects || [],
-                factCheck: post.educational_metadata.factCheck || false,
-                expertReviewed: post.educational_metadata.expertReviewed || false,
-              });
+              const metadata = post.educational_metadata;
+              // Create a properly typed educational metadata object
+              const typedMetadata: EducationalMetadata = {
+                difficulty: typeof metadata.difficulty === 'string' ? 
+                  metadata.difficulty as "beginner" | "intermediate" | "advanced" : "beginner",
+                ageRange: typeof metadata.ageRange === 'string' ? metadata.ageRange : "All ages",
+                subjects: Array.isArray(metadata.subjects) ? metadata.subjects : [],
+                factCheck: Boolean(metadata.factCheck),
+                expertReviewed: Boolean(metadata.expertReviewed),
+              };
+              
+              setEducationalMetadata(typedMetadata);
             }
             
             // Set original post for reference
@@ -229,28 +234,47 @@ const AddContent = () => {
     
     setIsSubmitting(true);
 
-    // Prepare content data
-    const contentData = {
-      title,
-      description,
-      mainContent,
-      categoryId,
-      coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
-      additionalImages: images.length > 0 ? images : undefined,
-      videoUrl,
-      videoType,
-      location,
-      tags: tags || undefined,
-      educationalMetadata: {
-        difficulty: educationalMetadata.difficulty,
-        ageRange: educationalMetadata.ageRange,
-        subjects: educationalMetadata.subjects,
-        factCheck: educationalMetadata.factCheck,
-        expertReviewed: educationalMetadata.expertReviewed,
-      }
-    };
-
     try {
+      // Make sure the user has an author profile before adding content
+      const { data: authorProfile, error: authorError } = await supabase
+        .from('author_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+        
+      if (authorError && authorError.code !== 'PGRST116') {
+        // Create an author profile if it doesn't exist
+        const { error: createError } = await supabase
+          .from('author_profiles')
+          .insert({ 
+            id: user.id,
+            expertise: [],
+            featured: false,
+            publications_count: 0,
+            qualification: null,
+            verified: false
+          });
+          
+        if (createError) {
+          throw createError;
+        }
+      }
+
+      // Prepare content data with correct tags handling
+      const contentData = {
+        title,
+        description,
+        mainContent,
+        categoryId,
+        coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
+        additionalImages: images.length > 0 ? images : undefined,
+        videoUrl,
+        videoType,
+        location,
+        tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        educationalMetadata
+      };
+
       if (isEditMode && originalPost) {
         // Update existing content
         await updateContent(originalPost.id, contentData, isDraft);

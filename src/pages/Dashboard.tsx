@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -189,7 +188,6 @@ const Dashboard = () => {
                       avatar: post.author?.profiles?.avatar_url || "https://i.pravatar.cc/150?img=32"
                     },
                     publishedAt: post.created_at,
-                    content: post.main_content
                   }} 
                   hasVideo={!!post.video_url} 
                   className={!gridView ? "md:grid md:grid-cols-2" : ""}
