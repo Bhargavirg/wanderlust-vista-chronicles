@@ -19,6 +19,39 @@ export interface ContentCreateData {
 
 export async function addContent(contentData: ContentCreateData, authorId?: string, isDraft: boolean = false) {
   try {
+    if (!authorId) {
+      throw new Error("Author ID is required to add content");
+    }
+
+    // Check if author profile exists, create one if it doesn't
+    const { data: authorProfile, error: authorError } = await supabase
+      .from('author_profiles')
+      .select('id')
+      .eq('id', authorId)
+      .single();
+
+    if (authorError && authorError.code === 'PGRST116') {
+      // Author profile doesn't exist, create it
+      const { error: createProfileError } = await supabase
+        .from('author_profiles')
+        .insert({ 
+          id: authorId,
+          expertise: [],
+          featured: false,
+          publications_count: 0,
+          qualification: null,
+          verified: false
+        });
+        
+      if (createProfileError) {
+        console.error('Error creating author profile:', createProfileError);
+        throw createProfileError;
+      }
+    } else if (authorError) {
+      console.error('Error checking author profile:', authorError);
+      throw authorError;
+    }
+
     // Prepare the slug from title
     const slug = contentData.title
       .toLowerCase()
@@ -46,7 +79,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
       location: contentData.location || null,
       tags: tags.length > 0 ? tags : null,
       category_id: contentData.categoryId || null,
-      author_id: authorId || null,
+      author_id: authorId,
       educational_metadata: contentData.educationalMetadata ? contentData.educationalMetadata as unknown as Json : null,
       published: !isDraft
     };

@@ -252,31 +252,6 @@ const AddContent = () => {
     setIsSubmitting(true);
 
     try {
-      // Make sure the user has an author profile before adding content
-      const { data: authorProfile, error: authorError } = await supabase
-        .from('author_profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-        
-      if (authorError && authorError.code !== 'PGRST116') {
-        // Create an author profile if it doesn't exist
-        const { error: createError } = await supabase
-          .from('author_profiles')
-          .insert({ 
-            id: user.id,
-            expertise: [],
-            featured: false,
-            publications_count: 0,
-            qualification: null,
-            verified: false
-          });
-          
-        if (createError) {
-          throw createError;
-        }
-      }
-
       // Prepare content data with correct tags handling
       const contentData = {
         title,
@@ -288,7 +263,7 @@ const AddContent = () => {
         videoUrl,
         videoType,
         location,
-        tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: tags,
         educationalMetadata
       };
 
