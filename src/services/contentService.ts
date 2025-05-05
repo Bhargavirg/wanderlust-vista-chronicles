@@ -10,8 +10,7 @@ export async function getContentById(id: string) {
       .select(`
         *,
         category:categories(*),
-        author_id,
-        profiles(*)
+        author:profiles(*)
       `)
       .eq('id', id)
       .single();
@@ -63,7 +62,7 @@ export async function getContentByCategory(categorySlug: string) {
       .select(`
         *,
         category:categories(*),
-        profiles(*)
+        author:profiles(*)
       `)
       .eq('category_id', categoryData.id)
       .eq('published', true)
@@ -88,7 +87,7 @@ export async function getAllPublishedContent() {
       .select(`
         *,
         category:categories(*),
-        profiles(*)
+        author:profiles(*)
       `)
       .eq('published', true)
       .order('created_at', { ascending: false });
@@ -112,7 +111,7 @@ export async function getFeaturedContent() {
       .select(`
         *,
         category:categories(*),
-        profiles(*)
+        author:profiles(*)
       `)
       .eq('featured', true)
       .eq('published', true)

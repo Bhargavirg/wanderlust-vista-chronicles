@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -37,8 +38,8 @@ const CategoryPage = () => {
             coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
             category: item.category?.slug || category,
             author: {
-              name: item.profiles?.username || item.profiles?.full_name || "Anonymous",
-              avatar: item.profiles?.avatar_url || "https://i.pravatar.cc/150?img=32"
+              name: item.author?.username || item.author?.full_name || "Anonymous",
+              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
             },
             publishedAt: item.created_at
           }));
