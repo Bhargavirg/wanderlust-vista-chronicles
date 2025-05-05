@@ -31,18 +31,23 @@ const CategoryPage = () => {
         
         if (contentData && contentData.length > 0) {
           // Map the content data to the expected BlogPost format
-          const formattedPosts = contentData.map(item => ({
-            id: item.id,
-            title: item.title || "Untitled Post",
-            excerpt: item.description || "",
-            coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
-            category: item.category?.slug || category,
-            author: {
-              name: item.author?.username || item.author?.full_name || "Anonymous",
-              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
-            },
-            publishedAt: item.created_at
-          }));
+          const formattedPosts = contentData.map(item => {
+            // Add null checks for author property
+            const author = item.author || {};
+            
+            return {
+              id: item.id,
+              title: item.title || "Untitled Post",
+              excerpt: item.description || "",
+              coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
+              category: item.category?.slug || category,
+              author: {
+                name: author.username || author.full_name || "Anonymous",
+                avatar: author.avatar_url || "https://i.pravatar.cc/150?img=32"
+              },
+              publishedAt: item.created_at
+            };
+          });
           setPosts(formattedPosts);
         } else {
           // Fallback to mock data if no real content available
