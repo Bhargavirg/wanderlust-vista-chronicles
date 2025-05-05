@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -29,17 +28,22 @@ export async function getContentById(id: string) {
 // Get category by slug
 export async function getCategoryBySlug(slug: string) {
   try {
+    console.log("Fetching category with slug:", slug);
     const { data, error } = await supabase
       .from('categories')
       .select('*')
-      .eq('slug', slug)
-      .single();
+      .eq('slug', slug);
 
     if (error) {
       throw error;
     }
 
-    return data;
+    if (!data || data.length === 0) {
+      console.warn(`No category found with slug: ${slug}`);
+      return null;
+    }
+
+    return data[0]; // Return the first matching category
   } catch (error) {
     console.error('Error getting category by slug:', error);
     throw error;
@@ -49,12 +53,17 @@ export async function getCategoryBySlug(slug: string) {
 // Get content by category slug
 export async function getContentByCategory(categorySlug: string) {
   try {
+    console.log("Getting content for category slug:", categorySlug);
+    
     // First, get category ID from slug
     const categoryData = await getCategoryBySlug(categorySlug);
     
     if (!categoryData) {
-      throw new Error(`Category not found: ${categorySlug}`);
+      console.error(`Category not found: ${categorySlug}`);
+      return [];
     }
+    
+    console.log("Found category:", categoryData);
     
     // Then, get all content with that category
     const { data, error } = await supabase
@@ -73,10 +82,11 @@ export async function getContentByCategory(categorySlug: string) {
       throw error;
     }
 
-    return data;
+    console.log(`Found ${data?.length || 0} items for category ${categorySlug}`);
+    return data || [];
   } catch (error) {
     console.error('Error getting content by category:', error);
-    throw error;
+    return []; // Return empty array instead of throwing
   }
 }
 
@@ -147,6 +157,8 @@ export async function updateContent(
   }
 ) {
   try {
+    console.log("Updating content with category ID:", contentData.categoryId);
+    
     // Convert tags string to array if needed
     const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     
@@ -198,6 +210,8 @@ export async function addContent(
   isDraft: boolean = false
 ) {
   try {
+    console.log("Adding content with category ID:", contentData.categoryId);
+    
     // Convert tags string to array if needed
     const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     
@@ -228,6 +242,7 @@ export async function addContent(
       });
 
     if (error) {
+      console.error('Error in addContent:', error);
       throw error;
     }
 

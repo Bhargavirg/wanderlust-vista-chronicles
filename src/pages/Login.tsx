@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,21 +17,20 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [session, setSession] = useState(null);
   const navigate = useNavigate();
 
-  // Check for existing session on component mount
+  // Check for existing session on component mount without automatic redirect
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
       if (session) {
         navigate("/home");
       }
     });
 
+    // We'll only subscribe to auth changes without automatic redirects
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        setSession(session);
+        // Only redirect if logged in
         if (session) {
           navigate("/home");
         }

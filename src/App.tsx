@@ -19,6 +19,7 @@ import VideosPage from "./pages/VideosPage";
 import JoinCommunity from "./pages/JoinCommunity";
 import { AuthProvider } from "./context/AuthContext";
 import { initializeCategories } from "./services/categoryService";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -31,17 +32,17 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/home" element={<Index />} />
-      <Route path="/post/:postId" element={<PostDetail />} />
-      <Route path="/category/:category" element={<CategoryPage />} />
-      <Route path="/category/videos" element={<VideosPage />} />
+      <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+      <Route path="/post/:postId" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
+      <Route path="/category/:category" element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
+      <Route path="/category/videos" element={<ProtectedRoute><VideosPage /></ProtectedRoute>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/new-post" element={<NewPost />} />
-      <Route path="/add-post" element={<AddPost />} />
-      <Route path="/add-content" element={<AddContent />} />
-      <Route path="/edit-content/:postId" element={<AddContent />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/new-post" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
+      <Route path="/add-post" element={<ProtectedRoute><AddPost /></ProtectedRoute>} />
+      <Route path="/add-content" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
+      <Route path="/edit-content/:postId" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
       <Route path="/join-community" element={<JoinCommunity />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
