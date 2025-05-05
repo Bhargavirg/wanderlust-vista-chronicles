@@ -44,8 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setProfile(null);
           // Redirect to login when session is null (user is logged out)
-          // Make sure we're not on login or register pages already
-          if (!['/login', '/register'].includes(location.pathname)) {
+          // Make sure we're not on login, register or join-community pages already
+          if (!['/login', '/register', '/join-community', '/'].includes(location.pathname)) {
             navigate('/login');
           }
         }
@@ -60,7 +60,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (session?.user) {
         fetchProfile(session.user.id);
-      } else if (!['/login', '/register', '/join-community'].includes(location.pathname)) {
+        
+        // If we're on the login page or root page and we have a session, redirect to home
+        if (['/login', '/'].includes(location.pathname)) {
+          navigate('/home');
+        }
+      } else if (!['/login', '/register', '/join-community', '/'].includes(location.pathname)) {
         // Redirect to login if no session and not already on login/register/join-community page
         navigate('/login');
       }
@@ -93,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      // Explicitly navigate to login after signout
       navigate('/login');
     } catch (error) {
       console.error('Error signing out:', error);

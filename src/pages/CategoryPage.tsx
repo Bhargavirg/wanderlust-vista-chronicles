@@ -5,13 +5,12 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/button";
-import { FilterX, ChevronLeft, ChevronRight } from "lucide-react";
+import { FilterX, ChevronLeft, ChevronRight, Atom, Rocket, History, Globe, Leaf, BookOpen, Camera } from "lucide-react";
 import { mockData } from "@/data/blogData";
 import { motion } from "framer-motion";
 import "./CategoryPage.css";
 import { getContentByCategory } from "@/services/contentService";
 import { toast } from "@/hooks/use-toast";
-import { Avatar } from "@/components/ui/avatar";
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
@@ -19,6 +18,7 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Fetch content for this category
   useEffect(() => {
@@ -114,32 +114,54 @@ const CategoryPage = () => {
     }
   };
 
-  // Get the category title
+  // Get the category banner image
+  function getCategoryBackground() {
+    switch (category) {
+      case "marine-life":
+        return "https://cdn.pixabay.com/photo/2013/11/01/11/13/dolphin-203875_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "monuments":
+        return "https://cdn.pixabay.com/photo/2019/12/28/14/29/tajmahal-4724799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "food":
+        return "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "literature":
+        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "art":
+        return "https://cdn.pixabay.com/photo/2013/02/24/18/33/vincent-van-gogh-85799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "flowers":
+        return "https://cdn.pixabay.com/photo/2016/03/16/13/41/cherry-blossom-1260641_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "anime":
+        return "https://cdn.pixabay.com/photo/2018/08/27/00/07/toy-3633751_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "politics":
+        return "https://cdn.pixabay.com/photo/2017/05/31/23/01/politics-2361943_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "sports":
+        return "https://cdn.pixabay.com/photo/2024/08/21/13/03/ai-generated-8986207_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "stories":
+        return "https://cdn.pixabay.com/photo/2015/07/27/20/16/book-863418_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "travel":
+        return "https://cdn.pixabay.com/photo/2016/11/23/14/51/stone-circles-1853340_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+      case "science":
+        return "https://cdn.pixabay.com/photo/2023/03/15/20/48/robots-7855433_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "technology":
+        return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "history":
+        return "https://i.pinimg.com/736x/5d/11/47/5d1147d0747d68d53179235a0362222c.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "culture":
+        return "https://cdn.pixabay.com/photo/2024/12/09/16/22/boat-9255590_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "nature":
+        return "https://cdn.pixabay.com/photo/2020/11/03/16/13/road-5710320_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "space":
+        return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      case "wildlife":
+        return "https://images.unsplash.com/photo-1504173010664-32509aeebb62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+      default:
+        return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+    }
+  };
+
+  // Get category title
   function getCategoryTitle() {
     if (!category) return "Category";
     return category.charAt(0).toUpperCase() + category.slice(1);
-  }
-
-  // Get category banner image
-  function getCategoryBanner() {
-    switch (category) {
-      case "science":
-        return "https://images.unsplash.com/photo-1582719471384-894fbb16e074";
-      case "technology":
-        return "https://images.unsplash.com/photo-1581089781785-603411fa81e5";
-      case "history":
-        return "https://images.unsplash.com/photo-1461360370896-922624d12aa1";
-      case "culture":
-        return "https://images.unsplash.com/photo-1566438480900-0609be27a4be";
-      case "nature":
-        return "https://images.unsplash.com/photo-1518495973542-4542c06a5843";
-      case "space":
-        return "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb";
-      case "wildlife":
-        return "https://images.unsplash.com/photo-1504173010664-32509aeebb62";
-      default:
-        return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24";
-    }
   }
 
   // Get category description
@@ -167,21 +189,33 @@ const CategoryPage = () => {
   const getCategoryIcon = () => {
     switch (category) {
       case "science":
-        return "🔬";
+        return <Atom className="h-8 w-8" />;
       case "technology":
-        return "🚀";
+        return <Rocket className="h-8 w-8" />;
       case "history":
-        return "🏛️";
+        return <History className="h-8 w-8" />;
       case "culture":
-        return "🌎";
+        return <Globe className="h-8 w-8" />;
       case "nature":
-        return "🌿";
+        return <Leaf className="h-8 w-8" />;
       case "space":
-        return "🌌";
+        return <BookOpen className="h-8 w-8" />;
       case "wildlife":
-        return "🦁";
+        return <Leaf className="h-8 w-8" />;
       default:
-        return "📚";
+        return <Camera className="h-8 w-8" />;
+    }
+  };
+  
+  // Scroll slider left or right
+  const scrollSlider = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const scrollAmount = 300;
+      if (direction === "left") {
+        scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      } else {
+        scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
     }
   };
 
@@ -194,7 +228,7 @@ const CategoryPage = () => {
         {/* Left side: Full screen background image */}
         <div 
           className="category-header__image"
-          style={{ backgroundImage: `url(${getCategoryBanner()})` }}
+          style={{ backgroundImage: `url(${getCategoryBackground()})` }}
         >
           <div className="category-header__overlay"></div>
           <div className="category-header__content">
@@ -267,6 +301,57 @@ const CategoryPage = () => {
           )}
         </div>
       </div>
+
+      {/* Gallery section */}
+      <section className="py-12 bg-gray-100 dark:bg-gray-900">
+        <div className="container">
+          <h2 className="text-2xl font-bold mb-8">Gallery</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <img src="https://cdn.pixabay.com/photo/2023/12/12/13/28/waterfall-8445292_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 1" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2020/02/01/20/05/hummingbird-hawkmoth-4811285_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 2" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2011/12/15/11/37/galaxy-11188_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 3" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2023/06/27/10/51/pier-8091934_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Gallery Image 4" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Bird" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2019/06/13/16/06/dance-4271941_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Dance" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2020/06/25/20/53/fish-5340878_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Fish" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2020/10/21/18/07/laptop-5673901_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Laptop" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2010/12/01/space-shuttle-774_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Space Shuttle" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2019/06/06/13/36/italy-4256017_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Italy" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2021/01/16/09/05/meal-5921491_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Meal" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Cormorant" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2017/02/19/15/28/sunset-2080072_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Sunset" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2017/12/03/22/11/winter-landscape-2995987_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Winter" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2020/06/22/15/37/insect-5329603_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Insect" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2023/01/14/19/50/ai-generated-7718952_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="AI Generated" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2016/11/29/02/53/python-1866944_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Python" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2012/09/26/17/40/air-force-58066_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Air Force" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2016/10/31/18/14/dessert-1786311_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Dessert" className="w-full h-48 object-cover rounded-lg" />
+            <img src="https://cdn.pixabay.com/photo/2022/08/19/15/14/lions-7397126_1280.jpg?auto=format&fit=crop&w=400&q=80" alt="Lions" className="w-full h-48 object-cover rounded-lg" />
+          </div>
+        </div>
+      </section>
+      
+      {/* Related topics section */}
+      {posts.length > 0 && (
+        <section className="py-12 bg-white dark:bg-gray-800">
+          <div className="container">
+            <h2 className="text-2xl font-bold mb-8">Related Topics</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {["Research", "Education", "Discoveries", "Perspectives"].map((topic) => (
+                <div 
+                  key={topic}
+                  className="p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                >
+                  <h3 className="font-medium">{topic}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {category && `${category.charAt(0).toUpperCase() + category.slice(1)} ${topic.toLowerCase()}`}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
