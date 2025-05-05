@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -32,8 +31,9 @@ const CategoryPage = () => {
         if (contentData && contentData.length > 0) {
           // Map the content data to the expected BlogPost format
           const formattedPosts = contentData.map(item => {
-            // Add null checks for author property
-            const author = item.author || {};
+            // Add proper type checking for author property
+            const authorName = item.author?.username || item.author?.full_name || "Anonymous";
+            const authorAvatar = item.author?.avatar_url || "https://i.pravatar.cc/150?img=32";
             
             return {
               id: item.id,
@@ -42,8 +42,8 @@ const CategoryPage = () => {
               coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
               category: item.category?.slug || category,
               author: {
-                name: author.username || author.full_name || "Anonymous",
-                avatar: author.avatar_url || "https://i.pravatar.cc/150?img=32"
+                name: authorName,
+                avatar: authorAvatar
               },
               publishedAt: item.created_at
             };
