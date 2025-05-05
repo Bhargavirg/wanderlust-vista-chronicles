@@ -62,6 +62,7 @@ export async function getContentByCategory(categorySlug: string) {
       .select(`
         *,
         category:categories(*),
+        author_id,
         author:profiles(*)
       `)
       .eq('category_id', categoryData.id)
