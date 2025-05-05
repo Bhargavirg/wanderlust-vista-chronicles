@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import "./CategoryPage.css";
 import { getContentByCategory } from "@/services/contentService";
 import { toast } from "@/hooks/use-toast";
+import { Avatar } from "@/components/ui/avatar";
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
@@ -35,6 +36,17 @@ const CategoryPage = () => {
             // Safely access author properties with proper type checking
             const author = item.author || {};
             
+            // Extract author properties safely with explicit type checks
+            let authorName = "Anonymous";
+            let authorAvatar = "https://i.pravatar.cc/150?img=32";
+            
+            if (author && typeof author === 'object') {
+              // Use type assertion to tell TypeScript this is a record with string keys
+              const typedAuthor = author as Record<string, any>;
+              authorName = typedAuthor.username || typedAuthor.full_name || "Anonymous";
+              authorAvatar = typedAuthor.avatar_url || "https://i.pravatar.cc/150?img=32";
+            }
+            
             return {
               id: item.id,
               title: item.title || "Untitled Post",
@@ -42,8 +54,8 @@ const CategoryPage = () => {
               coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
               category: item.category?.slug || category,
               author: {
-                name: typeof author === 'object' ? (author.username || author.full_name || "Anonymous") : "Anonymous",
-                avatar: typeof author === 'object' ? (author.avatar_url || "https://i.pravatar.cc/150?img=32") : "https://i.pravatar.cc/150?img=32"
+                name: authorName,
+                avatar: authorAvatar
               },
               publishedAt: item.created_at
             };
