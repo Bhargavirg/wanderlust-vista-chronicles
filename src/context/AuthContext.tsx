@@ -29,6 +29,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const location = useLocation();
 
   useEffect(() => {
+    console.log("Current path:", location.pathname);
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -44,10 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setProfile(null);
           // Redirect to login when session is null (user is logged out)
-          // Make sure we're not on login, register or join-community pages already
-          if (!['/login', '/register', '/join-community', '/'].includes(location.pathname)) {
-            navigate('/login');
-          }
+          navigate('/login');
         }
       }
     );
@@ -61,13 +60,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         fetchProfile(session.user.id);
         
-        // If we're on the login page or root page and we have a session, redirect to home
-        if (['/login', '/'].includes(location.pathname)) {
+        // If we're on the login page and we have a session, redirect to home
+        if (location.pathname === '/login' || location.pathname === '/') {
           navigate('/home');
         }
-      } else if (!['/login', '/register', '/join-community', '/'].includes(location.pathname)) {
-        // Redirect to login if no session and not already on login/register/join-community page
-        navigate('/login');
+      } else {
+        // If no session and not already on login/register/join-community page, redirect to login
+        const publicPaths = ['/login', '/register', '/join-community'];
+        if (!publicPaths.includes(location.pathname)) {
+          navigate('/login');
+        }
       }
       
       setLoading(false);
@@ -99,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await supabase.auth.signOut();
       // Explicitly navigate to login after signout
-      navigate('/login');
+      navigate('/login', { replace: true });
     } catch (error) {
       console.error('Error signing out:', error);
     }
