@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -198,7 +199,7 @@ export async function getContentByCategory(categorySlug: string) {
     .select(`
       *,
       category:categories(*),
-      author:author_profiles(*)
+      author:profiles(*)
     `)
     .eq('category_id', categoryData.id)
     .eq('published', true)
@@ -218,7 +219,7 @@ export async function getAllPublishedContent() {
     .select(`
       *,
       category:categories(*),
-      author:author_profiles(*)
+      author:profiles(*)
     `)
     .eq('published', true)
     .order('created_at', { ascending: false });

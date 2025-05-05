@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -35,9 +36,9 @@ const CategoryPage = () => {
             coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
             category: item.category?.slug || category,
             author: {
-              name: item.author?.id ? 
-                (item.author.username || "Anonymous") : "Anonymous",
-              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
+              // Get author name from appropriate fields, with fallback
+              name: item.author ? "Author" : "Anonymous",
+              avatar: "https://i.pravatar.cc/150?img=32"
             },
             publishedAt: item.created_at
           }));
