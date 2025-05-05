@@ -5,7 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import BlogCard from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/button";
-import { FilterX } from "lucide-react";
+import { FilterX, ChevronLeft, ChevronRight } from "lucide-react";
 import { mockData } from "@/data/blogData";
 import { motion } from "framer-motion";
 import "./CategoryPage.css";
@@ -16,6 +16,7 @@ const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // Fetch content for this category
   useEffect(() => {
@@ -36,9 +37,8 @@ const CategoryPage = () => {
             coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
             category: item.category?.slug || category,
             author: {
-              // Get author name from appropriate fields, with fallback
-              name: item.author ? "Author" : "Anonymous",
-              avatar: "https://i.pravatar.cc/150?img=32"
+              name: item.author?.username || "Anonymous",
+              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
             },
             publishedAt: item.created_at
           }));
@@ -117,68 +117,120 @@ const CategoryPage = () => {
     }
   }
 
+  // Navigation for slider
+  const handlePrevSlide = () => {
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(currentSlideIndex - 1);
+    }
+  };
+
+  const handleNextSlide = () => {
+    if (currentSlideIndex < posts.length - 1) {
+      setCurrentSlideIndex(currentSlideIndex + 1);
+    }
+  };
+
+  const getCategoryIcon = () => {
+    switch (category) {
+      case "science":
+        return "🔬";
+      case "technology":
+        return "🚀";
+      case "history":
+        return "🏛️";
+      case "culture":
+        return "🌎";
+      case "nature":
+        return "🌿";
+      case "space":
+        return "🌌";
+      case "wildlife":
+        return "🦁";
+      default:
+        return "📚";
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <div 
-        className="category-banner"
-        style={{ backgroundImage: `url(${getCategoryBanner()})` }}
-      >
-        <div className="container mx-auto px-4 py-16 relative z-10">
-          <motion.h1 
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {getCategoryTitle()}
-          </motion.h1>
-          <motion.p 
-            className="text-lg text-white/90 max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            {getCategoryDescription()}
-          </motion.p>
+      {/* Full screen category header with image and slider */}
+      <div className="category-header">
+        {/* Left side: Full screen background image */}
+        <div 
+          className="category-header__image"
+          style={{ backgroundImage: `url(${getCategoryBanner()})` }}
+        >
+          <div className="category-header__overlay"></div>
+          <div className="category-header__content">
+            <div className="flex items-center mb-2">
+              <div className="w-12 h-12 bg-yellow-400 flex items-center justify-center rounded-full mr-3 text-2xl">
+                {getCategoryIcon()}
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white">{getCategoryTitle()}</h1>
+            </div>
+            <p className="text-lg text-white/90 max-w-2xl mt-2">
+              {getCategoryDescription()}
+            </p>
+          </div>
+        </div>
+
+        {/* Right side: Slider container */}
+        <div className="category-header__slider">
+          <h2 className="text-2xl font-bold text-white mb-6">Explore Posts</h2>
+          
+          {loading ? (
+            <div className="flex flex-col gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-gray-700/50 animate-pulse rounded-lg h-72 w-full" />
+              ))}
+            </div>
+          ) : posts.length > 0 ? (
+            <>
+              <div className="category-slider__scroll-container">
+                {posts.map((post, index) => (
+                  <div key={post.id} className="category-slider__card">
+                    <BlogCard post={post} />
+                  </div>
+                ))}
+              </div>
+              
+              {/* Navigation buttons */}
+              {posts.length > 1 && (
+                <>
+                  <button 
+                    onClick={handlePrevSlide}
+                    className="category-slider__nav-button category-slider__nav-button--left"
+                    disabled={currentSlideIndex === 0}
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button 
+                    onClick={handleNextSlide}
+                    className="category-slider__nav-button category-slider__nav-button--right"
+                    disabled={currentSlideIndex >= posts.length - 1}
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-800/50 rounded-lg">
+              <FilterX className="h-16 w-16 text-gray-400 mb-4" />
+              <h2 className="text-2xl font-bold text-gray-300 mb-2">No posts found</h2>
+              <p className="text-gray-400 text-center max-w-md mb-6">
+                There are currently no posts in the {getCategoryTitle()} category. Check back soon for new content!
+              </p>
+              <Button variant="outline" onClick={() => window.history.back()}>
+                Go Back
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
-      <main className="flex-1 container mx-auto py-12 px-4">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg h-72" />
-            ))}
-          </div>
-        ) : posts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <BlogCard post={post} />
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 px-4">
-            <FilterX className="h-16 w-16 text-gray-400 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-600 dark:text-gray-300 mb-2">No posts found</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">
-              There are currently no posts in this category. Check back soon for new content!
-            </p>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              Go Back
-            </Button>
-          </div>
-        )}
-      </main>
-      
       <Footer />
     </div>
   );
