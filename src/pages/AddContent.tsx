@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -260,7 +259,7 @@ const AddContent = () => {
         mainContent,
         categoryId,
         coverImage: coverImage || "https://images.unsplash.com/photo-1557683316-973673baf926",
-        additionalImages: images.length > 0 ? images : undefined,
+        additionalImages: images.length > 0 ? images : [],
         videoUrl,
         videoType,
         location,
@@ -270,7 +269,7 @@ const AddContent = () => {
 
       if (isEditMode && originalPost) {
         // Update existing content
-        await updateContent(originalPost.id, contentData, isDraft);
+        await updateContent(originalPost.id, contentData);
         toast({
           title: "Content updated",
           description: isDraft 

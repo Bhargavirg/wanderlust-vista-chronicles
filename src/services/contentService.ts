@@ -10,7 +10,8 @@ export async function getContentById(id: string) {
       .select(`
         *,
         category:categories(*),
-        author:profiles(*)
+        author_id,
+        profiles(*)
       `)
       .eq('id', id)
       .single();
@@ -62,7 +63,7 @@ export async function getContentByCategory(categorySlug: string) {
       .select(`
         *,
         category:categories(*),
-        author:profiles(*)
+        profiles(*)
       `)
       .eq('category_id', categoryData.id)
       .eq('published', true)
@@ -87,7 +88,7 @@ export async function getAllPublishedContent() {
       .select(`
         *,
         category:categories(*),
-        author:profiles(*)
+        profiles(*)
       `)
       .eq('published', true)
       .order('created_at', { ascending: false });
@@ -111,7 +112,7 @@ export async function getFeaturedContent() {
       .select(`
         *,
         category:categories(*),
-        author:profiles(*)
+        profiles(*)
       `)
       .eq('featured', true)
       .eq('published', true)
@@ -146,6 +147,9 @@ export async function updateContent(
   }
 ) {
   try {
+    // Convert tags string to array if needed
+    const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    
     const { data, error } = await supabase
       .from('content')
       .update({
@@ -158,7 +162,7 @@ export async function updateContent(
         video_url: contentData.videoUrl,
         video_type: contentData.videoType,
         location: contentData.location,
-        tags: contentData.tags,
+        tags: tagsArray,
         educational_metadata: contentData.educationalMetadata as Json,
         updated_at: new Date().toISOString()
       })
@@ -177,40 +181,51 @@ export async function updateContent(
 
 // Add new content
 export async function addContent(
-  title: string,
-  description: string,
-  mainContent: string,
-  categoryId: string,
-  coverImage: string,
-  additionalImages: string[],
-  videoUrl: string,
-  videoType: 'youtube' | 'vimeo' | 'mp4' | 'other',
-  location: string,
-  tags: string,
-  educationalMetadata: EducationalMetadata,
-  userId: string
+  contentData: {
+    title: string;
+    description: string;
+    mainContent: string;
+    categoryId: string;
+    coverImage: string;
+    additionalImages: string[];
+    videoUrl: string;
+    videoType: 'youtube' | 'vimeo' | 'mp4' | 'other';
+    location: string;
+    tags: string;
+    educationalMetadata: EducationalMetadata;
+  },
+  userId: string,
+  isDraft: boolean = false
 ) {
   try {
+    // Convert tags string to array if needed
+    const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    
+    // Generate a slug from the title
+    const slug = contentData.title
+      .toLowerCase()
+      .replace(/[^\w\s]/gi, '')
+      .replace(/\s+/g, '-');
+    
     const { data, error } = await supabase
       .from('content')
-      .insert([
-        {
-          title,
-          description,
-          main_content: mainContent,
-          category_id: categoryId,
-          cover_image: coverImage,
-          additional_images: additionalImages,
-          video_url: videoUrl,
-          video_type: videoType,
-          location,
-          tags,
-          educational_metadata: educationalMetadata as Json,
-          author_id: userId,
-          published: true,
-          featured: false
-        }
-      ]);
+      .insert({
+        title: contentData.title,
+        description: contentData.description,
+        main_content: contentData.mainContent,
+        category_id: contentData.categoryId,
+        cover_image: contentData.coverImage,
+        additional_images: contentData.additionalImages,
+        video_url: contentData.videoUrl,
+        video_type: contentData.videoType,
+        location: contentData.location,
+        tags: tagsArray,
+        educational_metadata: contentData.educationalMetadata as Json,
+        author_id: userId,
+        published: !isDraft,
+        featured: false,
+        slug: slug
+      });
 
     if (error) {
       throw error;

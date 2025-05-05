@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -17,6 +16,7 @@ const CategoryPage = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Fetch content for this category
   useEffect(() => {
@@ -37,8 +37,8 @@ const CategoryPage = () => {
             coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
             category: item.category?.slug || category,
             author: {
-              name: item.author?.username || "Anonymous",
-              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
+              name: item.profiles?.username || item.profiles?.full_name || "Anonymous",
+              avatar: item.profiles?.avatar_url || "https://i.pravatar.cc/150?img=32"
             },
             publishedAt: item.created_at
           }));
@@ -66,6 +66,35 @@ const CategoryPage = () => {
     
     loadContent();
   }, [category]);
+
+  // Navigation for slider
+  const handlePrevSlide = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const scrollAmount = 360; // Approximate width of each card + gap
+    scrollContainerRef.current.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+    
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(currentSlideIndex - 1);
+    }
+  };
+
+  const handleNextSlide = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const scrollAmount = 360; // Approximate width of each card + gap
+    scrollContainerRef.current.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+    
+    if (currentSlideIndex < posts.length - 1) {
+      setCurrentSlideIndex(currentSlideIndex + 1);
+    }
+  };
 
   // Get the category title
   function getCategoryTitle() {
@@ -116,19 +145,6 @@ const CategoryPage = () => {
         return "Explore fascinating content in this category.";
     }
   }
-
-  // Navigation for slider
-  const handlePrevSlide = () => {
-    if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(currentSlideIndex - 1);
-    }
-  };
-
-  const handleNextSlide = () => {
-    if (currentSlideIndex < posts.length - 1) {
-      setCurrentSlideIndex(currentSlideIndex + 1);
-    }
-  };
 
   const getCategoryIcon = () => {
     switch (category) {
@@ -188,7 +204,10 @@ const CategoryPage = () => {
             </div>
           ) : posts.length > 0 ? (
             <>
-              <div className="category-slider__scroll-container">
+              <div 
+                ref={scrollContainerRef}
+                className="category-slider__scroll-container"
+              >
                 {posts.map((post, index) => (
                   <div key={post.id} className="category-slider__card">
                     <BlogCard post={post} />
