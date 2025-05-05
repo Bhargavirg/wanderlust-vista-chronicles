@@ -25,7 +25,9 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
     wildlife: "bg-category-wildlife text-white",
   };
   
-  const { minutes, seconds } = calculateReadingTime(post.excerpt);
+  // Make sure post.excerpt exists before calculating reading time
+  const excerpt = post.excerpt || post.description || "";
+  const { minutes, seconds } = calculateReadingTime(excerpt);
   const readingTime = formatReadingTime(minutes, seconds);
 
   return (
@@ -66,7 +68,7 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
             )}>
               {post.title}
             </h3>
-            <p className="text-muted-foreground text-sm line-clamp-2 mb-2">{post.excerpt}</p>
+            <p className="text-muted-foreground text-sm line-clamp-2 mb-2">{excerpt}</p>
           </CardContent>
           <CardFooter className={cn("flex items-center p-4 pt-0 text-sm", featured ? "md:p-6 md:pt-0" : "")}>
             <img

@@ -28,7 +28,20 @@ const CategoryPage = () => {
         console.log("Fetched category content:", contentData);
         
         if (contentData && contentData.length > 0) {
-          setPosts(contentData);
+          // Map the content data to the expected BlogPost format
+          const formattedPosts = contentData.map(item => ({
+            id: item.id,
+            title: item.title || "Untitled Post",
+            excerpt: item.description || "",
+            coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
+            category: item.category?.slug || category,
+            author: {
+              name: item.author?.profiles?.username || item.author?.full_name || "Anonymous",
+              avatar: item.author?.profiles?.avatar_url || "https://i.pravatar.cc/150?img=32"
+            },
+            publishedAt: item.created_at
+          }));
+          setPosts(formattedPosts);
         } else {
           // Fallback to mock data if no real content available
           const mockPosts = mockData.byCategory[category as keyof typeof mockData.byCategory] || [];
