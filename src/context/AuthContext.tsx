@@ -44,7 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setProfile(null);
           // Redirect to login when session is null (user is logged out)
-          if (location.pathname !== '/login' && location.pathname !== '/register') {
+          // Make sure we're not on login or register pages already
+          if (!['/login', '/register'].includes(location.pathname)) {
             navigate('/login');
           }
         }
@@ -59,8 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (session?.user) {
         fetchProfile(session.user.id);
-      } else if (location.pathname !== '/login' && location.pathname !== '/register') {
-        // Redirect to login if no session and not already on login/register page
+      } else if (!['/login', '/register', '/join-community'].includes(location.pathname)) {
+        // Redirect to login if no session and not already on login/register/join-community page
         navigate('/login');
       }
       
