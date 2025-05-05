@@ -26,7 +26,7 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   };
   
   // Make sure post.excerpt exists before calculating reading time
-  const excerpt = post.excerpt || post.description || "";
+  const excerpt = post.excerpt || "";
   const { minutes, seconds } = calculateReadingTime(excerpt);
   const readingTime = formatReadingTime(minutes, seconds);
 

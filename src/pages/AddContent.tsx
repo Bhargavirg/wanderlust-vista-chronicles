@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -263,7 +264,7 @@ const AddContent = () => {
         videoUrl,
         videoType,
         location,
-        tags: tags,
+        tags,
         educationalMetadata
       };
 

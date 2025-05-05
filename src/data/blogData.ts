@@ -3,6 +3,7 @@ export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
+  description?: string;
   coverImage: string;
   screenSizeImage?: string;
   category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 

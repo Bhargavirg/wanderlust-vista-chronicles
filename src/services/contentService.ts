@@ -104,7 +104,7 @@ export async function addContent(contentData: ContentCreateData, authorId?: stri
   }
 }
 
-export async function updateContent(contentData: Partial<ContentCreateData>, contentId: string, isDraft?: boolean) {
+export async function updateContent(contentId: string, contentData: ContentCreateData, isDraft?: boolean) {
   try {
     // Prepare tags array if provided
     let tags: string[] | undefined = undefined;

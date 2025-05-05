@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -36,8 +35,9 @@ const CategoryPage = () => {
             coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
             category: item.category?.slug || category,
             author: {
-              name: item.author?.profiles?.username || item.author?.full_name || "Anonymous",
-              avatar: item.author?.profiles?.avatar_url || "https://i.pravatar.cc/150?img=32"
+              name: item.author?.id ? 
+                (item.author.username || "Anonymous") : "Anonymous",
+              avatar: item.author?.avatar_url || "https://i.pravatar.cc/150?img=32"
             },
             publishedAt: item.created_at
           }));
@@ -67,13 +67,13 @@ const CategoryPage = () => {
   }, [category]);
 
   // Get the category title
-  const getCategoryTitle = () => {
+  function getCategoryTitle() {
     if (!category) return "Category";
     return category.charAt(0).toUpperCase() + category.slice(1);
-  };
+  }
 
   // Get category banner image
-  const getCategoryBanner = () => {
+  function getCategoryBanner() {
     switch (category) {
       case "science":
         return "https://images.unsplash.com/photo-1582719471384-894fbb16e074";
@@ -92,10 +92,10 @@ const CategoryPage = () => {
       default:
         return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24";
     }
-  };
+  }
 
   // Get category description
-  const getCategoryDescription = () => {
+  function getCategoryDescription() {
     switch (category) {
       case "science":
         return "Explore the latest discoveries and scientific breakthroughs from around the world.";
@@ -114,7 +114,7 @@ const CategoryPage = () => {
       default:
         return "Explore fascinating content in this category.";
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
