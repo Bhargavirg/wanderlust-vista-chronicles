@@ -1,13 +1,16 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, LogIn } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
-  const handleLogout = () => {
-    // In a real app, this would clear auth tokens, etc.
+  const handleLogout = async () => {
+    await signOut();
     toast({
       title: "Logged out successfully",
       description: "You have been logged out of your account.",
@@ -15,9 +18,12 @@ const Footer = () => {
     navigate("/login");
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <footer className="border-t footer-bg-image">
-      
       <div className="container py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -93,15 +99,29 @@ const Footer = () => {
           <p className="text-sm text-black">
             © {new Date().getFullYear()} BlogVista. All rights reserved.
           </p>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleLogout} 
-            className="mt-4 md:mt-0 flex items-center gap-2 text-black hover:text-primary hover:bg-muted"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Log Out</span>
-          </Button>
+          <div className="flex gap-2 mt-4 md:mt-0">
+            {user ? (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleLogout} 
+                className="flex items-center gap-2 text-black hover:text-primary hover:bg-muted"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log Out</span>
+              </Button>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleLogin} 
+                className="flex items-center gap-2 text-black hover:text-primary hover:bg-muted"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Log In</span>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </footer>
