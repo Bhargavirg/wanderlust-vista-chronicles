@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -139,7 +140,7 @@ export async function getFeaturedContent() {
   }
 }
 
-// Update content
+// Update content - Improved error handling
 export async function updateContent(
   contentId: string,
   contentData: {
@@ -178,9 +179,11 @@ export async function updateContent(
         educational_metadata: contentData.educationalMetadata as Json,
         updated_at: new Date().toISOString()
       })
-      .eq('id', contentId);
+      .eq('id', contentId)
+      .select();
 
     if (error) {
+      console.error('Error details:', error);
       throw error;
     }
 
@@ -191,7 +194,7 @@ export async function updateContent(
   }
 }
 
-// Add new content
+// Add new content - Improved error handling
 export async function addContent(
   contentData: {
     title: string;
@@ -211,6 +214,7 @@ export async function addContent(
 ) {
   try {
     console.log("Adding content with category ID:", contentData.categoryId);
+    console.log("User ID:", userId);
     
     // Convert tags string to array if needed
     const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
@@ -221,31 +225,38 @@ export async function addContent(
       .replace(/[^\w\s]/gi, '')
       .replace(/\s+/g, '-');
     
+    // Prepare the data
+    const newContent = {
+      title: contentData.title,
+      description: contentData.description,
+      main_content: contentData.mainContent,
+      category_id: contentData.categoryId,
+      cover_image: contentData.coverImage,
+      additional_images: contentData.additionalImages,
+      video_url: contentData.videoUrl,
+      video_type: contentData.videoType,
+      location: contentData.location,
+      tags: tagsArray,
+      educational_metadata: contentData.educationalMetadata as Json,
+      author_id: userId,
+      published: !isDraft,
+      featured: false,
+      slug: slug
+    };
+    
+    console.log("Inserting content:", newContent);
+    
     const { data, error } = await supabase
       .from('content')
-      .insert({
-        title: contentData.title,
-        description: contentData.description,
-        main_content: contentData.mainContent,
-        category_id: contentData.categoryId,
-        cover_image: contentData.coverImage,
-        additional_images: contentData.additionalImages,
-        video_url: contentData.videoUrl,
-        video_type: contentData.videoType,
-        location: contentData.location,
-        tags: tagsArray,
-        educational_metadata: contentData.educationalMetadata as Json,
-        author_id: userId,
-        published: !isDraft,
-        featured: false,
-        slug: slug
-      });
+      .insert(newContent)
+      .select();
 
     if (error) {
       console.error('Error in addContent:', error);
       throw error;
     }
 
+    console.log("Content added successfully:", data);
     return data;
   } catch (error) {
     console.error('Error adding content:', error);

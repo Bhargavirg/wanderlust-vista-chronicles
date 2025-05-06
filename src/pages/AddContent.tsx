@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -91,8 +92,22 @@ const AddContent = () => {
   // Load categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
-      const categoriesData = await getAllCategories();
-      setCategories(categoriesData);
+      try {
+        const categoriesData = await getAllCategories();
+        console.log("Fetched categories:", categoriesData);
+        if (categoriesData && categoriesData.length > 0) {
+          setCategories(categoriesData);
+        } else {
+          console.warn("No categories found");
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load categories. Please try again.",
+          variant: "destructive",
+        });
+      }
     };
     fetchCategories();
   }, []);
@@ -195,6 +210,9 @@ const AddContent = () => {
       const selectedCategory = categories.find(cat => cat.slug === category);
       if (selectedCategory) {
         setCategoryId(selectedCategory.id);
+        console.log("Selected category ID:", selectedCategory.id);
+      } else {
+        console.warn("Category not found for slug:", category);
       }
     }
   }, [category, categories]);
@@ -223,6 +241,16 @@ const AddContent = () => {
       toast({
         title: "Category required",
         description: "Please select a category for your content.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Check if categoryId was found
+    if (!categoryId) {
+      toast({
+        title: "Category error",
+        description: "Selected category could not be found. Please try again or select a different category.",
         variant: "destructive",
       });
       return;
@@ -267,9 +295,12 @@ const AddContent = () => {
         educationalMetadata
       };
 
+      console.log("Submitting content with data:", contentData);
+
       if (isEditMode && originalPost) {
         // Update existing content
-        await updateContent(originalPost.id, contentData);
+        const result = await updateContent(originalPost.id, contentData);
+        console.log("Update result:", result);
         toast({
           title: "Content updated",
           description: isDraft 
@@ -278,7 +309,8 @@ const AddContent = () => {
         });
       } else {
         // Add new content
-        await addContent(contentData, user.id, isDraft);
+        const result = await addContent(contentData, user.id, isDraft);
+        console.log("Add result:", result);
         toast({
           title: isDraft ? "Draft saved" : "Content published",
           description: isDraft 
@@ -289,11 +321,21 @@ const AddContent = () => {
       
       // Navigate to the dashboard
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving content:", error);
+      let errorMessage = "There was an error saving your content. Please try again.";
+      
+      if (error.message) {
+        errorMessage = `Error: ${error.message}`;
+      }
+      
+      if (error.code === "42501") {
+        errorMessage = "Permission denied. You may not have the required permissions to publish content.";
+      }
+      
       toast({
         title: "Error",
-        description: "There was an error saving your content. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -329,11 +371,11 @@ const AddContent = () => {
       
       // Navigate to dashboard
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting content:", error);
       toast({
         title: "Error",
-        description: "There was an error deleting your content. Please try again.",
+        description: error.message || "There was an error deleting your content. Please try again.",
         variant: "destructive",
       });
     }
