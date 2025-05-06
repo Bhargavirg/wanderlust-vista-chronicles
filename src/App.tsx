@@ -32,18 +32,18 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/join-community" element={<JoinCommunity />} />
       <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
       <Route path="/post/:postId" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
       <Route path="/category/:category" element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
       <Route path="/category/videos" element={<ProtectedRoute><VideosPage /></ProtectedRoute>} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/new-post" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
       <Route path="/add-post" element={<ProtectedRoute><AddPost /></ProtectedRoute>} />
       <Route path="/add-content" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
       <Route path="/edit-content/:postId" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
-      <Route path="/join-community" element={<JoinCommunity />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -49,13 +49,14 @@ const Login = () => {
         description: "Welcome back to Earth Lens!",
       });
       
-      navigate("/home");
+      // We don't need to navigate here, AuthContext will handle the redirect
     } catch (error: any) {
       toast({
         title: "Login failed",
         description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }

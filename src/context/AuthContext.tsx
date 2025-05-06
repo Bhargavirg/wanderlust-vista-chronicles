@@ -31,51 +31,77 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     console.log("Current path:", location.pathname);
     
+    let authListenerSetup = false;
+    
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("Auth state changed:", event, session?.user?.email);
+    const setupAuthListener = () => {
+      if (authListenerSetup) return;
+      
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          console.log("Auth state changed:", event, session?.user?.email);
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          // If session exists, fetch the user profile
+          if (session?.user) {
+            setTimeout(() => {
+              fetchProfile(session.user.id);
+            }, 0);
+          } else {
+            setProfile(null);
+            
+            // Only redirect to login if not already on a public path
+            const publicPaths = ['/login', '/register', '/join-community'];
+            if (!publicPaths.includes(location.pathname)) {
+              navigate('/login');
+            }
+          }
+        }
+      );
+      
+      authListenerSetup = true;
+      return subscription;
+    };
+    
+    // Setup the auth listener
+    const subscription = setupAuthListener();
+
+    // THEN check for existing session
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Initial session check:", session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
-        // If session exists, fetch the user profile
         if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
+          fetchProfile(session.user.id);
+          
+          // If we're on the login page and we have a session, redirect to home
+          if (location.pathname === '/login' || location.pathname === '/') {
+            navigate('/home');
+          }
         } else {
-          setProfile(null);
-          // Redirect to login when session is null (user is logged out)
-          navigate('/login');
+          // If no session and not on a public path, redirect to login
+          const publicPaths = ['/login', '/register', '/join-community'];
+          if (!publicPaths.includes(location.pathname)) {
+            navigate('/login');
+          }
         }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session check:", session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        fetchProfile(session.user.id);
         
-        // If we're on the login page and we have a session, redirect to home
-        if (location.pathname === '/login' || location.pathname === '/') {
-          navigate('/home');
-        }
-      } else {
-        // If no session and not already on login/register/join-community page, redirect to login
-        const publicPaths = ['/login', '/register', '/join-community'];
-        if (!publicPaths.includes(location.pathname)) {
-          navigate('/login');
-        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setLoading(false);
       }
-      
-      setLoading(false);
-    });
+    };
+    
+    checkSession();
 
-    return () => subscription.unsubscribe();
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
   }, [navigate, location.pathname]);
 
   const fetchProfile = async (userId: string) => {
@@ -84,7 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
       
       if (error) {
         console.error('Error fetching profile:', error);
@@ -99,11 +125,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
+      setLoading(true);
       await supabase.auth.signOut();
+      // Clear session and user state
+      setSession(null);
+      setUser(null);
+      setProfile(null);
       // Explicitly navigate to login after signout
       navigate('/login', { replace: true });
     } catch (error) {
       console.error('Error signing out:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
