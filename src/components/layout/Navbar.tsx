@@ -1,426 +1,183 @@
-import { useState } from "react";
+
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useTheme } from "next-themes";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Search, X, Compass, ChevronDown, Film, Flag, Trophy, BookOpen, Leaf, Anchor, Landmark, BookText, Utensils, Users, Mail } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { Bell, Moon, Search, Sun, User, Menu, X, LogOut, LogIn } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { setTheme, theme } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  // This would be connected to auth in the full implementation
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Define all available categories for search
-      const categories = [
-        "science", "technology", "travel", "history", "culture", 
-        "nature", "space", "wildlife", "marine-life", "monuments", 
-        "literature", "art", "flowers", "food", "anime", 
-        "politics", "sports", "stories","archealogy", "psychology","mythology","deep-earth","ancientcivilizations" ,"biodiversity",
-        "climatechange", "videos"
-      ];
-      
-      // Check if search query matches any category (case insensitive)
-      const matchedCategory = categories.find(category => 
-        category.toLowerCase() === searchQuery.toLowerCase() ||
-        searchQuery.toLowerCase().includes(category.toLowerCase())
-      );
-      
-      if (matchedCategory) {
-        // If it's a valid category, navigate to that category page
-        navigate(`/category/${matchedCategory}`);
-        toast({
-          title: "Category Found",
-          description: `Showing results for ${matchedCategory} category`,
-        });
-      } else {
-        // If not a category, treat as general search
-        toast({
-          title: "Search Results",
-          description: `No specific category found for "${searchQuery}"`,
-          variant: "destructive",
-        });
-        navigate(`/category/search?q=${encodeURIComponent(searchQuery)}`);
-      }
-      
-      setIsSearchOpen(false);
-      setSearchQuery("");
-    }
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   return (
-    <nav className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-950 shadow-sm border-b border-gray-200 dark:border-gray-800">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6 md:gap-10">
-          <Link to="/home" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-sky-500 flex items-center justify-center">
-              <Compass className="h-5 w-5 text-white" />
+        {/* Logo and site name */}
+        <div className="flex items-center">
+          <Link to="/home" className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-sky-500 flex items-center justify-center">
+              <span className="text-white font-bold text-xl">EL</span>
             </div>
-            <span className="text-xl font-bold">EARTH LENS</span>
+            <span className="text-xl font-bold hidden md:inline-block dark:text-white">
+              Earth Lens
+            </span>
           </Link>
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-6">
+          <Link to="/home" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
+            Home
+          </Link>
+          <Link to="/dashboard" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
+            Dashboard
+          </Link>
+          <Link to="/category/nature" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
+            Nature
+          </Link>
+          <Link to="/category/science" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
+            Science
+          </Link>
+          <Link to="/category/history" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
+            History
+          </Link>
+        </div>
+
+        {/* Right side actions */}
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={toggleTheme}>
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
           
-          <div className="hidden md:flex gap-6">
-            <Link to="/category/science" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Science
-            </Link>
-            <Link to="/category/technology" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Technology
-            </Link>
-            <Link to="/category/travel" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Travel
-            </Link>
-            <Link to="/category/history" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              History
-            </Link>
-            <Link to="/category/culture" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Culture
-            </Link>
-            
-            {/* More categories dropdown */}
+          <Button variant="ghost" size="icon">
+            <Search className="h-5 w-5" />
+          </Button>
+          
+          <Button variant="ghost" size="icon">
+            <Bell className="h-5 w-5" />
+          </Button>
+
+          {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary flex items-center gap-1">
-                More
-                <ChevronDown className="h-4 w-4" />
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="relative h-10 w-10 rounded-full"
+                  aria-label="User menu"
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User" />
+                    <AvatarFallback>
+                      <User className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="bg-white dark:bg-gray-800">
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link to="/category/nature" className="flex items-center w-full cursor-pointer">Nature</Link>
+                  <Link to="/dashboard">Dashboard</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/category/space" className="flex items-center w-full cursor-pointer">Space</Link>
+                  <Link to="/add-content">Add Content</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/wildlife" className="flex items-center w-full cursor-pointer">
-                    <Leaf className="h-4 w-4 mr-2" />
-                    Wildlife
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/marine-life" className="flex items-center w-full cursor-pointer">
-                    <Anchor className="h-4 w-4 mr-2" />
-                    Marine Life
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/monuments" className="flex items-center w-full cursor-pointer">
-                    <Landmark className="h-4 w-4 mr-2" />
-                    Monuments
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/literature" className="flex items-center w-full cursor-pointer">
-                    <BookText className="h-4 w-4 mr-2" />
-                    Literature
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/art" className="flex items-center w-full cursor-pointer">Art</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/flowers" className="flex items-center w-full cursor-pointer">Flowers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/food" className="flex items-center w-full cursor-pointer">
-                    <Utensils className="h-4 w-4 mr-2" />
-                    Food
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/anime" className="flex items-center w-full cursor-pointer">
-                    <Film className="h-4 w-4 mr-2" />
-                    Anime
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/politics" className="flex items-center w-full cursor-pointer">
-                    <Flag className="h-4 w-4 mr-2" />
-                    Politics
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/sports" className="flex items-center w-full cursor-pointer">
-                    <Trophy className="h-4 w-4 mr-2" />
-                    Sports
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/category/stories" className="flex items-center w-full cursor-pointer">
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Stories
-                  </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="text-red-500 cursor-pointer">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
+          ) : (
+            <Button onClick={() => navigate('/login')} variant="outline" size="sm">
+              <LogIn className="mr-2 h-4 w-4" />
+              Log In
+            </Button>
+          )}
+          
+          {/* Mobile menu button */}
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="md:hidden"
+            onClick={toggleMobileMenu}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
-
-        {isSearchOpen ? (
-          <form onSubmit={handleSearch} className="flex-1 ml-auto mr-4 max-w-sm flex items-center">
-            <Input
-              type="search"
-              placeholder="Search articles..."
-              className="w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              type="button"
-              onClick={() => setIsSearchOpen(false)}
-              className="ml-2"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close search</span>
-            </Button>
-          </form>
-        ) : (
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="hidden md:flex"
-              onClick={() => setIsSearchOpen(true)}
-            >
-              <Search className="h-4 w-4" />
-              <span className="sr-only">Search</span>
-            </Button>
-
-            <Button 
-              variant="ghost"
-              onClick={() => navigate('/join-community')}
-              className="hidden md:flex items-center gap-1"
-            >
-              <Users className="h-4 w-4 mr-1" />
-              Join
-            </Button>
-
-            <Button 
-              variant="ghost"
-              onClick={() => navigate('/join-community')}
-              className="hidden md:flex items-center gap-1"
-            >
-              <Mail className="h-4 w-4 mr-1" />
-              Subscribe
-            </Button>
-
-            {isLoggedIn ? (
-              <>
-                <Button 
-                  variant="ghost"
-                  onClick={() => navigate('/add-content')}
-                  className="hidden md:flex"
-                >
-                  Add Content
-                </Button>
-                <Button 
-                  variant="default"
-                  onClick={() => navigate('/dashboard')}
-                  className="hidden md:flex bg-sky-500 hover:bg-sky-600 text-white"
-                >
-                  Dashboard
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button 
-                  variant="ghost"
-                  onClick={() => navigate('/login')}
-                  className="hidden md:flex"
-                >
-                  Login
-                </Button>
-                <Button 
-                  variant="default"
-                  onClick={() => navigate('/register')}
-                  className="hidden md:flex bg-sky-500 hover:bg-sky-600 text-white"
-                >
-                  Subscribe
-                </Button>
-              </>
-            )}
-
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="md:hidden">
-                  <Menu className="h-4 w-4" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <div className="grid gap-6 pt-6">
-                  <div className="grid gap-3">
-                    <Link 
-                      to="/category/science"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Science
-                    </Link>
-                    <Link 
-                      to="/category/technology"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Technology
-                    </Link>
-                    <Link 
-                      to="/category/travel"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Travel
-                    </Link>
-                    <Link 
-                      to="/category/history"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      History
-                    </Link>
-                    <Link 
-                      to="/category/culture"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Culture
-                    </Link>
-                    <Link 
-                      to="/category/nature"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Nature
-                    </Link>
-                    <Link 
-                      to="/category/space"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Space
-                    </Link>
-                    <Link 
-                      to="/category/wildlife"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Wildlife
-                    </Link>
-                    <Link 
-                      to="/category/marine-life"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Marine Life
-                    </Link>
-                    <Link 
-                      to="/category/monuments"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Monuments
-                    </Link>
-                    <Link 
-                      to="/category/literature"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Literature
-                    </Link>
-                    <Link 
-                      to="/category/art"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Art
-                    </Link>
-                    <Link 
-                      to="/category/flowers"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Flowers
-                    </Link>
-                    <Link 
-                      to="/category/food"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Food
-                    </Link>
-                    <Link 
-                      to="/category/anime"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Anime
-                    </Link>
-                    <Link 
-                      to="/category/politics"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Politics
-                    </Link>
-                    <Link 
-                      to="/category/sports"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Sports
-                    </Link>
-                    <Link 
-                      to="/category/stories"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Stories
-                    </Link>
-                    <Link 
-                      to="/join-community"
-                      className="text-sm font-medium transition-colors"
-                    >
-                      Join Community
-                    </Link>
-                  </div>
-                  <div className="grid gap-2">
-                    {isLoggedIn ? (
-                      <>
-                        <Button variant="outline" onClick={() => navigate('/add-content')}>
-                          Add Content
-                        </Button>
-                        <Button variant="outline" onClick={() => navigate('/dashboard')}>
-                          Dashboard
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          onClick={() => {
-                            setIsLoggedIn(false);
-                            navigate('/home');
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button variant="outline" onClick={() => navigate('/login')}>
-                          Login
-                        </Button>
-                        <Button 
-                          variant="default" 
-                          onClick={() => navigate('/register')}
-                          className="bg-sky-500 hover:bg-sky-600 text-white"
-                        >
-                          Subscribe
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
       </div>
+      
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden py-4 px-4 space-y-4 border-t border-gray-200 dark:border-gray-800">
+          <Link 
+            to="/home" 
+            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link 
+            to="/dashboard" 
+            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Dashboard
+          </Link>
+          <Link 
+            to="/category/nature" 
+            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Nature
+          </Link>
+          <Link 
+            to="/category/science" 
+            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Science
+          </Link>
+          <Link 
+            to="/category/history" 
+            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            History
+          </Link>
+          {!user && (
+            <Link 
+              to="/login" 
+              className="block py-2 text-base font-medium text-sky-500 hover:text-sky-600"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Log In
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

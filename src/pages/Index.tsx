@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FeaturedSection from "@/components/home/FeaturedSection";
@@ -7,8 +8,10 @@ import { mockData } from "@/data/blogData";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown, Landmark, BookText, Anchor, Utensils, Plane } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   // Scroll to top when the page loads
@@ -16,9 +19,28 @@ const Index = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
       <Navbar />
+      
+      {/* Login Banner - Only show if user is not logged in */}
+      {!user && (
+        <div className="bg-sky-500 text-white py-3">
+          <div className="container flex justify-between items-center">
+            <p className="font-medium">You are not logged in. Some features may be limited.</p>
+            <Button 
+              variant="secondary" 
+              onClick={() => navigate('/login')}
+              className="bg-white text-sky-700 hover:bg-gray-100"
+            >
+              Log In Now
+            </Button>
+          </div>
+        </div>
+      )}
       
       <main className="flex-1">
         <Hero />
@@ -372,12 +394,21 @@ const Index = () => {
               <p className="text-lg mb-8">
                 Join our community of explorers, scientists, and storytellers. Share your knowledge and experiences with the world.
               </p>
-              <Link 
-                to="/add-content"
-                className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
-              >
-                Add Your Content
-              </Link>
+              {user ? (
+                <Link 
+                  to="/add-content"
+                  className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
+                >
+                  Add Your Content
+                </Link>
+              ) : (
+                <Button 
+                  onClick={() => navigate('/login')}
+                  className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg"
+                >
+                  Log In to Contribute
+                </Button>
+              )}
             </div>
           </div>
         </div>

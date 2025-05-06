@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from '@/components/ui/use-toast';
 
 interface AuthContextType {
   session: Session | null;
@@ -48,11 +49,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setTimeout(() => {
               fetchProfile(session.user.id);
             }, 0);
+            
+            // If we're on the login page and have a session, navigate to home
+            if (location.pathname === '/login' || location.pathname === '/') {
+              navigate('/home');
+            }
           } else {
             setProfile(null);
             
-            // Only redirect to login if not already on a public path
-            const publicPaths = ['/login', '/register', '/join-community'];
+            // If we're NOT on a public path and have no session, navigate to login
+            const publicPaths = ['/login', '/register', '/join-community', '/'];
             if (!publicPaths.includes(location.pathname)) {
               navigate('/login');
             }
@@ -78,13 +84,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session?.user) {
           fetchProfile(session.user.id);
           
-          // If we're on the login page and we have a session, redirect to home
-          if (location.pathname === '/login' || location.pathname === '/') {
+          // Only navigate to home if explicitly on the login page
+          if (location.pathname === '/login') {
             navigate('/home');
           }
         } else {
           // If no session and not on a public path, redirect to login
-          const publicPaths = ['/login', '/register', '/join-community'];
+          const publicPaths = ['/login', '/register', '/join-community', '/'];
           if (!publicPaths.includes(location.pathname)) {
             navigate('/login');
           }
@@ -126,15 +132,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     try {
       setLoading(true);
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        throw error;
+      }
+      
       // Clear session and user state
       setSession(null);
       setUser(null);
       setProfile(null);
+      
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+      
       // Explicitly navigate to login after signout
       navigate('/login', { replace: true });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing out:', error);
+      toast({
+        title: "Error signing out",
+        description: error.message || "There was a problem signing out.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
