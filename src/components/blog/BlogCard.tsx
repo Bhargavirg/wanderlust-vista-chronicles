@@ -28,12 +28,12 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   // Handle both cases: when category is a string or an object with name/slug properties
   // Adding null checks to prevent TypeScript errors
   const categoryName = post.category === null ? "Uncategorized" :
-    typeof post.category === 'object' ? post.category.name :
+    typeof post.category === 'object' && post.category !== null ? post.category.name :
     typeof post.category === 'string' ? post.category.charAt(0).toUpperCase() + post.category.slice(1) :
     "Uncategorized";
   
   const categorySlug = post.category === null ? "uncategorized" :
-    typeof post.category === 'object' ? post.category.slug :
+    typeof post.category === 'object' && post.category !== null ? post.category.slug :
     typeof post.category === 'string' ? post.category :
     "uncategorized";
   
@@ -57,7 +57,6 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
               className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
             />
           </AspectRatio>
-          {/* Use the correct video property from the BlogPost type */}
           {hasVideo && (
             <div className="absolute top-2 right-2 bg-black/70 rounded-full p-1.5">
               <Video className="h-4 w-4 text-white" />
