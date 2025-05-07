@@ -21,7 +21,8 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
     'science', 'technology', 'history', 'culture', 'nature', 'space', 'wildlife', 
     'art', 'flowers', 'anime', 'politics', 'sports', 'stories',
     'psychology', 'archaeology', 'mythology', 'climate', 'current-affairs', 
-    'music', 'business-economics', 'deep-earth-geology', 'ancient-civilizations'
+    'music', 'business-economics', 'deep-earth-geology', 'ancient-civilizations',
+    'education', 'health', 'travel', 'food', 'fashion', 'entertainment'
   ] as const;
   
   type AllowedCategory = typeof allowedCategories[number];

@@ -54,7 +54,7 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   const readingTime = formatReadingTime(minutes, seconds);
 
   return (
-    <Link to={`/post/${post.id}`}>
+    <Link to={`/post/${post.id}`} className="block">
       <Card className={cn(
         "overflow-hidden transition-all duration-200 hover:shadow-lg", 
         featured ? "md:grid md:grid-cols-2" : "",

@@ -113,7 +113,23 @@ const PostDetail = () => {
   }
 
   // Format the post content for display
-  const postContent = post.main_content || post.excerpt || post.description || "No content available.";
+  const formatPostContent = (post: any) => {
+    if (!post) return "";
+    
+    // Check if main_content exists and contains HTML
+    if (post.main_content && post.main_content.trim()) {
+      return post.main_content;
+    } 
+    
+    // Fall back to description if main_content is empty
+    if (post.description && post.description.trim()) {
+      return post.description;
+    }
+    
+    return "No content available.";
+  };
+
+  const postContent = formatPostContent(post);
   
   // Calculate reading time
   const { minutes, seconds } = calculateReadingTime(postContent);

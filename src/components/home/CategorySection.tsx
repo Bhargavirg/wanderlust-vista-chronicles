@@ -12,7 +12,8 @@ interface CategorySectionProps {
   category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 
     'art' | 'flowers' | 'anime' | 'politics' | 'sports' | 'stories' | 
     'psychology' | 'archaeology' | 'mythology' | 'climate' | 'current-affairs' | 
-    'music' | 'business-economics' | 'deep-earth-geology' | 'ancient-civilizations';
+    'music' | 'business-economics' | 'deep-earth-geology' | 'ancient-civilizations' |
+    'education' | 'health' | 'travel' | 'food' | 'fashion' | 'technology' | 'entertainment';
   posts: BlogPost[];
 }
 
@@ -69,6 +70,18 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
         return <Mountain className="size-5" />;
       case "ancient-civilizations":
         return <ScrollText className="size-5" />;
+      case "education":
+        return <BookOpen className="size-5" />;
+      case "health":
+        return <Brain className="size-5" />;
+      case "travel":
+        return <Globe className="size-5" />;
+      case "food":
+        return <Book className="size-5" />;
+      case "fashion":
+        return <Camera className="size-5" />;
+      case "entertainment":
+        return <Film className="size-5" />;
       default:
         return <Camera className="size-5" />;
     }
@@ -121,6 +134,18 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
         return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
       case "ancient-civilizations":
         return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "education":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "health":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "travel":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "food":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "fashion":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+      case "entertainment":
+        return "https://images.unsplash.com/photo-1541872703-74c5e44368f9?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
       default:
         return "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
     }
@@ -149,7 +174,13 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
     music: "from-pink-600/80 to-pink-700",
     "business-economics": "from-green-600/80 to-green-700",
     "deep-earth-geology": "from-yellow-600/80 to-yellow-700",
-    "ancient-civilizations": "from-stone-500/80 to-stone-600"
+    "ancient-civilizations": "from-stone-500/80 to-stone-600",
+    education: "from-blue-400/80 to-blue-500",
+    health: "from-emerald-400/80 to-emerald-500",
+    travel: "from-cyan-500/80 to-cyan-600",
+    food: "from-orange-400/80 to-orange-500",
+    fashion: "from-rose-400/80 to-rose-500",
+    entertainment: "from-purple-400/80 to-purple-500"
   };
 
   return (
@@ -200,6 +231,12 @@ const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
                 {category === 'business-economics' && 'Understand markets, financial trends, and economic principles.'}
                 {category === 'deep-earth-geology' && 'Explore Earth\'s structure, rocks, and geological forces.'}
                 {category === 'ancient-civilizations' && 'Uncover the mysteries of lost cultures and ancient wisdom.'}
+                {category === 'education' && 'Explore learning methods, educational systems, and knowledge acquisition.'}
+                {category === 'health' && 'Learn about wellness, medical advances, and healthy living practices.'}
+                {category === 'travel' && 'Discover amazing destinations and travel experiences around the world.'}
+                {category === 'food' && 'Explore culinary traditions, recipes, and food culture.'}
+                {category === 'fashion' && 'Follow trends, styles, and the evolution of clothing and design.'}
+                {category === 'entertainment' && 'Stay updated with films, shows, and entertainment media.'}
               </p>
               <Link 
                 to={`/category/${category}`}

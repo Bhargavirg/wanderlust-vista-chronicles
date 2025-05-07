@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,8 @@ const Navbar = () => {
         if (matchingCategory) {
           // If it matches a category, navigate to that category page
           navigate(`/category/${matchingCategory.slug}`);
+          setSearchTerm(""); // Clear search after navigating
+          setCategoryDropdownOpen(false); // Close dropdown after search
         } else {
           // Otherwise, navigate to search results page
           navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
@@ -78,6 +81,13 @@ const Navbar = () => {
       }
     }
   };
+
+  // Filter out any categories that match the current search term
+  const filteredCategories = categories.filter(category => {
+    if (!searchTerm) return true;
+    return !category.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+           !category.slug.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-gray-950 shadow-sm border-b border-gray-200 dark:border-gray-800">
@@ -117,7 +127,7 @@ const Navbar = () => {
               <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
                 <ScrollArea className="h-64">
                   <div className="py-1">
-                    {categories.map(category => (
+                    {filteredCategories.map(category => (
                       <Link 
                         key={category.id} 
                         to={`/category/${category.slug}`}
