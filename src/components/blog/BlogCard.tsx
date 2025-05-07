@@ -25,17 +25,20 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
     wildlife: "bg-category-wildlife text-white",
   };
   
-  // Handle both cases: when category is a string or an object with name/slug properties
-  // Adding null checks to prevent TypeScript errors
-  const categoryName = post.category === null ? "Uncategorized" :
-    typeof post.category === 'object' && post.category !== null ? post.category.name :
-    typeof post.category === 'string' && post.category !== null ? post.category.charAt(0).toUpperCase() + post.category.slice(1) :
-    "Uncategorized";
+  // Restructured logic to handle null cases properly
+  const categoryName = (() => {
+    if (post.category === null || post.category === undefined) return "Uncategorized";
+    if (typeof post.category === 'object') return post.category.name;
+    if (typeof post.category === 'string') return post.category.charAt(0).toUpperCase() + post.category.slice(1);
+    return "Uncategorized";
+  })();
   
-  const categorySlug = post.category === null ? "uncategorized" :
-    typeof post.category === 'object' && post.category !== null ? post.category.slug :
-    typeof post.category === 'string' && post.category !== null ? post.category :
-    "uncategorized";
+  const categorySlug = (() => {
+    if (post.category === null || post.category === undefined) return "uncategorized";
+    if (typeof post.category === 'object') return post.category.slug;
+    if (typeof post.category === 'string') return post.category;
+    return "uncategorized";
+  })();
   
   // Make sure excerpt exists before calculating reading time
   const excerpt = post.excerpt || post.description || "";
