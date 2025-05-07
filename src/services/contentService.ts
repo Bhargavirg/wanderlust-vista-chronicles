@@ -1,10 +1,11 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
 
 export async function getContentById(id: string) {
   try {
+    console.log("Getting content with ID:", id);
+    
     const { data, error } = await supabase
       .from('content')
       .select(`
@@ -16,9 +17,11 @@ export async function getContentById(id: string) {
       .single();
 
     if (error) {
+      console.error("Error retrieving content:", error);
       throw error;
     }
 
+    console.log("Content retrieved:", data);
     return data;
   } catch (error) {
     console.error('Error getting content by id:', error);
@@ -321,5 +324,38 @@ export async function deleteContent(contentId: string) {
   } catch (error) {
     console.error('Error deleting content:', error);
     throw error;
+  }
+}
+
+// Add a new search function for the navbar search
+export async function searchContent(query: string) {
+  try {
+    if (!query || query.trim() === '') {
+      return [];
+    }
+    
+    console.log("Searching content with query:", query);
+    
+    const { data, error } = await supabase
+      .from('content')
+      .select(`
+        *,
+        category:categories(*),
+        author:profiles(*)
+      `)
+      .or(`title.ilike.%${query}%, description.ilike.%${query}%, main_content.ilike.%${query}%`)
+      .eq('published', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Search error:", error);
+      throw error;
+    }
+    
+    console.log("Search results:", data);
+    return data || [];
+  } catch (error) {
+    console.error('Error searching content:', error);
+    return [];
   }
 }

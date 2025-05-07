@@ -26,18 +26,29 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
   
   type AllowedCategory = typeof allowedCategories[number];
   
+  // Track categories we've already processed to avoid duplicates
+  const processedCategories = new Set<string>();
+  
   return (
     <>
-      {Object.entries(blogData.byCategory).map(([category, posts]) => {
+      {Object.entries(blogData.byCategory).map(([category, posts], index) => {
         // Check if this category is in our allowed list, otherwise default to a safe category
         const safeCategory: AllowedCategory = 
           allowedCategories.includes(category as AllowedCategory) 
             ? (category as AllowedCategory) 
             : 'nature';
+        
+        // Skip if we've already processed this category to prevent duplicate keys
+        if (processedCategories.has(category)) {
+          return null;
+        }
+        
+        // Mark as processed
+        processedCategories.add(category);
             
         return (
           <CategorySection
-            key={category}
+            key={`${category}-${index}`}
             title={`${category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ')}`}
             category={safeCategory}
             posts={posts}

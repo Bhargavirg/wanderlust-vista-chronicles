@@ -25,8 +25,12 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
     wildlife: "bg-category-wildlife text-white",
   };
   
-  // Make sure post.excerpt exists before calculating reading time
-  const excerpt = post.excerpt || "";
+  // Get category name from either the category object or direct property
+  const categoryName = post.category?.name || post.category;
+  const categorySlug = post.category?.slug || post.category;
+  
+  // Make sure excerpt exists before calculating reading time
+  const excerpt = post.excerpt || post.description || "";
   const { minutes, seconds } = calculateReadingTime(excerpt);
   const readingTime = formatReadingTime(minutes, seconds);
 
@@ -40,12 +44,12 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
         <div className="relative">
           <AspectRatio ratio={16 / 9} className={featured ? "md:h-full" : ""}>
             <img
-              src={post.coverImage}
+              src={post.coverImage || post.cover_image}
               alt={post.title}
               className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
             />
           </AspectRatio>
-          {hasVideo && (
+          {(hasVideo || post.video_url) && (
             <div className="absolute top-2 right-2 bg-black/70 rounded-full p-1.5">
               <Video className="h-4 w-4 text-white" />
             </div>
@@ -54,8 +58,8 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
         <div className="flex flex-col">
           <CardContent className={cn("p-4", featured ? "md:p-6" : "")}>
             <div className="flex justify-between items-center mb-2">
-              <Badge className={cn(categoryColors[post.category])}>
-                {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
+              <Badge className={cn(categoryColors[categorySlug])}>
+                {categoryName ? (categoryName.charAt(0).toUpperCase() + categoryName.slice(1)) : "Uncategorized"}
               </Badge>
               <div className="flex items-center text-xs text-gray-500">
                 <Clock size={12} className="mr-1" />
@@ -72,13 +76,15 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
           </CardContent>
           <CardFooter className={cn("flex items-center p-4 pt-0 text-sm", featured ? "md:p-6 md:pt-0" : "")}>
             <img
-              src={post.author.avatar}
-              alt={post.author.name}
+              src={post.author?.avatar_url || post.author?.avatar || "https://i.pravatar.cc/150?img=3"}
+              alt={post.author?.username || post.author?.name || "Author"}
               className="w-6 h-6 rounded-full mr-2"
             />
-            <span className="text-muted-foreground">{post.author.name}</span>
+            <span className="text-muted-foreground">{post.author?.username || post.author?.name || "Unknown"}</span>
             <span className="mx-2 text-muted-foreground">•</span>
-            <time className="text-muted-foreground">{new Date(post.publishedAt).toLocaleDateString()}</time>
+            <time className="text-muted-foreground">
+              {new Date(post.created_at || post.publishedAt || new Date()).toLocaleDateString()}
+            </time>
           </CardFooter>
         </div>
       </Card>

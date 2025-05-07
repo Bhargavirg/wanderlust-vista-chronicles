@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -31,6 +30,7 @@ const PostDetail = () => {
       
       setLoading(true);
       try {
+        console.log("Fetching post with ID:", postId);
         const contentData = await getContentById(postId);
         console.log("Fetched post content:", contentData);
         
@@ -45,25 +45,13 @@ const PostDetail = () => {
             
           setRelatedPosts(related);
         } else {
-          // Fall back to mock data
-          const combinedPosts = [
-            ...(mockData.featured ? [mockData.featured] : []), 
-            ...(mockData.recent || []), 
-            ...Object.values(mockData.byCategory || {}).flat()
-          ];
-          const uniquePosts = Array.from(new Map(combinedPosts.map(p => [p?.id, p])).values()).filter(Boolean);
-          const foundPost = uniquePosts.find((p) => p?.id === postId);
-          
-          setPost(foundPost || null);
-          
-          if (foundPost) {
-            // Find related posts with the same category from mock data
-            const mockRelatedPosts = uniquePosts
-              .filter((p) => p?.category === foundPost.category && p?.id !== foundPost.id)
-              .slice(0, 3);
-              
-            setRelatedPosts(mockRelatedPosts);
-          }
+          // Fall back to mock data - adjusted to improve error handling
+          console.warn("No content found with ID:", postId);
+          toast({
+            title: "Content Not Found",
+            description: "The requested article could not be found",
+            variant: "destructive",
+          });
         }
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -72,17 +60,6 @@ const PostDetail = () => {
           description: "Failed to load post content",
           variant: "destructive",
         });
-        
-        // Fall back to mock data
-        const combinedPosts = [
-          ...(mockData.featured ? [mockData.featured] : []), 
-          ...(mockData.recent || []), 
-          ...Object.values(mockData.byCategory || {}).flat()
-        ];
-        const uniquePosts = Array.from(new Map(combinedPosts.map(p => [p?.id, p])).values()).filter(Boolean);
-        const foundPost = uniquePosts.find((p) => p?.id === postId);
-        
-        setPost(foundPost || null);
       } finally {
         setLoading(false);
       }

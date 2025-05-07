@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,14 +9,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Search, User, Menu, X, LogOut, LogIn } from "lucide-react";
+import { Search, User, Menu, X, LogOut, LogIn, ChevronDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { ScrollArea } from "@/components/ui/scroll-area"; 
+import { supabase } from "@/integrations/supabase/client";
+import { searchContent } from "@/services/contentService";
+import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data, error } = await supabase
+          .from('categories')
+          .select('*')
+          .order('name');
+          
+        if (error) throw error;
+        setCategories(data || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+    
+    fetchCategories();
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -27,12 +51,31 @@ const Navbar = () => {
     await signOut();
   };
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      // Implement search functionality
-      console.log("Searching for:", searchTerm);
-      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+      try {
+        // Check if search term matches a category
+        const matchingCategory = categories.find(cat => 
+          cat.name.toLowerCase() === searchTerm.toLowerCase() ||
+          cat.slug.toLowerCase() === searchTerm.toLowerCase()
+        );
+        
+        if (matchingCategory) {
+          // If it matches a category, navigate to that category page
+          navigate(`/category/${matchingCategory.slug}`);
+        } else {
+          // Otherwise, navigate to search results page
+          navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        toast({
+          title: "Search Error",
+          description: "An error occurred while searching",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -59,6 +102,37 @@ const Navbar = () => {
           <Link to="/dashboard" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
             Dashboard
           </Link>
+          
+          {/* Categories dropdown */}
+          <div className="relative">
+            <button 
+              className="flex items-center gap-1 text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+            >
+              Categories
+              <ChevronDown className="h-3 w-3" />
+            </button>
+            
+            {categoryDropdownOpen && (
+              <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
+                <ScrollArea className="h-64">
+                  <div className="py-1">
+                    {categories.map(category => (
+                      <Link 
+                        key={category.id} 
+                        to={`/category/${category.slug}`}
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        onClick={() => setCategoryDropdownOpen(false)}
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+          </div>
+          
           <Link to="/category/nature" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
             Nature
           </Link>
@@ -92,16 +166,6 @@ const Navbar = () => {
             className="hidden md:flex"
           >
             Join Community
-          </Button>
-          
-          {/* Subscribe button */}
-          <Button 
-            variant="default" 
-            size="sm" 
-            onClick={() => navigate('/subscribe')}
-            className="hidden md:flex"
-          >
-            Subscribe
           </Button>
 
           {user ? (
@@ -182,6 +246,33 @@ const Navbar = () => {
           >
             Dashboard
           </Link>
+          
+          {/* Mobile categories accordion */}
+          <div className="py-2">
+            <button 
+              className="flex items-center justify-between w-full text-left text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+            >
+              <span>Categories</span>
+              <ChevronDown className={`h-4 w-4 transform ${categoryDropdownOpen ? 'rotate-180' : ''} transition-transform`} />
+            </button>
+            
+            {categoryDropdownOpen && (
+              <div className="mt-2 pl-4 space-y-1 max-h-48 overflow-y-auto">
+                {categories.map(category => (
+                  <Link 
+                    key={category.id}
+                    to={`/category/${category.slug}`}
+                    className="block py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-sky-500 dark:hover:text-white"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          
           <Link 
             to="/category/nature" 
             className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
@@ -213,16 +304,6 @@ const Navbar = () => {
               }}
             >
               Join Community
-            </Button>
-            
-            <Button 
-              variant="default"
-              onClick={() => {
-                navigate('/subscribe');
-                setMobileMenuOpen(false);
-              }}
-            >
-              Subscribe
             </Button>
             
             {!user && (
