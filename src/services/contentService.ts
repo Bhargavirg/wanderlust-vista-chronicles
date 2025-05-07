@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -10,8 +11,7 @@ export async function getContentById(id: string) {
       .from('content')
       .select(`
         *,
-        category:categories(*),
-        author:profiles(*)
+        category:categories(*)
       `)
       .eq('id', id)
       .single();
@@ -19,6 +19,20 @@ export async function getContentById(id: string) {
     if (error) {
       console.error("Error retrieving content:", error);
       throw error;
+    }
+
+    // If we need author data, we can fetch it separately
+    let authorData = null;
+    if (data && data.author_id) {
+      const { data: author } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', data.author_id)
+        .single();
+      
+      if (author) {
+        data.author = author;
+      }
     }
 
     console.log("Content retrieved:", data);
@@ -69,14 +83,12 @@ export async function getContentByCategory(categorySlug: string) {
     
     console.log("Found category:", categoryData);
     
-    // Then, get all content with that category
+    // Modified query to avoid the profiles relationship error
     const { data, error } = await supabase
       .from('content')
       .select(`
         *,
-        category:categories(*),
-        author_id,
-        author:profiles(*)
+        category:categories(*)
       `)
       .eq('category_id', categoryData.id)
       .eq('published', true)
@@ -87,6 +99,29 @@ export async function getContentByCategory(categorySlug: string) {
       throw error;
     }
 
+    // If we need author data, fetch it separately for each content item
+    if (data && data.length > 0) {
+      const authorIds = data
+        .map(item => item.author_id)
+        .filter(Boolean);
+      
+      if (authorIds.length > 0) {
+        const { data: authors } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', authorIds);
+        
+        if (authors) {
+          // Map authors to their respective content
+          data.forEach(item => {
+            if (item.author_id) {
+              item.author = authors.find(author => author.id === item.author_id) || null;
+            }
+          });
+        }
+      }
+    }
+
     console.log(`Found ${data?.length || 0} items for category ${categorySlug}`);
     return data || [];
   } catch (error) {
@@ -95,21 +130,42 @@ export async function getContentByCategory(categorySlug: string) {
   }
 }
 
-// Get all published content
+// Get all published content with the same fix
 export async function getAllPublishedContent() {
   try {
     const { data, error } = await supabase
       .from('content')
       .select(`
         *,
-        category:categories(*),
-        author:profiles(*)
+        category:categories(*)
       `)
       .eq('published', true)
       .order('created_at', { ascending: false });
 
     if (error) {
       throw error;
+    }
+
+    // Fetch author data separately
+    if (data && data.length > 0) {
+      const authorIds = data
+        .map(item => item.author_id)
+        .filter(Boolean);
+      
+      if (authorIds.length > 0) {
+        const { data: authors } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', authorIds);
+        
+        if (authors) {
+          data.forEach(item => {
+            if (item.author_id) {
+              item.author = authors.find(author => author.id === item.author_id) || null;
+            }
+          });
+        }
+      }
     }
 
     return data;
@@ -119,15 +175,14 @@ export async function getAllPublishedContent() {
   }
 }
 
-// Get featured content
+// Get featured content with the same fix
 export async function getFeaturedContent() {
   try {
     const { data, error } = await supabase
       .from('content')
       .select(`
         *,
-        category:categories(*),
-        author:profiles(*)
+        category:categories(*)
       `)
       .eq('featured', true)
       .eq('published', true)
@@ -135,6 +190,28 @@ export async function getFeaturedContent() {
 
     if (error) {
       throw error;
+    }
+
+    // Fetch author data separately
+    if (data && data.length > 0) {
+      const authorIds = data
+        .map(item => item.author_id)
+        .filter(Boolean);
+      
+      if (authorIds.length > 0) {
+        const { data: authors } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', authorIds);
+        
+        if (authors) {
+          data.forEach(item => {
+            if (item.author_id) {
+              item.author = authors.find(author => author.id === item.author_id) || null;
+            }
+          });
+        }
+      }
     }
 
     return data;
@@ -340,8 +417,7 @@ export async function searchContent(query: string) {
       .from('content')
       .select(`
         *,
-        category:categories(*),
-        author:profiles(*)
+        category:categories(*)
       `)
       .or(`title.ilike.%${query}%, description.ilike.%${query}%, main_content.ilike.%${query}%`)
       .eq('published', true)
@@ -350,6 +426,28 @@ export async function searchContent(query: string) {
     if (error) {
       console.error("Search error:", error);
       throw error;
+    }
+    
+    // Fetch author data separately
+    if (data && data.length > 0) {
+      const authorIds = data
+        .map(item => item.author_id)
+        .filter(Boolean);
+      
+      if (authorIds.length > 0) {
+        const { data: authors } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', authorIds);
+        
+        if (authors) {
+          data.forEach(item => {
+            if (item.author_id) {
+              item.author = authors.find(author => author.id === item.author_id) || null;
+            }
+          });
+        }
+      }
     }
     
     console.log("Search results:", data);

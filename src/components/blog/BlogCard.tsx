@@ -25,36 +25,74 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
     wildlife: "bg-category-wildlife text-white",
   };
   
-  // Using type assertions to resolve TypeScript errors with null checks
+  // Safely determine category name and slug with proper type handling
   const categoryName = (() => {
+    // Handle both mock data format and API data format
     if (!post.category) return "Uncategorized";
+    
     if (typeof post.category === 'object' && post.category !== null) {
-      return (post.category as {name: string}).name || "Uncategorized";
+      // Handle API data format (content from Supabase)
+      return post.category.name || "Uncategorized";
     }
+    
+    // Handle mock data format (string category)
     if (typeof post.category === 'string') {
       return post.category.charAt(0).toUpperCase() + post.category.slice(1);
     }
+    
     return "Uncategorized";
   })();
   
   const categorySlug = (() => {
+    // Handle both mock data format and API data format
     if (!post.category) return "uncategorized";
+    
     if (typeof post.category === 'object' && post.category !== null) {
-      return (post.category as {slug: string}).slug || "uncategorized";
+      // Handle API data format (content from Supabase)
+      return post.category.slug || "uncategorized";
     }
+    
+    // Handle mock data format (string category)
     if (typeof post.category === 'string') {
-      return post.category;
+      return post.category.toLowerCase();
     }
+    
     return "uncategorized";
   })();
   
-  // Make sure excerpt exists before calculating reading time
+  // Handle different post data structures for excerpt
   const excerpt = post.excerpt || post.description || "";
-  const { minutes, seconds } = calculateReadingTime(excerpt);
-  const readingTime = formatReadingTime(minutes, seconds);
+  const readingTime = (() => {
+    const { minutes, seconds } = calculateReadingTime(excerpt);
+    return formatReadingTime(minutes, seconds);
+  })();
+
+  // Get the post ID for the URL - handle both API and mock data formats
+  const postId = post.id;
+
+  // Get cover image - handle both API and mock data formats
+  const coverImage = post.coverImage || post.cover_image || "";
+  
+  // Handle author data for both formats
+  const authorName = (() => {
+    if (post.author && typeof post.author === 'object') {
+      return post.author.name || post.author.username || "Unknown";
+    }
+    return "Unknown";
+  })();
+  
+  const authorAvatar = (() => {
+    if (post.author && typeof post.author === 'object') {
+      return post.author.avatar || post.author.avatar_url || "https://i.pravatar.cc/150?img=3";
+    }
+    return "https://i.pravatar.cc/150?img=3";
+  })();
+  
+  // Get published date - handle both API and mock data formats
+  const publishedDate = post.publishedAt || post.created_at || new Date();
 
   return (
-    <Link to={`/post/${post.id}`} className="block">
+    <Link to={`/post/${postId}`} className="block">
       <Card className={cn(
         "overflow-hidden transition-all duration-200 hover:shadow-lg", 
         featured ? "md:grid md:grid-cols-2" : "",
@@ -63,7 +101,7 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
         <div className="relative">
           <AspectRatio ratio={16 / 9} className={featured ? "md:h-full" : ""}>
             <img
-              src={post.coverImage}
+              src={coverImage}
               alt={post.title}
               className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
             />
@@ -78,7 +116,7 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
           <CardContent className={cn("p-4", featured ? "md:p-6" : "")}>
             <div className="flex justify-between items-center mb-2">
               <Badge className={cn(categoryColors[categorySlug] || "bg-gray-500 text-white")}>
-                {categoryName || "Uncategorized"}
+                {categoryName}
               </Badge>
               <div className="flex items-center text-xs text-gray-500">
                 <Clock size={12} className="mr-1" />
@@ -95,14 +133,14 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
           </CardContent>
           <CardFooter className={cn("flex items-center p-4 pt-0 text-sm", featured ? "md:p-6 md:pt-0" : "")}>
             <img
-              src={post.author?.avatar || "https://i.pravatar.cc/150?img=3"}
-              alt={post.author?.name || "Author"}
+              src={authorAvatar}
+              alt={authorName}
               className="w-6 h-6 rounded-full mr-2"
             />
-            <span className="text-muted-foreground">{post.author?.name || "Unknown"}</span>
+            <span className="text-muted-foreground">{authorName}</span>
             <span className="mx-2 text-muted-foreground">•</span>
             <time className="text-muted-foreground">
-              {new Date(post.publishedAt || new Date()).toLocaleDateString()}
+              {new Date(publishedDate).toLocaleDateString()}
             </time>
           </CardFooter>
         </div>
