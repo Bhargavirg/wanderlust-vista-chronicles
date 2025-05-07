@@ -27,17 +27,15 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   
   // Handle both cases: when category is a string or an object with name/slug properties
   // Adding null checks to prevent TypeScript errors
-  const categoryName = typeof post.category === 'object' && post.category !== null 
-    ? post.category.name 
-    : typeof post.category === 'string' && post.category !== null
-      ? post.category.charAt(0).toUpperCase() + post.category.slice(1) 
-      : "Uncategorized";
+  const categoryName = post.category === null ? "Uncategorized" :
+    typeof post.category === 'object' ? post.category.name :
+    typeof post.category === 'string' ? post.category.charAt(0).toUpperCase() + post.category.slice(1) :
+    "Uncategorized";
   
-  const categorySlug = typeof post.category === 'object' && post.category !== null 
-    ? post.category.slug 
-    : typeof post.category === 'string' && post.category !== null
-      ? post.category 
-      : "uncategorized";
+  const categorySlug = post.category === null ? "uncategorized" :
+    typeof post.category === 'object' ? post.category.slug :
+    typeof post.category === 'string' ? post.category :
+    "uncategorized";
   
   // Make sure excerpt exists before calculating reading time
   const excerpt = post.excerpt || post.description || "";
