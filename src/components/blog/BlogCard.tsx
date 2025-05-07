@@ -29,12 +29,12 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   // Adding null checks to prevent TypeScript errors
   const categoryName = post.category === null ? "Uncategorized" :
     typeof post.category === 'object' && post.category !== null ? post.category.name :
-    typeof post.category === 'string' ? post.category.charAt(0).toUpperCase() + post.category.slice(1) :
+    typeof post.category === 'string' && post.category !== null ? post.category.charAt(0).toUpperCase() + post.category.slice(1) :
     "Uncategorized";
   
   const categorySlug = post.category === null ? "uncategorized" :
     typeof post.category === 'object' && post.category !== null ? post.category.slug :
-    typeof post.category === 'string' ? post.category :
+    typeof post.category === 'string' && post.category !== null ? post.category :
     "uncategorized";
   
   // Make sure excerpt exists before calculating reading time
