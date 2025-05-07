@@ -12,6 +12,7 @@ interface CategoriesListProps {
  * Renders a list of CategorySection components based on the categories in the blogData object.
  * It iterates over the blogData.byCategory object and renders a CategorySection for each
  * category that is present in the allowedCategories array. If a category is not present in
+*/
 
 /*******  54284743-bbec-483e-a58c-675281dacac1  *******/
 const CategoriesList = ({ blogData }: CategoriesListProps) => {
@@ -37,7 +38,7 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
         return (
           <CategorySection
             key={category}
-            title={`${category.charAt(0).toUpperCase() + category.slice(1)}`}
+            title={`${category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ')}`}
             category={safeCategory}
             posts={posts}
           />
