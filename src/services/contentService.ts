@@ -80,6 +80,7 @@ export async function getContentByCategory(categorySlug: string) {
       .order('created_at', { ascending: false });
 
     if (error) {
+      console.error("Error fetching content by category:", error);
       throw error;
     }
 
@@ -216,8 +217,8 @@ export async function addContent(
     console.log("Adding content with category ID:", contentData.categoryId);
     console.log("User ID:", userId);
     
-    // Validate category ID before attempting to insert
-    if (!contentData.categoryId) {
+    // Extra validation for category ID
+    if (!contentData.categoryId || contentData.categoryId.trim() === "") {
       throw new Error("Category ID is required but was not provided");
     }
     
@@ -261,7 +262,7 @@ export async function addContent(
       slug: slug
     };
     
-    console.log("Inserting content:", newContent);
+    console.log("Inserting content with data:", newContent);
     
     const { data, error } = await supabase
       .from('content')

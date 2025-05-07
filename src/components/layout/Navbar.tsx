@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -11,18 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Bell, Moon, Search, Sun, User, Menu, X, LogOut, LogIn } from "lucide-react";
+import { Search, User, Menu, X, LogOut, LogIn } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
-  const { setTheme, theme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -30,6 +25,15 @@ const Navbar = () => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Implement search functionality
+      console.log("Searching for:", searchTerm);
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+    }
   };
 
   return (
@@ -68,16 +72,36 @@ const Navbar = () => {
 
         {/* Right side actions */}
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggleTheme}>
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          {/* Search form */}
+          <form onSubmit={handleSearch} className="hidden md:flex items-center relative mr-2">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="py-1 pl-8 pr-3 rounded-full text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            />
+            <Search className="h-4 w-4 absolute left-2 text-gray-400" />
+          </form>
+          
+          {/* Join Community button */}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => navigate('/join-community')}
+            className="hidden md:flex"
+          >
+            Join Community
           </Button>
           
-          <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
-          </Button>
-          
-          <Button variant="ghost" size="icon">
-            <Bell className="h-5 w-5" />
+          {/* Subscribe button */}
+          <Button 
+            variant="default" 
+            size="sm" 
+            onClick={() => navigate('/subscribe')}
+            className="hidden md:flex"
+          >
+            Subscribe
           </Button>
 
           {user ? (
@@ -132,6 +156,18 @@ const Navbar = () => {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden py-4 px-4 space-y-4 border-t border-gray-200 dark:border-gray-800">
+          {/* Mobile search */}
+          <form onSubmit={handleSearch} className="flex items-center relative mb-2">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full py-2 pl-9 pr-3 rounded-md text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+            />
+            <Search className="h-4 w-4 absolute left-3 text-gray-400" />
+          </form>
+          
           <Link 
             to="/home" 
             className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
@@ -167,15 +203,38 @@ const Navbar = () => {
           >
             History
           </Link>
-          {!user && (
-            <Link 
-              to="/login" 
-              className="block py-2 text-base font-medium text-sky-500 hover:text-sky-600"
-              onClick={() => setMobileMenuOpen(false)}
+          
+          <div className="flex flex-col space-y-2 pt-2">
+            <Button 
+              variant="outline"
+              onClick={() => {
+                navigate('/join-community');
+                setMobileMenuOpen(false);
+              }}
             >
-              Log In
-            </Link>
-          )}
+              Join Community
+            </Button>
+            
+            <Button 
+              variant="default"
+              onClick={() => {
+                navigate('/subscribe');
+                setMobileMenuOpen(false);
+              }}
+            >
+              Subscribe
+            </Button>
+            
+            {!user && (
+              <Link 
+                to="/login" 
+                className="block py-2 text-base font-medium text-sky-500 hover:text-sky-600"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Log In
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </nav>

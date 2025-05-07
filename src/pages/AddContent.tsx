@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -205,7 +204,7 @@ const AddContent = () => {
     }
   }, [postId, navigate]);
 
-  // Update categoryId when category changes
+  // Updated useEffect to properly handle category selection and get the correct categoryId
   useEffect(() => {
     if (categories.length > 0) {
       const selectedCategory = categories.find(cat => cat.slug === category);
@@ -214,6 +213,18 @@ const AddContent = () => {
         console.log("Selected category ID:", selectedCategory.id);
       } else {
         console.warn("Category not found for slug:", category);
+        // Try to find a default category
+        const defaultCategory = categories.find(cat => cat.slug === 'nature');
+        if (defaultCategory) {
+          setCategoryId(defaultCategory.id);
+          setCategory('nature' as CategoryType);
+          console.log("Falling back to default category:", defaultCategory.id);
+        } else if (categories.length > 0) {
+          // If still no match, just use the first available category
+          setCategoryId(categories[0].id);
+          setCategory(categories[0].slug as CategoryType);
+          console.log("Using first available category:", categories[0].id);
+        }
       }
     }
   }, [category, categories]);
@@ -297,6 +308,8 @@ const AddContent = () => {
       };
 
       console.log("Submitting content with data:", contentData);
+      console.log("Category selected:", category);
+      console.log("Category ID being used:", categoryId);
 
       if (isEditMode && originalPost) {
         // Update existing content
