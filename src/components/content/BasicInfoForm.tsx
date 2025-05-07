@@ -1,22 +1,14 @@
 
-import { useState } from "react";
-import { Label } from "@/components/ui/label";
+import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue,
-  SelectGroup,
-  SelectLabel
-} from "@/components/ui/select";
-import { MapPin } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+// Define the CategoryType to match the BlogPost interface
 type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
-  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | 
-  "sports" | "stories" ;
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories" |
+  "psychology" | "archaeology" | "mythology" | "climate" | "current-affairs" | "music" | "business-economics" | "deep-earth-geology" | "ancient-civilizations";
 
 interface BasicInfoFormProps {
   title: string;
@@ -38,116 +30,101 @@ const BasicInfoForm = ({
   setCategory,
   description,
   setDescription,
-  location, 
+  location,
   setLocation,
   tags,
   setTags
 }: BasicInfoFormProps) => {
-  
-  const handleCategoryChange = (value: string) => {
-    setCategory(value as CategoryType);
-  };
-  
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold border-b pb-2">Basic Information</h3>
+      <h3 className="text-lg font-medium">Basic Information</h3>
       
-      <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          placeholder="Enter a descriptive title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-1">
+      <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter a descriptive title"
+            required
+          />
+        </div>
+        
+        <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select value={category} onValueChange={(value) => setCategory(value as CategoryType)}>
-            <SelectTrigger id="category">
+            <SelectTrigger>
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Nature</SelectLabel>
-                <SelectItem value="nature">Nature</SelectItem>
-                <SelectItem value="wildlife">Wildlife</SelectItem>
-                <SelectItem value="flowers">Flowers</SelectItem>
-                <SelectItem value="marinelife">Marine Life</SelectItem>
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Science & Technology</SelectLabel>
-                <SelectItem value="science">Science</SelectItem>
-                <SelectItem value="technology">Technology</SelectItem>
-                <SelectItem value="space">Space</SelectItem>
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Culture & History</SelectLabel>
-                <SelectItem value="culture">Culture</SelectItem>
-                <SelectItem value="history">History</SelectItem>
-                <SelectItem value="monuments">Monuments</SelectItem>
-                <SelectItem value="literature">Literature</SelectItem>
-                <SelectItem value="art">Art</SelectItem>
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Lifestyle</SelectLabel>
-                <SelectItem value="travel">Travel</SelectItem>
-                <SelectItem value="food">Food</SelectItem>
-                <SelectItem value="sports">Sports</SelectItem>
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Entertainment</SelectLabel>
-                <SelectItem value="anime">Anime</SelectItem>
-                <SelectItem value="stories">Stories</SelectItem>
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel>Others</SelectLabel>
-                <SelectItem value="politics">Politics</SelectItem>
-                
-              </SelectGroup>
+              <SelectItem value="science">Science</SelectItem>
+              <SelectItem value="technology">Technology</SelectItem>
+              <SelectItem value="history">History</SelectItem>
+              <SelectItem value="culture">Culture</SelectItem>
+              <SelectItem value="nature">Nature</SelectItem>
+              <SelectItem value="space">Space</SelectItem>
+              <SelectItem value="wildlife">Wildlife</SelectItem>
+              <SelectItem value="travel">Travel</SelectItem>
+              <SelectItem value="marinelife">Marine Life</SelectItem>
+              <SelectItem value="monuments">Monuments</SelectItem>
+              <SelectItem value="literature">Literature</SelectItem>
+              <SelectItem value="art">Art</SelectItem>
+              <SelectItem value="flowers">Flowers</SelectItem>
+              <SelectItem value="food">Food</SelectItem>
+              <SelectItem value="anime">Anime</SelectItem>
+              <SelectItem value="politics">Politics</SelectItem>
+              <SelectItem value="sports">Sports</SelectItem>
+              <SelectItem value="stories">Stories</SelectItem>
+              <SelectItem value="psychology">Psychology</SelectItem>
+              <SelectItem value="archaeology">Archaeology</SelectItem>
+              <SelectItem value="mythology">Mythology</SelectItem>
+              <SelectItem value="climate">Climate</SelectItem>
+              <SelectItem value="current-affairs">Current Affairs</SelectItem>
+              <SelectItem value="music">Music</SelectItem>
+              <SelectItem value="business-economics">Business & Economics</SelectItem>
+              <SelectItem value="deep-earth-geology">Deep Earth & Geology</SelectItem>
+              <SelectItem value="ancient-civilizations">Ancient Civilizations</SelectItem>
             </SelectContent>
           </Select>
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-            <Input
-              id="location"
-              placeholder="Where was this content captured/created?"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="pl-9"
-            />
-          </div>
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Write a brief summary of your content"
+            rows={3}
+          />
+          <p className="text-sm text-muted-foreground">
+            This description will appear in search results and previews.
+          </p>
         </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="description">Short Description</Label>
-        <Textarea
-          id="description"
-          placeholder="Enter a brief summary of your content (100-200 characters)"
-          rows={2}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="tags">Tags</Label>
-        <div className="relative">
+        
+        <div className="space-y-2">
+          <Label htmlFor="location">Location (Optional)</Label>
           <Input
-            id="tags"
-            placeholder="Enter tags separated by commas"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
+            id="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Where was this content created or about?"
           />
         </div>
-        <p className="text-xs text-gray-500">e.g., rainforest, biodiversity, amazon</p>
+        
+        <div className="space-y-2">
+          <Label htmlFor="tags">Tags</Label>
+          <Input
+            id="tags"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="Enter tags separated by commas (e.g. nature, wildlife, conservation)"
+          />
+          <p className="text-sm text-muted-foreground">
+            Tags help users find your content.
+          </p>
+        </div>
       </div>
     </div>
   );

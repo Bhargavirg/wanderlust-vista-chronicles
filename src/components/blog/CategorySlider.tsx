@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -148,10 +149,10 @@ const CategorySlider = () => {
       description: "Earth's structure and geological wonders"
     },
     {
-      name: "Ancient Civilization",
+      name: "Ancient Civilizations",
       image: "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg",
       icon: <Scroll className="h-6 w-6" />,
-      link: "/category/ancient-civilization",
+      link: "/category/ancient-civilizations",
       description: "Lost cultures and ancient wisdom"
     },
     {

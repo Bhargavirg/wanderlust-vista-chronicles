@@ -216,6 +216,23 @@ export async function addContent(
     console.log("Adding content with category ID:", contentData.categoryId);
     console.log("User ID:", userId);
     
+    // Validate category ID before attempting to insert
+    if (!contentData.categoryId) {
+      throw new Error("Category ID is required but was not provided");
+    }
+    
+    // Check if the category exists
+    const { data: categoryCheck, error: categoryError } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('id', contentData.categoryId)
+      .single();
+      
+    if (categoryError || !categoryCheck) {
+      console.error('Category validation failed:', categoryError || "Category not found");
+      throw new Error(`Category not found with ID: ${contentData.categoryId}`);
+    }
+    
     // Convert tags string to array if needed
     const tagsArray = contentData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     

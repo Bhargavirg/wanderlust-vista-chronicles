@@ -15,7 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Define the CategoryType to match the BlogPost interface
 type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
-  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories";
+  "travel" | "marinelife" | "monuments" | "literature" | "art" | "flowers" | "food" | "anime" | "politics" | "sports" | "stories" |
+  "psychology" | "archaeology" | "mythology" | "climate" | "current-affairs" | "music" | "business-economics" | "deep-earth-geology" | "ancient-civilizations";
 
 const AddContent = () => {
   const navigate = useNavigate();

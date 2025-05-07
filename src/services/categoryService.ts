@@ -118,6 +118,31 @@ const defaultCategories: Category[] = [
     name: "Stories",
     slug: "stories",
     description: "Immerse yourself in compelling narratives and meaningful tales."
+  },
+  {
+    name: "Food",
+    slug: "food",
+    description: "Culinary delights and recipes from around the world."
+  },
+  {
+    name: "Music",
+    slug: "music",
+    description: "Harmony, rhythm, and musical culture from around the world."
+  },
+  {
+    name: "Business & Economics",
+    slug: "business-economics",
+    description: "Markets, finance, and economic trends."
+  },
+  {
+    name: "Current Affairs",
+    slug: "current-affairs",
+    description: "Today's most important global events and news."
+  },
+  {
+    name: "Deep Earth & Geology",
+    slug: "deep-earth-geology",
+    description: "Earth's structure, rocks, minerals, and geological forces."
   }
 ];
 
@@ -146,13 +171,19 @@ export async function initializeCategories() {
     
     if (missingCategories.length > 0) {
       console.log(`Adding ${missingCategories.length} missing categories`);
-      const { error } = await supabase
-        .from('categories')
-        .insert(missingCategories);
       
-      if (error) {
-        console.error('Error adding categories:', error);
-        throw error;
+      // Insert categories in smaller batches to avoid potential issues
+      const batchSize = 5;
+      for (let i = 0; i < missingCategories.length; i += batchSize) {
+        const batch = missingCategories.slice(i, i + batchSize);
+        const { error } = await supabase
+          .from('categories')
+          .insert(batch);
+        
+        if (error) {
+          console.error('Error adding categories batch:', error);
+          // Continue with other batches even if one fails
+        }
       }
       
       console.log('Missing categories added successfully');

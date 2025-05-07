@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BlogData } from '@/data/blogData';
 import CategorySection from '@/components/home/CategorySection';
@@ -17,7 +18,9 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
   // Define the allowed categories that match the CategorySection component's expected types
   const allowedCategories = [
     'science', 'technology', 'history', 'culture', 'nature', 'space', 'wildlife', 
-    'art', 'flowers', 'anime', 'politics', 'sports', 'stories'
+    'art', 'flowers', 'anime', 'politics', 'sports', 'stories',
+    'psychology', 'archaeology', 'mythology', 'climate', 'current-affairs', 
+    'music', 'business-economics', 'deep-earth-geology', 'ancient-civilizations'
   ] as const;
   
   type AllowedCategory = typeof allowedCategories[number];
