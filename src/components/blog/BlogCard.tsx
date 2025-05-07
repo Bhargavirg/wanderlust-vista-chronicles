@@ -25,18 +25,26 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
     wildlife: "bg-category-wildlife text-white",
   };
   
-  // Restructured logic to handle null cases properly
+  // Using type assertions to resolve TypeScript errors with null checks
   const categoryName = (() => {
-    if (post.category === null || post.category === undefined) return "Uncategorized";
-    if (typeof post.category === 'object') return post.category.name;
-    if (typeof post.category === 'string') return post.category.charAt(0).toUpperCase() + post.category.slice(1);
+    if (!post.category) return "Uncategorized";
+    if (typeof post.category === 'object' && post.category !== null) {
+      return (post.category as {name: string}).name || "Uncategorized";
+    }
+    if (typeof post.category === 'string') {
+      return post.category.charAt(0).toUpperCase() + post.category.slice(1);
+    }
     return "Uncategorized";
   })();
   
   const categorySlug = (() => {
-    if (post.category === null || post.category === undefined) return "uncategorized";
-    if (typeof post.category === 'object') return post.category.slug;
-    if (typeof post.category === 'string') return post.category;
+    if (!post.category) return "uncategorized";
+    if (typeof post.category === 'object' && post.category !== null) {
+      return (post.category as {slug: string}).slug || "uncategorized";
+    }
+    if (typeof post.category === 'string') {
+      return post.category;
+    }
     return "uncategorized";
   })();
   
