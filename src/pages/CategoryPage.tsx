@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -33,18 +32,16 @@ const CategoryPage = () => {
         if (contentData && contentData.length > 0) {
           // Map the content data to the expected BlogPost format
           const formattedPosts = contentData.map(item => {
-            // Add author property if it doesn't exist
-            const author = item.author || {}; 
+            // We need to create an author object since it doesn't exist in the type
+            const authorInfo = {
+              name: "Anonymous",
+              avatar: "https://i.pravatar.cc/150?img=32"
+            };
             
-            // Extract author properties safely with explicit type checks
-            let authorName = "Anonymous";
-            let authorAvatar = "https://i.pravatar.cc/150?img=32";
-            
-            if (author && typeof author === 'object') {
-              // Use type assertion to tell TypeScript this is a record with string keys
-              const typedAuthor = author as Record<string, any>;
-              authorName = typedAuthor.username || typedAuthor.full_name || "Anonymous";
-              authorAvatar = typedAuthor.avatar_url || "https://i.pravatar.cc/150?img=32";
+            // If author_id exists, try to extract name and avatar from profiles
+            if (item.profiles) {
+              authorInfo.name = item.profiles.username || item.profiles.full_name || "Anonymous";
+              authorInfo.avatar = item.profiles.avatar_url || "https://i.pravatar.cc/150?img=32";
             }
             
             return {
@@ -53,10 +50,7 @@ const CategoryPage = () => {
               excerpt: item.description || "",
               coverImage: item.cover_image || "https://images.unsplash.com/photo-1496449903678-68ddcb189a24",
               category: item.category?.slug || category,
-              author: {
-                name: authorName,
-                avatar: authorAvatar
-              },
+              author: authorInfo,
               publishedAt: item.created_at
             };
           });
@@ -124,7 +118,7 @@ const CategoryPage = () => {
       case "food":
         return "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
       case "literature":
-        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
       case "art":
         return "https://cdn.pixabay.com/photo/2013/02/24/18/33/vincent-van-gogh-85799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
       case "flowers":

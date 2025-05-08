@@ -30,7 +30,8 @@ export async function getContentById(id: string) {
       
       if (authorData) {
         // Add author data to the content object
-        data.author = authorData;
+        // Use type assertion to add the property that doesn't exist in the type
+        (data as any).author = authorData;
       }
     }
 
@@ -116,7 +117,8 @@ export async function getContentByCategory(categorySlug: string) {
             if (item.author_id) {
               const authorMatch = authors.find(author => author.id === item.author_id);
               if (authorMatch) {
-                item.author = authorMatch;
+                // Use type assertion to add the property
+                (item as any).author = authorMatch;
               }
             }
           });
@@ -165,7 +167,8 @@ export async function getAllPublishedContent() {
             if (item.author_id) {
               const authorMatch = authors.find(author => author.id === item.author_id);
               if (authorMatch) {
-                item.author = authorMatch;
+                // Use type assertion to add the property
+                (item as any).author = authorMatch;
               }
             }
           });
@@ -214,7 +217,8 @@ export async function getFeaturedContent() {
             if (item.author_id) {
               const authorMatch = authors.find(author => author.id === item.author_id);
               if (authorMatch) {
-                item.author = authorMatch;
+                // Use type assertion to add the property
+                (item as any).author = authorMatch;
               }
             }
           });
@@ -453,7 +457,8 @@ export async function searchContent(query: string) {
             if (item.author_id) {
               const authorMatch = authors.find(author => author.id === item.author_id);
               if (authorMatch) {
-                item.author = authorMatch;
+                // Use type assertion to add the property
+                (item as any).author = authorMatch;
               }
             }
           });
