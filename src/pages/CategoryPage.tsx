@@ -33,8 +33,8 @@ const CategoryPage = () => {
         if (contentData && contentData.length > 0) {
           // Map the content data to the expected BlogPost format
           const formattedPosts = contentData.map(item => {
-            // Safely access author properties with proper type checking
-            const author = item.author || {};
+            // Add author property if it doesn't exist
+            const author = item.author || {}; 
             
             // Extract author properties safely with explicit type checks
             let authorName = "Anonymous";

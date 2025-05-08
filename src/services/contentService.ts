@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { EducationalMetadata } from "@/types/mediaTypes";
 import { Json } from "@/integrations/supabase/types";
@@ -22,16 +21,16 @@ export async function getContentById(id: string) {
     }
 
     // If we need author data, we can fetch it separately
-    let authorData = null;
     if (data && data.author_id) {
-      const { data: author } = await supabase
+      const { data: authorData } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', data.author_id)
         .single();
       
-      if (author) {
-        data.author = author;
+      if (authorData) {
+        // Add author data to the content object
+        data.author = authorData;
       }
     }
 
@@ -115,7 +114,10 @@ export async function getContentByCategory(categorySlug: string) {
           // Map authors to their respective content
           data.forEach(item => {
             if (item.author_id) {
-              item.author = authors.find(author => author.id === item.author_id) || null;
+              const authorMatch = authors.find(author => author.id === item.author_id);
+              if (authorMatch) {
+                item.author = authorMatch;
+              }
             }
           });
         }
@@ -161,7 +163,10 @@ export async function getAllPublishedContent() {
         if (authors) {
           data.forEach(item => {
             if (item.author_id) {
-              item.author = authors.find(author => author.id === item.author_id) || null;
+              const authorMatch = authors.find(author => author.id === item.author_id);
+              if (authorMatch) {
+                item.author = authorMatch;
+              }
             }
           });
         }
@@ -207,7 +212,10 @@ export async function getFeaturedContent() {
         if (authors) {
           data.forEach(item => {
             if (item.author_id) {
-              item.author = authors.find(author => author.id === item.author_id) || null;
+              const authorMatch = authors.find(author => author.id === item.author_id);
+              if (authorMatch) {
+                item.author = authorMatch;
+              }
             }
           });
         }
@@ -443,7 +451,10 @@ export async function searchContent(query: string) {
         if (authors) {
           data.forEach(item => {
             if (item.author_id) {
-              item.author = authors.find(author => author.id === item.author_id) || null;
+              const authorMatch = authors.find(author => author.id === item.author_id);
+              if (authorMatch) {
+                item.author = authorMatch;
+              }
             }
           });
         }

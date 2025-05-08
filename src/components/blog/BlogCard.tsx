@@ -9,7 +9,7 @@ import { BlogPost } from "@/data/blogData";
 import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
 
 interface BlogCardProps {
-  post: BlogPost;
+  post: BlogPost | any; // Allow Supabase content type as well
   className?: string;
   featured?: boolean;
   hasVideo?: boolean;
@@ -75,16 +75,27 @@ const BlogCard = ({ post, className, featured = false, hasVideo = false }: BlogC
   
   // Handle author data for both formats
   const authorName = (() => {
-    if (post.author && typeof post.author === 'object') {
-      return post.author.name || post.author.username || "Unknown";
+    if (!post.author) return "Unknown";
+    
+    if (typeof post.author === 'object') {
+      // Handle different possible author object structures
+      if (post.author.name) return post.author.name;
+      if (post.author.username) return post.author.username;
+      if (post.author.full_name) return post.author.full_name;
     }
+    
     return "Unknown";
   })();
   
   const authorAvatar = (() => {
-    if (post.author && typeof post.author === 'object') {
-      return post.author.avatar || post.author.avatar_url || "https://i.pravatar.cc/150?img=3";
+    if (!post.author) return "https://i.pravatar.cc/150?img=3";
+    
+    if (typeof post.author === 'object') {
+      // Handle different possible author avatar fields
+      if (post.author.avatar) return post.author.avatar;
+      if (post.author.avatar_url) return post.author.avatar_url;
     }
+    
     return "https://i.pravatar.cc/150?img=3";
   })();
   
