@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -43,12 +44,31 @@ const SearchPage = () => {
       // First check if the search term matches a category
       const matchingCategory = categories.find(cat => 
         cat.name.toLowerCase() === term.toLowerCase() ||
-        cat.slug.toLowerCase() === term.toLowerCase()
+        cat.slug.toLowerCase() === term.toLowerCase() ||
+        // Include checking for subcategories or combined terms
+        term.toLowerCase().includes(cat.name.toLowerCase()) ||
+        cat.slug.split('-').some(part => term.toLowerCase().includes(part))
       );
       
       if (matchingCategory) {
         // If it matches a category, navigate to that category page
         navigate(`/category/${matchingCategory.slug}`);
+        return;
+      }
+      
+      // Handle special case for "deep earth" or "geology" searches
+      if (term.toLowerCase().includes('deep earth') || 
+          term.toLowerCase().includes('geology') || 
+          term.toLowerCase().includes('earth') ||
+          term.toLowerCase().includes('deep-earth-geology')) {
+        navigate('/category/deep-earth-geology');
+        return;
+      }
+      
+      // Handle special case for "ancient civilizations" searches
+      if (term.toLowerCase().includes('ancient') && 
+          term.toLowerCase().includes('civilization')) {
+        navigate('/category/ancient-civilizations');
         return;
       }
       

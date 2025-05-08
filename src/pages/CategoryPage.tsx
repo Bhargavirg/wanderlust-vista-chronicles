@@ -113,38 +113,50 @@ const CategoryPage = () => {
   // Get the category banner image
   function getCategoryBackground() {
     switch (category) {
+      case "ancient-civilizations":
+        return "https://cdn.pixabay.com/photo/2015/09/02/12/25/pantheone-918531_1280.jpg";
+      case "archaeology":
+        return "https://cdn.pixabay.com/photo/2016/07/30/13/04/easter-island-1557162_1280.jpg";
+      case "business-economics":
+        return "https://cdn.pixabay.com/photo/2017/10/25/19/46/piggy-bank-2889042_1280.jpg";
+      case "climate":
+        return "https://cdn.pixabay.com/photo/2017/03/16/21/10/landscape-2150112_1280.jpg";
+      case "current-affairs":
+        return "https://cdn.pixabay.com/photo/2016/02/19/11/46/social-network-1209859_1280.jpg";
+      case "deep-earth-geology":
+        return "https://cdn.pixabay.com/photo/2023/07/20/11/00/cave-8138930_1280.jpg";
       case "marine-life":
-        return "https://cdn.pixabay.com/photo/2013/11/01/11/13/dolphin-203875_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+        return "https://cdn.pixabay.com/photo/2013/11/01/11/13/dolphin-203875_1280.jpg";
       case "monuments":
-        return "https://cdn.pixabay.com/photo/2019/12/28/14/29/tajmahal-4724799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+        return "https://cdn.pixabay.com/photo/2019/12/28/14/29/tajmahal-4724799_1280.jpg";
       case "food":
-        return "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&q=80";
+        return "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg";
       case "literature":
-        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2015/05/09/15/42/book-759873_1280.jpg";
       case "art":
-        return "https://cdn.pixabay.com/photo/2013/02/24/18/33/vincent-van-gogh-85799_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2013/02/24/18/33/vincent-van-gogh-85799_1280.jpg";
       case "flowers":
-        return "https://cdn.pixabay.com/photo/2016/03/16/13/41/cherry-blossom-1260641_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2016/03/16/13/41/cherry-blossom-1260641_1280.jpg";
       case "anime":
-        return "https://cdn.pixabay.com/photo/2018/08/27/00/07/toy-3633751_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2018/08/27/00/07/toy-3633751_1280.jpg";
       case "politics":
-        return "https://cdn.pixabay.com/photo/2017/05/31/23/01/politics-2361943_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2017/05/31/23/01/politics-2361943_1280.jpg";
       case "sports":
-        return "https://cdn.pixabay.com/photo/2024/08/21/13/03/ai-generated-8986207_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2024/08/21/13/03/ai-generated-8986207_1280.jpg";
       case "stories":
-        return "https://cdn.pixabay.com/photo/2015/07/27/20/16/book-863418_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2015/07/27/20/16/book-863418_1280.jpg";
       case "travel":
-        return "https://cdn.pixabay.com/photo/2016/11/23/14/51/stone-circles-1853340_1280.jpg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2016/11/23/14/51/stone-circles-1853340_1280.jpg";
       case "science":
-        return "https://cdn.pixabay.com/photo/2023/03/15/20/48/robots-7855433_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2023/03/15/20/48/robots-7855433_1280.jpg";
       case "technology":
         return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
       case "history":
-        return "https://i.pinimg.com/736x/5d/11/47/5d1147d0747d68d53179235a0362222c.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+        return "https://i.pinimg.com/736x/5d/11/47/5d1147d0747d68d53179235a0362222c.jpg";
       case "culture":
-        return "https://cdn.pixabay.com/photo/2024/12/09/16/22/boat-9255590_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2024/12/09/16/22/boat-9255590_1280.jpg";
       case "nature":
-        return "https://cdn.pixabay.com/photo/2020/11/03/16/13/road-5710320_1280.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
+        return "https://cdn.pixabay.com/photo/2020/11/03/16/13/road-5710320_1280.jpg";
       case "space":
         return "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80";
       case "wildlife":
@@ -157,7 +169,28 @@ const CategoryPage = () => {
   // Get category title
   function getCategoryTitle() {
     if (!category) return "Category";
-    return category.charAt(0).toUpperCase() + category.slice(1);
+    
+    // Handle special cases
+    if (category === "deep-earth-geology") {
+      return "Deep Earth & Geology";
+    }
+    if (category === "ancient-civilizations") {
+      return "Ancient Civilizations";
+    }
+    if (category === "business-economics") {
+      return "Business & Economics";
+    }
+    if (category === "current-affairs") {
+      return "Current Affairs";
+    }
+    if (category === "marine-life") {
+      return "Marine Life";
+    }
+    
+    // Default title formatting
+    return category.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
   }
 
   // Get category description
@@ -177,6 +210,18 @@ const CategoryPage = () => {
         return "Venture into the cosmos and unlock the mysteries of stars, planets, and galaxies.";
       case "wildlife":
         return "Discover the amazing diversity of animals and their incredible adaptations.";
+      case "deep-earth-geology":
+        return "Explore the mysteries beneath our feet, from plate tectonics to volcanic activity and rock formations.";
+      case "ancient-civilizations":
+        return "Discover the fascinating history of human civilizations from ancient Egypt to Mesopotamia and beyond.";
+      case "archaeology":
+        return "Explore ancient ruins and artifacts that reveal secrets about human history and past civilizations.";
+      case "business-economics":
+        return "Understand market trends, business strategies and economic principles that shape our global economy.";
+      case "climate":
+        return "Learn about climate change, weather patterns and environmental challenges facing our planet.";
+      case "current-affairs":
+        return "Stay informed about today's most important events and stories from around the world.";
       default:
         return "Explore fascinating content in this category.";
     }

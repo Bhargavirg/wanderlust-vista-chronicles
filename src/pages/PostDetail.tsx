@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -6,21 +7,33 @@ import BlogCard from "@/components/blog/BlogCard";
 import FocusMode from "@/components/blog/FocusMode";
 import ImageCarousel from "@/components/blog/ImageCarousel";
 import VideoEmbed from "@/components/blog/VideoEmbed";
+import PlagiarismChecker from "@/components/blog/PlagiarismChecker";
 import { mockData } from "@/data/blogData";
 import { Button } from "@/components/ui/button";
-import { BookOpenText, Image as ImageIcon, Video as VideoIcon, ArrowLeft } from "lucide-react";
+import { BookOpenText, Image as ImageIcon, Video as VideoIcon, ArrowLeft, Scan } from "lucide-react";
 import { calculateReadingTime, formatReadingTime } from "@/utils/readingTimeUtils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getContentById, getAllPublishedContent } from "@/services/contentService";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const PostDetail = () => {
   const { postId } = useParams<{ postId: string }>();
+  const { user } = useAuth();
   const [focusModeActive, setFocusModeActive] = useState(false);
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
+  const [plagiarismDialogOpen, setPlagiarismDialogOpen] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -187,6 +200,34 @@ const PostDetail = () => {
                 </svg>
                 {readingTime}
               </span>
+              
+              {/* Plagiarism Checker Dialog */}
+              {user && (
+                <Dialog open={plagiarismDialogOpen} onOpenChange={setPlagiarismDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex items-center gap-1"
+                    >
+                      <Scan size={16} />
+                      Check Plagiarism
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                      <DialogTitle>Plagiarism Checker</DialogTitle>
+                      <DialogDescription>
+                        Check if this content has similarities with other articles in our database.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <PlagiarismChecker contentText={postContent} />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
+              
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
