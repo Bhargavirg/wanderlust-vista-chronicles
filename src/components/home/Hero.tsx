@@ -47,6 +47,14 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row justify-center gap-4 mt-8"
           >
+            <Button
+              onClick={() => navigate('/image-search')}
+              variant="outline"
+              size="lg"
+              className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white px-8 py-6 text-lg"
+            >
+              Visual hunt
+            </Button>
             <Button 
               onClick={() => navigate('/add-content')} 
               size="lg"
