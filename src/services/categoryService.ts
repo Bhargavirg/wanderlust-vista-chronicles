@@ -7,6 +7,7 @@ export interface Category {
   description: string;
 }
 
+// Note: This array is used as a fallback if database categories can't be loaded
 const defaultCategories: Category[] = [
   {
     name: "Wildlife",
@@ -58,7 +59,6 @@ const defaultCategories: Category[] = [
     slug: "mythology",
     description: "Ancient stories, legendary beings, and cultural beliefs."
   },
-  // Add more categories to match those in CategorySection
   {
     name: "Science",
     slug: "science",
@@ -164,8 +164,11 @@ export async function initializeCategories() {
       .select('id', { count: 'exact', head: true });
     
     if (countError) {
+      console.error("Error checking categories count:", countError);
       throw countError;
     }
+    
+    console.log(`Found ${count} existing categories`);
     
     // If no categories exist or additional categories should be added
     const { data: existingCategories, error: fetchError } = await supabase
@@ -173,11 +176,14 @@ export async function initializeCategories() {
       .select('slug');
       
     if (fetchError) {
+      console.error("Error fetching existing categories:", fetchError);
       throw fetchError;
     }
     
     const existingSlugs = new Set((existingCategories || []).map(cat => cat.slug));
     const missingCategories = defaultCategories.filter(cat => !existingSlugs.has(cat.slug));
+    
+    console.log(`Found ${missingCategories.length} missing categories`);
     
     if (missingCategories.length > 0) {
       console.log(`Adding ${missingCategories.length} missing categories`);
@@ -192,6 +198,7 @@ export async function initializeCategories() {
         
         if (error) {
           console.error('Error adding categories batch:', error);
+          console.error('Batch data:', batch);
           // Continue with other batches even if one fails
         }
       }
@@ -209,15 +216,20 @@ export async function initializeCategories() {
 }
 
 export async function getAllCategories() {
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*')
-    .order('name');
+  try {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .order('name');
+      
+    if (error) {
+      console.error('Error fetching categories:', error);
+      return defaultCategories; // Fall back to default categories in case of error
+    }
     
-  if (error) {
-    console.error('Error fetching categories:', error);
-    return [];
+    return data || defaultCategories;
+  } catch (error) {
+    console.error('Error fetching categories (caught):', error);
+    return defaultCategories; // Fall back to default categories in case of error
   }
-  
-  return data;
 }

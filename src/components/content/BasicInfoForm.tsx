@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import CategoryBadge from "@/components/blog/CategoryBadge";
 
 // Define the CategoryType to match the BlogPost interface
 type CategoryType = "science" | "technology" | "history" | "culture" | "nature" | "space" | "wildlife" | 
@@ -54,8 +55,10 @@ const BasicInfoForm = ({
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select value={category} onValueChange={(value) => setCategory(value as CategoryType)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a category" />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a category">
+                {category && <CategoryBadge category={category} size="sm" />}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent className="max-h-[300px] overflow-y-auto">
               <SelectItem value="science">Science</SelectItem>

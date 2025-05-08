@@ -78,10 +78,15 @@ const CategoryBadge = ({ category, size = 'default' }: CategoryBadgeProps) => {
     "ancient-civilizations": "🏺"
   };
 
+  // Ensure we have a valid category or fallback to a default style
+  const categoryColor = categoryColors[category] || "bg-gradient-to-r from-gray-500/80 to-gray-600 text-white";
+  const icon = icons[category] || "📄";
+  const displayName = category ? category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ') : "Unknown";
+
   return (
-    <Badge className={cn(categoryColors[category], sizeClasses[size], "font-medium")}>
-      <span className="mr-1">{icons[category]}</span>
-      {category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ')}
+    <Badge className={cn(categoryColor, sizeClasses[size], "font-medium")}>
+      <span className="mr-1">{icon}</span>
+      {displayName}
     </Badge>
   );
 };
