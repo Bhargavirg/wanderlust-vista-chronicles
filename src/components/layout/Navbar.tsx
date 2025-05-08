@@ -16,6 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { searchContent } from "@/services/contentService";
 import { toast } from "@/hooks/use-toast";
+import { getAllCategories } from "@/services/categoryService";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,20 +25,20 @@ const Navbar = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Fetch categories on component mount
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const { data, error } = await supabase
-          .from('categories')
-          .select('*')
-          .order('name');
-          
-        if (error) throw error;
-        setCategories(data || []);
+        setLoading(true);
+        // Using the getAllCategories function from categoryService for consistency
+        const categoriesData = await getAllCategories();
+        setCategories(categoriesData || []);
       } catch (error) {
         console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
       }
     }
     
@@ -56,7 +57,7 @@ const Navbar = () => {
     e.preventDefault();
     if (searchTerm.trim()) {
       try {
-        // Check if search term matches a category
+        // Check if search term matches a category name or slug
         const matchingCategory = categories.find(cat => 
           cat.name.toLowerCase() === searchTerm.toLowerCase() ||
           cat.slug.toLowerCase() === searchTerm.toLowerCase()
@@ -82,12 +83,18 @@ const Navbar = () => {
     }
   };
 
-  // Filter out any categories that match the current search term
-  const filteredCategories = categories.filter(category => {
+  // Sort categories alphabetically
+  const sortedCategories = [...categories].sort((a, b) => a.name.localeCompare(b.name));
+
+  // Filter categories that match the search term for the dropdown
+  const filteredCategories = sortedCategories.filter(category => {
     if (!searchTerm) return true;
     return !category.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
            !category.slug.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  // Featured categories to show in the main navigation
+  const featuredCategories = ["nature", "science", "history", "technology", "culture"];
 
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-gray-950 shadow-sm border-b border-gray-200 dark:border-gray-800">
@@ -118,40 +125,61 @@ const Navbar = () => {
             <button 
               className="flex items-center gap-1 text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
               onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+              aria-expanded={categoryDropdownOpen}
+              aria-controls="categories-dropdown"
             >
               Categories
-              <ChevronDown className="h-3 w-3" />
+              <ChevronDown className={`h-3 w-3 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             
             {categoryDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
+              <div 
+                id="categories-dropdown"
+                className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50"
+              >
                 <ScrollArea className="h-64">
                   <div className="py-1">
-                    {filteredCategories.map(category => (
-                      <Link 
-                        key={category.id} 
-                        to={`/category/${category.slug}`}
-                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        onClick={() => setCategoryDropdownOpen(false)}
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
+                    {loading ? (
+                      <div className="flex justify-center py-4">
+                        <div className="animate-pulse h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      </div>
+                    ) : filteredCategories.length > 0 ? (
+                      filteredCategories.map(category => (
+                        <Link 
+                          key={category.id} 
+                          to={`/category/${category.slug}`}
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          onClick={() => setCategoryDropdownOpen(false)}
+                        >
+                          {category.name}
+                        </Link>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                        No categories found
+                      </div>
+                    )}
                   </div>
                 </ScrollArea>
               </div>
             )}
           </div>
           
-          <Link to="/category/nature" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
-            Nature
-          </Link>
-          <Link to="/category/science" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
-            Science
-          </Link>
-          <Link to="/category/history" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
-            History
-          </Link>
+          {/* Featured categories in main nav */}
+          {featuredCategories.map(slug => {
+            const category = categories.find(cat => cat.slug === slug);
+            if (!category) return null;
+            
+            return (
+              <Link 
+                key={slug} 
+                to={`/category/${slug}`} 
+                className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+              >
+                {category.name}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right side actions */}
@@ -221,6 +249,7 @@ const Navbar = () => {
             size="icon"
             className="md:hidden"
             onClick={toggleMobileMenu}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
@@ -262,6 +291,7 @@ const Navbar = () => {
             <button 
               className="flex items-center justify-between w-full text-left text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
               onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+              aria-expanded={categoryDropdownOpen}
             >
               <span>Categories</span>
               <ChevronDown className={`h-4 w-4 transform ${categoryDropdownOpen ? 'rotate-180' : ''} transition-transform`} />
@@ -269,41 +299,46 @@ const Navbar = () => {
             
             {categoryDropdownOpen && (
               <div className="mt-2 pl-4 space-y-1 max-h-48 overflow-y-auto">
-                {categories.map(category => (
-                  <Link 
-                    key={category.id}
-                    to={`/category/${category.slug}`}
-                    className="block py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-sky-500 dark:hover:text-white"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {category.name}
-                  </Link>
-                ))}
+                {loading ? (
+                  <div className="flex justify-center py-2">
+                    <div className="animate-pulse h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  </div>
+                ) : categories.length > 0 ? (
+                  sortedCategories.map(category => (
+                    <Link 
+                      key={category.id}
+                      to={`/category/${category.slug}`}
+                      className="block py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-sky-500 dark:hover:text-white"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="py-1 text-sm text-gray-500 dark:text-gray-400">
+                    No categories found
+                  </div>
+                )}
               </div>
             )}
           </div>
           
-          <Link 
-            to="/category/nature" 
-            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Nature
-          </Link>
-          <Link 
-            to="/category/science" 
-            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Science
-          </Link>
-          <Link 
-            to="/category/history" 
-            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            History
-          </Link>
+          {/* Featured categories in mobile menu */}
+          {featuredCategories.map(slug => {
+            const category = categories.find(cat => cat.slug === slug);
+            if (!category) return null;
+            
+            return (
+              <Link 
+                key={slug}
+                to={`/category/${category.slug}`} 
+                className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {category.name}
+              </Link>
+            );
+          })}
           
           <div className="flex flex-col space-y-2 pt-2">
             <Button 

@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlogCard from '@/components/blog/BlogCard';
@@ -8,13 +7,30 @@ import { searchContent } from '@/services/contentService';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { getAllCategories } from '@/services/categoryService';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const query = searchParams.get('q') || '';
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(query);
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch categories to check against search terms
+    async function fetchCategories() {
+      try {
+        const categoriesData = await getAllCategories();
+        setCategories(categoriesData || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    }
+    
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (query) {
@@ -24,6 +40,19 @@ const SearchPage = () => {
 
   const performSearch = async (term: string) => {
     try {
+      // First check if the search term matches a category
+      const matchingCategory = categories.find(cat => 
+        cat.name.toLowerCase() === term.toLowerCase() ||
+        cat.slug.toLowerCase() === term.toLowerCase()
+      );
+      
+      if (matchingCategory) {
+        // If it matches a category, navigate to that category page
+        navigate(`/category/${matchingCategory.slug}`);
+        return;
+      }
+      
+      // Otherwise perform content search
       setLoading(true);
       const results = await searchContent(term);
       setSearchResults(results || []);
@@ -65,7 +94,7 @@ const SearchPage = () => {
               <input
                 type="text"
                 className="w-full p-2 pl-10 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800"
-                placeholder="Search for content..."
+                placeholder="Search for content or categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
