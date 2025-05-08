@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -38,10 +39,11 @@ const CategoryPage = () => {
               avatar: "https://i.pravatar.cc/150?img=32"
             };
             
-            // If author_id exists, try to extract name and avatar from profiles
-            if (item.profiles) {
-              authorInfo.name = item.profiles.username || item.profiles.full_name || "Anonymous";
-              authorInfo.avatar = item.profiles.avatar_url || "https://i.pravatar.cc/150?img=32";
+            // If the item has an author property (added via type assertion in contentService.ts)
+            if ((item as any).author) {
+              const author = (item as any).author;
+              authorInfo.name = author.username || author.full_name || "Anonymous";
+              authorInfo.avatar = author.avatar_url || "https://i.pravatar.cc/150?img=32";
             }
             
             return {
