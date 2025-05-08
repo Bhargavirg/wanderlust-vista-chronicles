@@ -453,7 +453,7 @@ const Login = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1506744038136-4627383780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+                <img src="https://cdn.pixabay.com/photo/2016/07/02/12/21/eclipse-1492818_1280.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Protect</h3>

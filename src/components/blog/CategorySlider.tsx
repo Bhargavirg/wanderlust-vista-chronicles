@@ -199,7 +199,7 @@ const CategorySlider = () => {
     },
     {
       name: "Current Affairs",
-      image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg",
+      image: "https://cdn.pixabay.com/photo/2017/08/03/11/05/people-2575608_1280.jpg",
       icon: <Globe className="h-6 w-6" />,
       link: "/category/current-affairs",
       description: "Today's most important global events"
