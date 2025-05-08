@@ -16,6 +16,7 @@ import AddContent from "./pages/AddContent";
 import NotFound from "./pages/NotFound";
 import VideosPage from "./pages/VideosPage";
 import JoinCommunity from "./pages/JoinCommunity";
+import MagazinePage from "./pages/MagazinePage";
 import { AuthProvider } from "./context/AuthContext";
 import { initializeCategories } from "./services/categoryService";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -44,6 +45,7 @@ const AppContent = () => {
       <Route path="/add-post" element={<ProtectedRoute><AddPost /></ProtectedRoute>} />
       <Route path="/add-content" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
       <Route path="/edit-content/:postId" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
+      <Route path="/magazine" element={<ProtectedRoute><MagazinePage /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -57,13 +57,13 @@ const Hero = () => {
             </Button>
             
             <Button 
-              onClick={handleWatchVideos} 
+              onClick={() => navigate('/magazine')} 
               variant="outline" 
               size="lg"
               className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white px-8 py-6 text-lg"
             >
-              <Film className="mr-2" />
-              Watch Videos
+              <BookOpen className="mr-2" />
+              Magazine
             </Button>
           </motion.div>
           
