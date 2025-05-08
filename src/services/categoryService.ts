@@ -20,7 +20,7 @@ const defaultCategories: Category[] = [
   },
   {
     name: "Marine Life",
-    slug: "marine-life",
+    slug: "marinelife",
     description: "Explore the wonders beneath the waves and oceanic ecosystems."
   },
   {
@@ -143,6 +143,16 @@ const defaultCategories: Category[] = [
     name: "Deep Earth & Geology",
     slug: "deep-earth-geology",
     description: "Earth's structure, rocks, minerals, and geological forces."
+  },
+  {
+    name: "Monuments",
+    slug: "monuments",
+    description: "Discover significant landmarks and memorials around the world."
+  },
+  {
+    name: "Literature",
+    slug: "literature",
+    description: "Explore written works of artistic and cultural significance."
   }
 ];
 

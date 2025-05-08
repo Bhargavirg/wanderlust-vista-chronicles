@@ -57,7 +57,7 @@ const BasicInfoForm = ({
             <SelectTrigger>
               <SelectValue placeholder="Select a category" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-[300px] overflow-y-auto">
               <SelectItem value="science">Science</SelectItem>
               <SelectItem value="technology">Technology</SelectItem>
               <SelectItem value="history">History</SelectItem>
