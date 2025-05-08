@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, BookOpen as StoryIcon, Utensils, Book, Map, Ship, Landmark, Mountain, Scroll, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -139,9 +139,71 @@ const CategorySlider = () => {
       icon: <Landmark className="h-6 w-6" />,
       link: "/category/monuments",
       description: "Historical landmarks worldwide"
+    },
+    // New categories
+    {
+      name: "Deep Earth & Geology",
+      image: "https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg",
+      icon: <Mountain className="h-6 w-6" />,
+      link: "/category/deep-earth-geology",
+      description: "Earth's structure and geological wonders"
+    },
+    {
+      name: "Ancient Civilizations",
+      image: "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg",
+      icon: <Scroll className="h-6 w-6" />,
+      link: "/category/ancient-civilizations",
+      description: "Lost cultures and ancient wisdom"
+    },
+    {
+      name: "Climate",
+      image: "https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg",
+      icon: <Cloud className="h-6 w-6" />,
+      link: "/category/climate",
+      description: "Weather patterns and climate science"
+    },
+    {
+      name: "Psychology",
+      image: "https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg",
+      icon: <Brain className="h-6 w-6" />,
+      link: "/category/psychology",
+      description: "Understanding the human mind"
+    },
+    {
+      name: "Archaeology",
+      image: "https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg",
+      icon: <Shovel className="h-6 w-6" />,
+      link: "/category/archaeology",
+      description: "Uncovering history through artifacts"
+    },
+    {
+      name: "Mythology",
+      image: "https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg",
+      icon: <Smile className="h-6 w-6" />,
+      link: "/category/mythology",
+      description: "Ancient stories and legendary beings"
+    },
+    {
+      name: "Business & Economics",
+      image: "https://cdn.pixabay.com/photo/2018/02/08/10/22/desk-3139127_1280.jpg",
+      icon: <DollarSign className="h-6 w-6" />,
+      link: "/category/business-economics",
+      description: "Markets, finance, and economic trends"
+    },
+    {
+      name: "Music",
+      image: "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+      icon: <Music className="h-6 w-6" />,
+      link: "/category/music",
+      description: "Harmony, rhythm, and musical culture"
+    },
+    {
+      name: "Current Affairs",
+      image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg",
+      icon: <Globe className="h-6 w-6" />,
+      link: "/category/current-affairs",
+      description: "Today's most important global events"
     }
-   
-    
   ];
 
   return (

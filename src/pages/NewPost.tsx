@@ -174,6 +174,15 @@ const NewPost = () => {
                   <SelectItem value="politics">Politics</SelectItem>
                   <SelectItem value="sports">Sports</SelectItem>
                   <SelectItem value="stories">Stories</SelectItem>
+                  <SelectItem value="archaeology">Archaeology</SelectItem>
+                  <SelectItem value="psychology">Psychology</SelectItem>
+                  <SelectItem value="climate">Climate</SelectItem>
+                  <SelectItem value="mythology">Mythology</SelectItem>
+                  <SelectItem value="current-affairs">Current Affairs</SelectItem>
+                  <SelectItem value="music">Music</SelectItem>
+                  <SelectItem value="business-economics">Business & Economics</SelectItem>
+                  <SelectItem value="deep-earth-geology">Deep Earth & Geology</SelectItem>
+                  <SelectItem value="ancient-civilizations">Ancient Civilizations</SelectItem>
                 </SelectContent>
               </Select>
             </div>

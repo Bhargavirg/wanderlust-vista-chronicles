@@ -8,9 +8,19 @@
  * @param text The content to calculate reading time for
  * @returns An object with minutes, seconds and words count
  */
-export const calculateReadingTime = (text: string) => {
+export const calculateReadingTime = (text: string | null | undefined) => {
   // Average reading speed (words per minute)
   const wordsPerMinute = 225;
+  
+  // Handle null or undefined text
+  if (!text) {
+    return {
+      minutes: 0,
+      seconds: 0,
+      wordCount: 0
+    };
+  }
+  
   const wordCount = text.trim().split(/\s+/).length;
   const minutes = Math.floor(wordCount / wordsPerMinute);
   const seconds = Math.floor((wordCount % wordsPerMinute) / (wordsPerMinute / 60));

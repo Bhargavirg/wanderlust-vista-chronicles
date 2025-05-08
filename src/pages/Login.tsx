@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,57 +6,64 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark } from "lucide-react";
+import { Camera, Globe, Compass, Bird, Mountain, TreePine, Laptop, Users, Book, Map, Ship, Landmark, Cloud, Brain, Shovel, Smile, Building, DollarSign, Music, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/layout/Footer";
 import CategorySlider from "@/components/blog/CategorySlider";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/home");
+      }
+    };
+    
+    checkSession();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // In a real app, this would connect to an authentication service
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // Store login state in localStorage for the demo
-      localStorage.setItem("isLoggedIn", "true");
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Login successful",
         description: "Welcome back to Earth Lens!",
       });
       
-      navigate("/home");
-    } catch (error) {
+      // We don't need to navigate here, AuthContext will handle the redirect
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleJoinCommunity = () => {
-    // If user is logged in, redirect to home page, otherwise to login
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    if (isLoggedIn) {
-      navigate("/home");
-    } else {
-      // Since we're already on login page, just scroll to the login form
-      const loginForm = document.querySelector(".login-form");
-      if (loginForm) {
-        loginForm.scrollIntoView({ behavior: "smooth" });
-      }
-    }
+    navigate("/register");
   };
 
   return (
@@ -159,14 +165,23 @@ const Login = () => {
                         Forgot password?
                       </Link>
                     </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="bg-white/50 dark:bg-gray-900/50"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="bg-white/50 dark:bg-gray-900/50 pr-10"
+                      />
+                      <button 
+                        type="button" 
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="flex items-center space-x-2">
@@ -257,6 +272,110 @@ const Login = () => {
                 </div>
               </div>
             </div>
+
+            {/* New featured categories - first row */}
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg" 
+                  alt="Deep Earth & Geology"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Mountain className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Deep Earth & Geology</h4>
+                  </div>
+                  <p className="text-white/80">Explore Earth's structure and geological forces</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg" 
+                  alt="Ancient Civilization"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Building className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Ancient Civilization</h4>
+                  </div>
+                  <p className="text-white/80">Discover lost cultures and forgotten wisdom</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg" 
+                  alt="Climate"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Cloud className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Climate</h4>
+                  </div>
+                  <p className="text-white/80">Weather patterns and environmental science</p>
+                </div>
+              </div>
+            </div>
+
+            {/* New featured categories - second row */}
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg" 
+                  alt="Psychology"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Brain className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Psychology</h4>
+                  </div>
+                  <p className="text-white/80">Understanding the human mind and behavior</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg" 
+                  alt="Archaeology"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Shovel className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Archaeology</h4>
+                  </div>
+                  <p className="text-white/80">Uncovering history through artifacts</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden shadow-xl h-72">
+              <div className="relative w-full h-full group">
+                <img 
+                  src="https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg" 
+                  alt="Mythology"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center mb-2">
+                    <Smile className="h-6 w-6 text-sky-400 mr-2" />
+                    <h4 className="text-xl font-bold text-white">Mythology</h4>
+                  </div>
+                  <p className="text-white/80">Ancient stories and legendary beings</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -334,7 +453,7 @@ const Login = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <div className="relative h-64 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
+                <img src="https://images.unsplash.com/photo-1506744038136-4627383780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="Forest and mountain landscape" className="w-full h-full object-cover transition-transform hover:scale-105 duration-500" />
               </div>
               <div className="p-4 bg-white">
                 <h3 className="font-semibold text-gray-900">Protect</h3>

@@ -1,11 +1,14 @@
+
 export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
+  description?: string;
   coverImage: string;
   screenSizeImage?: string;
   category: 'science' | 'technology' | 'history' | 'culture' | 'nature' | 'space' | 'wildlife' | 
-    'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories';
+    'travel' | 'marinelife' | 'monuments' | 'literature' | 'art' | 'flowers' | 'food' | 'anime' | 'politics' | 'sports' | 'stories' |
+    'deep-earth-geology' | 'ancient-civilization' | 'climate' | 'psychology' | 'archaeology' | 'mythology' | 'business-economics' | 'music' | 'current-affairs';
   subCategory?: string; // For more specific categorization
   author: {
     name: string;
@@ -650,23 +653,143 @@ export const mockData: BlogData = {
           avatar: "https://i.pravatar.cc/150?img=38",
           credentials: "Literary Critic"
         },
-        publishedAt: "2025-03-05T07:00:00Z",
-      },
-      {
-        id: "34",
-        title: "Classic Literature That Shaped the World",
-        excerpt: "A look at timeless literary masterpieces.",
-        coverImage: "https://i.pinimg.com/736x/71/64/aa/7164aa49fca58e79e7014e67a5a99869.jpg",
-        category: "literature",
-        author: {
-          name: "William Harris",
-          avatar: "https://i.pravatar.cc/150?img=38",
-          credentials: "Literary Critic"
-        },
-        publishedAt: "2025-03-05T07:00:00Z",
+        publishedAt: "2025-03-05T10:00:00Z",
       }
-
     ],
-    
-  },
+    "deep-earth-geology": [
+      {
+        id: "35",
+        title: "Exploring Earth's Core: What Lies Beneath",
+        excerpt: "A journey into the layers of our planet and the forces that shape it.",
+        coverImage: "https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg",
+        category: "deep-earth-geology",
+        author: {
+          name: "Dr. Robert Chen",
+          avatar: "https://i.pravatar.cc/150?img=39",
+          credentials: "Geophysicist"
+        },
+        publishedAt: "2025-03-04T14:30:00Z",
+      }
+    ],
+    "ancient-civilization": [
+      {
+        id: "36",
+        title: "Lost Cities: Rediscovering Ancient Wonders",
+        excerpt: "Archaeological discoveries revealing secrets of long-forgotten human settlements.",
+        coverImage: "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg",
+        category: "ancient-civilization",
+        author: {
+          name: "Dr. Maya Rodriguez",
+          avatar: "https://i.pravatar.cc/150?img=40",
+          credentials: "Archaeological Anthropologist"
+        },
+        publishedAt: "2025-03-03T09:45:00Z",
+      }
+    ],
+    climate: [
+      {
+        id: "37",
+        title: "Understanding Climate Systems and Weather Patterns",
+        excerpt: "How global atmospheric circulation shapes our regional weather experiences.",
+        coverImage: "https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg",
+        category: "climate",
+        author: {
+          name: "Dr. Sarah Johnson",
+          avatar: "https://i.pravatar.cc/150?img=41",
+          credentials: "Climatologist"
+        },
+        publishedAt: "2025-03-02T11:20:00Z",
+      }
+    ],
+    psychology: [
+      {
+        id: "38",
+        title: "The Science of Happiness: Positive Psychology Explained",
+        excerpt: "Research-backed approaches to improving wellbeing and life satisfaction.",
+        coverImage: "https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg",
+        category: "psychology",
+        author: {
+          name: "Dr. David Kim",
+          avatar: "https://i.pravatar.cc/150?img=42",
+          credentials: "Clinical Psychologist"
+        },
+        publishedAt: "2025-03-01T16:15:00Z",
+      }
+    ],
+    archaeology: [
+      {
+        id: "39",
+        title: "Modern Methods in Archaeological Excavation",
+        excerpt: "How technology is revolutionizing the discovery and preservation of historical sites.",
+        coverImage: "https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg",
+        category: "archaeology",
+        author: {
+          name: "Dr. Emily Carter",
+          avatar: "https://i.pravatar.cc/150?img=43",
+          credentials: "Field Archaeologist"
+        },
+        publishedAt: "2025-02-28T13:40:00Z",
+      }
+    ],
+    mythology: [
+      {
+        id: "40",
+        title: "Gods and Heroes: Comparative Mythology Across Cultures",
+        excerpt: "Exploring common themes in mythological narratives from around the world.",
+        coverImage: "https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg",
+        category: "mythology",
+        author: {
+          name: "Dr. Thomas Williams",
+          avatar: "https://i.pravatar.cc/150?img=44",
+          credentials: "Comparative Mythologist"
+        },
+        publishedAt: "2025-02-27T10:20:00Z",
+      }
+    ],
+    "business-economics": [
+      {
+        id: "41",
+        title: "Sustainable Business Practices in a Changing Economy",
+        excerpt: "How companies are adapting to environmental challenges while maintaining profitability.",
+        coverImage: "https://cdn.pixabay.com/photo/2018/02/08/10/22/desk-3139127_1280.jpg",
+        category: "business-economics",
+        author: {
+          name: "Dr. Rebecca Lee",
+          avatar: "https://i.pravatar.cc/150?img=45",
+          credentials: "Economist"
+        },
+        publishedAt: "2025-02-26T14:10:00Z",
+      }
+    ],
+    music: [
+      {
+        id: "42",
+        title: "The Evolution of Musical Instruments Through History",
+        excerpt: "From ancient flutes to digital synthesizers, exploring how we make music.",
+        coverImage: "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+        category: "music",
+        author: {
+          name: "Dr. James Wilson",
+          avatar: "https://i.pravatar.cc/150?img=46",
+          credentials: "Musicologist"
+        },
+        publishedAt: "2025-02-25T09:30:00Z",
+      }
+    ],
+    "current-affairs": [
+      {
+        id: "43",
+        title: "Global Cooperation in an Age of Challenge",
+        excerpt: "How nations are working together to address shared problems across borders.",
+        coverImage: "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg",
+        category: "current-affairs",
+        author: {
+          name: "Dr. Amina Hassan",
+          avatar: "https://i.pravatar.cc/150?img=47",
+          credentials: "International Relations Specialist"
+        },
+        publishedAt: "2025-02-24T11:45:00Z",
+      }
+    ]
+  }
 };

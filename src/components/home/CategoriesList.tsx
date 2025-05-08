@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BlogData } from "../../data/blogData";
 import { Link } from "react-router-dom";
@@ -12,7 +13,9 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
   // Define the allowed categories that match the BlogPost interface
   const allowedCategories = [
     'science', 'technology', 'history', 'culture', 'nature', 'space', 'wildlife', 
-    'art', 'flowers', 'anime', 'politics', 'sports', 'stories','travel', 'food','monuments','marinelife','literature'
+    'art', 'flowers', 'anime', 'politics', 'sports', 'stories', 'travel', 'food',
+    'monuments', 'marinelife', 'literature', 'deep-earth-geology', 'ancient-civilization',
+    'climate', 'psychology', 'archaeology', 'mythology', 'business-economics', 'music', 'current-affairs'
   ] as const;
   
   type AllowedCategory = typeof allowedCategories[number];
@@ -43,6 +46,16 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
       monuments: "from-rose-500/80 to-rose-600",
       marinelife: "from-violet-500/80 to-violet-600",
       literature: "from-slate-500/80 to-slate-600",
+      // New categories
+      "deep-earth-geology": "from-amber-700/80 to-amber-800",
+      "ancient-civilization": "from-stone-500/80 to-stone-600",
+      "climate": "from-sky-500/80 to-sky-600",
+      "psychology": "from-fuchsia-500/80 to-fuchsia-600",
+      "archaeology": "from-amber-600/80 to-amber-700",
+      "mythology": "from-indigo-600/80 to-indigo-700",
+      "business-economics": "from-green-600/80 to-green-700",
+      "music": "from-pink-600/80 to-pink-700",
+      "current-affairs": "from-blue-600/80 to-blue-700",
     };
     
     return categoryColors[category] || "from-sky-500/80 to-sky-600";
@@ -75,6 +88,16 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
       monuments: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29",
       marinelife: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
       literature: "https://i.pinimg.com/736x/4c/be/72/4cbe72bd4c75c1fa36fd416d1601c816.jpg",
+      // New categories
+      "deep-earth-geology": "https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg",
+      "ancient-civilization": "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg",
+      "climate": "https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg",
+      "psychology": "https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg",
+      "archaeology": "https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg",
+      "mythology": "https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg",
+      "business-economics": "https://cdn.pixabay.com/photo/2018/02/08/10/22/desk-3139127_1280.jpg",
+      "music": "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+      "current-affairs": "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg",
       default: "https://images.unsplash.com/photo-1517841905240-472988babdf9",
     };
     
@@ -102,6 +125,16 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
       monuments: 'Discover the architectural wonders and historical landmarks of our world.',
       marinelife: 'Explore the wonders of the ocean and its diverse ecosystems.',
       literature: 'Dive into the world of books and literary masterpieces.',
+      // New categories
+      "deep-earth-geology": 'Discover the fascinating science of Earth\'s structure and geological formations.',
+      "ancient-civilization": 'Explore the mysteries of lost civilizations and ancient wisdom.',
+      "climate": 'Understand our planet\'s climate systems and environmental challenges.',
+      "psychology": 'Delve into the complexities of the human mind and behavior.',
+      "archaeology": 'Uncover the secrets of the past through archaeological discoveries.',
+      "mythology": 'Journey through the legends and myths that shaped human cultures.',
+      "business-economics": 'Stay informed about markets, finance, and economic trends.',
+      "music": 'Celebrate the art and influence of music across cultures and time.',
+      "current-affairs": 'Keep up with the most important events and issues of our time.',
       default: 'Explore a variety of topics and discover something new.',
     };
     
@@ -131,7 +164,7 @@ const CategoriesList = ({ blogData }: CategoriesListProps) => {
         }
         
         const safeCategory = category;
-        const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+        const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ');
         const gradientClass = getCategoryColor(safeCategory);
         const backgroundImage = getCategoryBackgroundImage(safeCategory);
         const description = getCategoryDescription(safeCategory);

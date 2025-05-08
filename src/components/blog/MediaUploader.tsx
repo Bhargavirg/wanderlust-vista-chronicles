@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Image, X, Video, Plus, Upload } from "lucide-react";
@@ -28,7 +27,6 @@ const MediaUploader = ({
   const handleAddImage = () => {
     if (!currentImageInput.trim()) return;
     
-    // Validate URL
     try {
       new URL(currentImageInput);
       
@@ -41,7 +39,6 @@ const MediaUploader = ({
         setShowImageInput(false);
       }
     } catch (e) {
-      // Invalid URL, handle error
       console.error("Invalid URL:", currentImageInput);
       toast({
         title: "Invalid URL",
@@ -61,8 +58,53 @@ const MediaUploader = ({
     if (!videoUrl.trim()) return;
     
     try {
-      new URL(videoUrl);
-      onVideoSelected(videoUrl, determineVideoType(videoUrl));
+      // For YouTube URLs, handle different formats
+      if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+        // Extract video ID and standardize URL
+        let videoId = "";
+        
+        if (videoUrl.includes("youtube.com/watch")) {
+          const url = new URL(videoUrl);
+          videoId = url.searchParams.get("v") || "";
+        } else if (videoUrl.includes("youtu.be/")) {
+          videoId = videoUrl.split("youtu.be/")[1].split("?")[0];
+        } else if (videoUrl.includes("youtube.com/embed/")) {
+          videoId = videoUrl.split("youtube.com/embed/")[1].split("?")[0];
+        }
+        
+        if (videoId) {
+          const standardUrl = `https://www.youtube.com/watch?v=${videoId}`;
+          onVideoSelected(standardUrl, "youtube");
+          setVideoUrl(standardUrl);
+          toast({
+            title: "YouTube video added",
+            description: "The video has been successfully added to your content"
+          });
+        } else {
+          toast({
+            title: "Invalid YouTube URL",
+            description: "Could not extract video ID from the URL",
+            variant: "destructive"
+          });
+          return;
+        }
+      } else if (videoUrl.includes("vimeo.com")) {
+        // Vimeo URL handling
+        onVideoSelected(videoUrl, "vimeo");
+        toast({
+          title: "Vimeo video added",
+          description: "The video has been successfully added to your content"
+        });
+      } else {
+        // Other URL formats
+        new URL(videoUrl); // Validate URL format
+        onVideoSelected(videoUrl, determineVideoType(videoUrl));
+        toast({
+          title: "Video added",
+          description: "The video has been successfully added to your content"
+        });
+      }
+      
       setShowVideoInput(false);
     } catch (e) {
       console.error("Invalid URL:", videoUrl);
@@ -135,6 +177,10 @@ const MediaUploader = ({
             setVideoUrl(localVideoUrl);
             onVideoSelected(localVideoUrl, "mp4");
             setShowVideoInput(false);
+            toast({
+              title: "Video added",
+              description: "The video has been successfully added to your content"
+            });
           }
         };
         reader.readAsArrayBuffer(file); // Just to trigger the onload event
@@ -179,6 +225,10 @@ const MediaUploader = ({
         setVideoUrl(localVideoUrl);
         onVideoSelected(localVideoUrl, "mp4");
         setShowVideoInput(false);
+        toast({
+          title: "Video added",
+          description: "The video has been successfully added to your content"
+        });
       } else {
         toast({
           title: "Invalid file type",
@@ -186,6 +236,20 @@ const MediaUploader = ({
           variant: "destructive"
         });
       }
+    }
+  };
+  
+  const handlePasteVideoUrl = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = e.clipboardData.getData('text');
+    if (pastedText.includes('youtube.com') || pastedText.includes('youtu.be')) {
+      setVideoUrl(pastedText);
+      // Allow the default paste action to complete
+      setTimeout(() => {
+        // Then trigger handle add if needed
+        if (pastedText.trim() && !videoUrl) {
+          handleAddVideo();
+        }
+      }, 100);
     }
   };
   
@@ -291,6 +355,7 @@ const MediaUploader = ({
               type="text"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
+              onPaste={handlePasteVideoUrl}
               placeholder="Enter YouTube, Vimeo or video URL"
               className="flex-1 px-3 py-2 border rounded-md"
             />
