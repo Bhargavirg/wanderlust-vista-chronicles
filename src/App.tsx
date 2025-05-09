@@ -17,8 +17,7 @@ import NotFound from "./pages/NotFound";
 import VideosPage from "./pages/VideosPage";
 import JoinCommunity from "./pages/JoinCommunity";
 import MagazinePage from "./pages/MagazinePage";
-import ImageSearchEngine from "./components/Visual hunt/ImageSearchEngine";
-import ImageSearchEngineWithMedia from "./components/Visual hunt/ImageSearchEngineWithMediaV2";
+import VisualHunt from "./components/Visual hunt";
 import { AuthProvider } from "./context/AuthContext";
 import { initializeCategories } from "./services/categoryService";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -48,8 +47,8 @@ const AppContent = () => {
       <Route path="/add-content" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
       <Route path="/edit-content/:postId" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
       <Route path="/magazine" element={<ProtectedRoute><MagazinePage /></ProtectedRoute>} />
-      <Route path="/image-search" element={<ProtectedRoute><ImageSearchEngine /></ProtectedRoute>} />
-      <Route path="/image-search-media" element={<ProtectedRoute><ImageSearchEngineWithMedia /></ProtectedRoute>} />
+      <Route path="/image-search" element={<ProtectedRoute><VisualHunt.ImageSearchEngine /></ProtectedRoute>} />
+      <Route path="/image-search-media-v2" element={<ProtectedRoute><VisualHunt.ImageSearchEngineWithMediaV2 /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
