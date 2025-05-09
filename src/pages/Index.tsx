@@ -380,6 +380,14 @@ const Index = () => {
             recentPosts={mockData.recent} 
           />
           
+          <div className="container my-6 flex justify-center">
+            <Link to="/category/videos">
+              <Button variant="secondary" size="lg">
+                WatchVideo
+              </Button>
+            </Link>
+          </div>
+
           <CategoriesList blogData={mockData} />
         </motion.div>
         
