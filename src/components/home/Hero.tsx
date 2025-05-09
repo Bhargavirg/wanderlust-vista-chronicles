@@ -73,6 +73,13 @@ const Hero = () => {
               <BookOpen className="mr-2" />
               Magazine
             </Button>
+            <Button
+              onClick={() => navigate('/videos')}
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg shadow-lg"
+            >
+              Watch Video
+            </Button>
           </motion.div>
           
           <motion.div
