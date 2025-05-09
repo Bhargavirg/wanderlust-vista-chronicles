@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay API Example</title>
+    <link rel="stylesheet" href="styles.css">"
+    <script src=></script>
+</head>
+<body>"https://pixabay.com/goodies/javascript/pixabay-widget.min.js"
+    <div id="pixabay-gallery"></div>
+
+    <script>
+        // Initialize the Pixabay widget
+        PixabayWidget.init({
+            apiKey: '47123049-23e01f6dff4d75db8639e27c8',
+            container: '#pixabay-gallery',
+            imagesPerPage: 10,
+            category: 'nature',
+            safesearch: true
+        });
+    </script>
+</body>
+</html>
