@@ -142,7 +142,7 @@ export async function getComments(contentId: string) {
       .from('article_comments')
       .select(`
         *,
-        profiles:user_id (
+        profiles (
           username,
           full_name,
           avatar_url

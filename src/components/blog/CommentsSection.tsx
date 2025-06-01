@@ -67,7 +67,9 @@ const CommentsSection = ({ contentId, isOpen, onClose }: CommentsSectionProps) =
     setLoading(true);
     try {
       const commentsData = await getComments(contentId);
-      setComments(commentsData);
+      // Type assertion to ensure the data matches our Comment interface
+      const typedComments = commentsData as Comment[];
+      setComments(typedComments);
     } catch (error) {
       console.error('Error loading comments:', error);
       toast({
