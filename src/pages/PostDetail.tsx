@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -8,6 +7,8 @@ import FocusMode from "@/components/blog/FocusMode";
 import ImageCarousel from "@/components/blog/ImageCarousel";
 import VideoEmbed from "@/components/blog/VideoEmbed";
 import PlagiarismChecker from "@/components/blog/PlagiarismChecker";
+import ArticleInteractions from "@/components/blog/ArticleInteractions";
+import CommentsSection from "@/components/blog/CommentsSection";
 import { mockData } from "@/data/blogData";
 import { Button } from "@/components/ui/button";
 import { BookOpenText, Image as ImageIcon, Video as VideoIcon, ArrowLeft, Scan } from "lucide-react";
@@ -34,6 +35,7 @@ const PostDetail = () => {
   const [loading, setLoading] = useState(true);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [plagiarismDialogOpen, setPlagiarismDialogOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -289,6 +291,25 @@ const PostDetail = () => {
             </div>
           )}
         </motion.div>
+
+        {/* Article Interactions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
+          <ArticleInteractions 
+            contentId={post.id}
+            onCommentClick={() => setCommentsOpen(true)}
+          />
+        </motion.div>
+
+        {/* Comments Section */}
+        <CommentsSection 
+          contentId={post.id}
+          isOpen={commentsOpen}
+          onClose={() => setCommentsOpen(false)}
+        />
 
         {/* Related posts section */}
         {relatedPosts.length > 0 && (

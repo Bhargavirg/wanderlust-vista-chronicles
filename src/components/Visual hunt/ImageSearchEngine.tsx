@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import styles from "./ImageSearchEngine.module.css";
 
@@ -11,6 +12,20 @@ const ImageSearchEngine = () => {
   const [loading, setLoading] = useState(false);
 
   const UNSPLASH_ACCESS_KEY = "kOovNxGYbH-dW0bcPFgbLqN5PknSqPR0TCvgzYTTB64";
+
+  // Featured nature images
+  const featuredImages = [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500",
+    "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=500",
+    "https://images.unsplash.com/photo-1433838552652-f9a46b332c40?w=500",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500",
+    "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?w=500",
+    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=500"
+  ];
 
   const fetchImages = async (searchKeyword, pageNumber) => {
     if (!searchKeyword) return;
@@ -82,11 +97,11 @@ const ImageSearchEngine = () => {
         <div className={styles.black}></div>
         <div className={styles.content}>
           <h1>VisualHunt</h1>
-          <p>Search and download images within a second</p>
+          <p>Search and download images and videos within a second</p>
           <div className={styles.searchBox}>
             <input
               type="text"
-              placeholder="Searching images....."
+              placeholder="Search for nature, wildlife, travel, science..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyUp={handleKeyUp}
@@ -100,33 +115,37 @@ const ImageSearchEngine = () => {
         </div>
       </div>
 
-      <div className={styles.imageGallary}>
-        <ul className={styles.images}>
-          {images.map((result, index) => (
-            <li key={index} className={styles.image}>
-              <img
-                src={result.preview_photos[0].urls.small}
-                alt={result.title}
-                className={styles.photo}
-              />
-              <div className={styles.details}>
-                <div className={styles.user}>
-                  <img src="/VisualHunt/camera.svg" alt="camera" />
-                  <span>{result.title}</span>
+      {/* Search Results */}
+      {images.length > 0 && (
+        <div className={styles.imageGallary}>
+          <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '24px', fontWeight: 'bold' }}>
+            Search Results
+          </h2>
+          <ul className={styles.images}>
+            {images.map((result, index) => (
+              <li key={index} className={styles.image}>
+                <img
+                  src={result.preview_photos[0].urls.small}
+                  alt={result.title}
+                  className={styles.photo}
+                />
+                <div className={styles.details}>
+                  <div className={styles.user}>
+                    <img src="/VisualHunt/camera.svg" alt="camera" />
+                    <span>{result.title}</span>
+                  </div>
+                  <div
+                    className={styles.download}
+                    onClick={() =>
+                      downloadImage(result.preview_photos[0].urls.small)
+                    }
+                  >
+                    <img src="/VisualHunt/download.svg" alt="download" />
+                  </div>
                 </div>
-                <div
-                  className={styles.download}
-                  onClick={() =>
-                    downloadImage(result.preview_photos[0].urls.small)
-                  }
-                >
-                  <img src="/VisualHunt/download.svg" alt="download" />
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-        {images.length > 0 && (
+              </li>
+            ))}
+          </ul>
           <button
             id="load"
             className={styles.load}
@@ -135,62 +154,58 @@ const ImageSearchEngine = () => {
           >
             More
           </button>
-        )}
-        
+        </div>
+      )}
 
-      </div>
-
-      {/* New section for static images from VisualHunt */}
+      {/* Featured Images Section */}
       <div className={styles.imageGallary}>
+        <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '24px', fontWeight: 'bold' }}>
+          Featured Nature & Science Images
+        </h2>
         <ul className={styles.images}>
-          <li className={styles.image}><img src="/VisualHunt/visual1.jpg" alt="visual1" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual2.jpg" alt="visual2" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual3.jpg" alt="visual3" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual4.jpg" alt="visual4" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual5.jpg" alt="visual5" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual6.jpg" alt="visual6" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual7.jpg" alt="visual7" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual8.jpg" alt="visual8" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual9.jpg" alt="visual9" className={styles.photo} /></li>
-          <li className={styles.image}><img src="/VisualHunt/visual10.jpg" alt="visual10" className={styles.photo} /></li>
-        </ul>
-      </div>
-
-      {/* New section for videos from VisualHunt */}
-      <div className={styles.videoGallary}>
-        <ul className={styles.videos}>
-          <li className={styles.video}><video src="/VisualHunt/video1.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/video2.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/video3.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/video4.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd5.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd6.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd7.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd8.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd9.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd10.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd11.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd12.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd13.mp4" controls></video></li>
-          <li className={styles.video}><video src="/VisualHunt/vd14.mp4" controls></video></li>
-        </ul>
-      </div>
-
-      {/* New section for videos from Pixabay API */}
-      <div className={styles.videoGallary}>
-        <ul className={styles.videos}>
-          {videos.map((video) => (
-            <li key={video.id} className={styles.video}>
-              <video
-                controls
-                width="320"
-                height="240"
-                src={video.videos.medium.url}
-              ></video>
+          {featuredImages.map((imageUrl, index) => (
+            <li key={index} className={styles.image}>
+              <img src={imageUrl} alt={`Featured ${index + 1}`} className={styles.photo} />
+              <div className={styles.details}>
+                <div className={styles.user}>
+                  <img src="/VisualHunt/camera.svg" alt="camera" />
+                  <span>Featured Image {index + 1}</span>
+                </div>
+                <div
+                  className={styles.download}
+                  onClick={() => downloadImage(imageUrl)}
+                >
+                  <img src="/VisualHunt/download.svg" alt="download" />
+                </div>
+              </div>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Search Results Videos */}
+      {videos.length > 0 && (
+        <div className={styles.videoGallary}>
+          <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '24px', fontWeight: 'bold' }}>
+            Video Results
+          </h2>
+          <ul className={styles.videos}>
+            {videos.map((video) => (
+              <li key={video.id} className={styles.video}>
+                <video
+                  controls
+                  width="320"
+                  height="240"
+                  src={video.videos.medium.url}
+                  poster={video.webformatURL}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

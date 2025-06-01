@@ -1,70 +1,68 @@
-import { useEffect } from "react";
+
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { Toaster } from "sonner";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/context/AuthContext";
 import Index from "./pages/Index";
-import PostDetail from "./pages/PostDetail";
-import CategoryPage from "./pages/CategoryPage";
-import SearchPage from "./pages/SearchPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import NewPost from "./pages/NewPost";
-import AddPost from "./pages/AddPost";
 import AddContent from "./pages/AddContent";
-import NotFound from "./pages/NotFound";
+import PostDetail from "./pages/PostDetail";
+import CategoryPage from "./pages/CategoryPage";
+import SearchPage from "./pages/SearchPage";
+import ImageSearchPage from "./pages/ImageSearchPage";
 import VideosPage from "./pages/VideosPage";
-import JoinCommunity from "./pages/JoinCommunity";
 import MagazinePage from "./pages/MagazinePage";
-import VisualHunt from "./components/Visual hunt";
-import { AuthProvider } from "./context/AuthContext";
-import { initializeCategories } from "./services/categoryService";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-const AppContent = () => {
-  useEffect(() => {
-    // Initialize categories when app starts
-    initializeCategories().catch(console.error);
-  }, []);
-
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/join-community" element={<JoinCommunity />} />
-      <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-      <Route path="/post/:postId" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
-      <Route path="/category/:category" element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
-      <Route path="/category/videos" element={<ProtectedRoute><VideosPage /></ProtectedRoute>} />
-      <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/new-post" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
-      <Route path="/add-post" element={<ProtectedRoute><AddPost /></ProtectedRoute>} />
-      <Route path="/add-content" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
-      <Route path="/edit-content/:postId" element={<ProtectedRoute><AddContent /></ProtectedRoute>} />
-      <Route path="/magazine" element={<ProtectedRoute><MagazinePage /></ProtectedRoute>} />
-      <Route path="/image-search" element={<ProtectedRoute><VisualHunt.ImageSearchEngine /></ProtectedRoute>} />
-      <Route path="/image-search-media-v2" element={<ProtectedRoute><VisualHunt.ImageSearchEngineWithMediaV2 /></ProtectedRoute>} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/home" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/image-search" element={<ImageSearchPage />} />
+              <Route path="/videos" element={<VideosPage />} />
+              <Route path="/magazine" element={<MagazinePage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/category/:categorySlug" element={<CategoryPage />} />
+              <Route path="/post/:postId" element={<PostDetail />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/add-content" 
+                element={
+                  <ProtectedRoute>
+                    <AddContent />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
-};
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <BrowserRouter>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+}
 
 export default App;

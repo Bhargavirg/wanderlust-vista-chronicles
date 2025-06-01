@@ -7,12 +7,6 @@ import { motion } from "framer-motion";
 const Hero = () => {
   const navigate = useNavigate();
   
-  const handleWatchVideos = () => {
-    // Redirect to a dedicated videos page or section
-    // For now, we'll just redirect to a special category for videos
-    navigate('/category/videos');
-  };
-  
   return (
     <section className="relative py-20 md:py-32 overflow-hidden" style={{ backgroundImage: "url(https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg??ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80)", backgroundSize: "cover", backgroundPosition: "center" }}>
       {/* Overlay for better text readability */}
@@ -53,7 +47,7 @@ const Hero = () => {
               size="lg"
               className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white px-8 py-6 text-lg"
             >
-              Visual hunt
+              Visual Hunt
             </Button>
             <Button 
               onClick={() => navigate('/add-content')} 
