@@ -252,6 +252,39 @@ export type Database = {
           },
         ]
       }
+      interaction_counts: {
+        Row: {
+          content_id: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          saves_count: number | null
+          shares_count: number | null
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          content_id: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          saves_count?: number | null
+          shares_count?: number | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          content_id?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          saves_count?: number | null
+          shares_count?: number | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -288,6 +321,42 @@ export type Database = {
           updated_at?: string
           username?: string | null
           website?: string | null
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          embed_id: string
+          id: string
+          thumbnail: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          embed_id: string
+          id?: string
+          thumbnail?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          embed_id?: string
+          id?: string
+          thumbnail?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

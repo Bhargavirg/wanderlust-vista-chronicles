@@ -1,70 +1,64 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { Film, Play } from "lucide-react";
+import { Film } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Video {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  embed_id: string;
+  duration: string;
+  category: string;
+}
 
 const VideosPage = () => {
-  // Sample video data
-  const videos = [
-    {
-      id: "v1",
-      title: "Secrets of the Deep Ocean",
-      description: "Explore the mysteries of the deepest parts of our oceans",
-      thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "dIiO8bhqZxQ",
-      duration: "12:45",
-      category: "Nature"
-    },
-    {
-      id: "v2",
-      title: "Wonders of the Amazon Rainforest",
-      description: "Journey through the most biodiverse ecosystem on Earth",
-      thumbnail: "https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "JEGYpEcHSbw",
-      duration: "15:20",
-      category: "Wildlife"
-    },
-    {
-      id: "v3",
-      title: "Ancient Monuments: Lost Civilizations",
-      description: "Uncovering the mysteries of ancient architectural marvels",
-      thumbnail: "https://images.unsplash.com/photo-1562979314-bee7453e911c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "rRi-IjrG-dc",
-      duration: "18:30",
-      category: "History"
-    },
-    {
-      id: "v4",
-      title: "Space Exploration: Journey to the Stars",
-      description: "The latest discoveries in astronomy and space exploration",
-      thumbnail: "https://images.unsplash.com/photo-1462332420958-a05d1e002413?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "GoW8Tf7hTGA",
-      duration: "21:15",
-      category: "Space"
-    },
-    {
-      id: "v5",
-      title: "The Art of Traditional Japanese Cuisine",
-      description: "Exploring the techniques and philosophy behind Japanese cooking",
-      thumbnail: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "M-7KUpW7ORI",
-      duration: "14:50",
-      category: "Food"
-    },
-    {
-      id: "v6",
-      title: "Cultural Festivals Around the World",
-      description: "Celebrating diversity through traditional festivals",
-      thumbnail: "https://images.unsplash.com/photo-1604342427969-5f06aa2e60c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
-      embedId: "QOaYtf61tGo",
-      duration: "16:40",
-      category: "Culture"
-    }
-  ];
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('videos')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching videos:', error);
+        } else {
+          setVideos(data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        <Navbar />
+        <main className="flex-1 container py-6">
+          <div className="text-center">Loading videos...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const featuredVideo = videos[0];
+  const otherVideos = videos.slice(1);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -81,25 +75,27 @@ const VideosPage = () => {
         </div>
 
         {/* Featured video */}
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold mb-4">Featured Video</h2>
-          <div className="bg-black rounded-lg overflow-hidden shadow-xl">
-            <div className="aspect-video">
-              <iframe 
-                src="https://www.youtube.com/embed/dIiO8bhqZxQ" 
-                title="Earth's Natural Wonders"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen>
-              </iframe>
-            </div>
-            <div className="p-4 bg-gray-900 text-white">
-              <h3 className="text-xl font-bold">Secrets of the Deep Ocean</h3>
-              <p className="text-gray-300 mt-1">Explore the mysteries of the deepest parts of our oceans</p>
+        {featuredVideo && (
+          <div className="mb-12">
+            <h2 className="text-xl font-semibold mb-4">Featured Video</h2>
+            <div className="bg-black rounded-lg overflow-hidden shadow-xl">
+              <div className="aspect-video">
+                <iframe 
+                  src={`https://www.youtube.com/embed/${featuredVideo.embed_id}`}
+                  title={featuredVideo.title}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen>
+                </iframe>
+              </div>
+              <div className="p-4 bg-gray-900 text-white">
+                <h3 className="text-xl font-bold">{featuredVideo.title}</h3>
+                <p className="text-gray-300 mt-1">{featuredVideo.description}</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Video grid */}
         <h2 className="text-xl font-semibold mb-4">All Videos</h2>
@@ -109,7 +105,7 @@ const VideosPage = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, staggerChildren: 0.1 }}
         >
-          {videos.map((video) => (
+          {otherVideos.map((video) => (
             <motion.div 
               key={video.id}
               className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg flex flex-col"
@@ -118,21 +114,15 @@ const VideosPage = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="relative">
-                <img 
-                  src={video.thumbnail} 
-                  alt={video.title} 
-                  className="w-full aspect-video object-cover"
-                />
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <Button 
-                    size="icon" 
-                    className="rounded-full w-12 h-12 bg-sky-500/90 hover:bg-sky-600 text-white"
-                    asChild
-                  >
-                    <Link to={`/video/${video.id}`}>
-                      <Play className="w-6 h-6" />
-                    </Link>
-                  </Button>
+                <div className="aspect-video w-full">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.embed_id}`}
+                    title={video.title}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
                 <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
                   {video.duration}
