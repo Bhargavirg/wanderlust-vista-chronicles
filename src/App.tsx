@@ -15,6 +15,7 @@ import CategoryPage from "./pages/CategoryPage";
 import SearchPage from "./pages/SearchPage";
 import ImageSearchPage from "./pages/ImageSearchPage";
 import VideosPage from "./pages/VideosPage";
+import AudiosPage from "./pages/AudiosPage";
 import MagazinePage from "./pages/MagazinePage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -36,6 +37,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/image-search" element={<ImageSearchPage />} />
               <Route path="/videos" element={<VideosPage />} />
+              <Route path="/audios" element={<AudiosPage />} />
               <Route path="/magazine" element={<MagazinePage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/category/:categorySlug" element={<CategoryPage />} />

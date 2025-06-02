@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Link, useNavigate } from "react-router-dom";
-import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown, Landmark, BookText, Anchor, Utensils, Plane } from "lucide-react";
+import { Atom, BookOpen, Globe, History, Rocket, Leaf, Camera, Palette, Flower2, Film, Flag, Trophy, ChevronDown, Landmark, BookText, Anchor, Utensils, Plane, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
@@ -382,7 +382,7 @@ const Index = () => {
           <CategoriesList blogData={mockData} />
         </motion.div>
         
-        {/* Content creation CTA - Changed from yellow to sky blue */}
+        {/* Content creation CTA - Updated with three buttons */}
         <div className="bg-gray-900 text-white py-16 mt-12">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
@@ -394,17 +394,25 @@ const Index = () => {
                 Join our community of explorers, scientists, and storytellers. Share your knowledge and experiences with the world.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button
+                  onClick={() => navigate('/audios')}
+                  size="lg"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 text-lg shadow-lg"
+                >
+                  <Music className="mr-2 h-5 w-5" />
+                  Listen to Audio
+                </Button>
                 {user ? (
                   <Link 
                     to="/add-content"
-                    className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
+                    className="inline-flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white px-6 py-4 font-semibold text-lg transition-colors rounded-md shadow-lg"
                   >
                     Add Your Content
                   </Link>
                 ) : (
                   <Button 
                     onClick={() => navigate('/login')}
-                    className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg"
+                    className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-4 font-semibold text-lg"
                   >
                     Log In to Contribute
                   </Button>
@@ -412,7 +420,7 @@ const Index = () => {
                 <Button
                   onClick={() => navigate('/videos')}
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg shadow-lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 text-lg shadow-lg"
                 >
                   Watch Videos
                 </Button>
