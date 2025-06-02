@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Compass, Camera, Film, BookOpen, Plus } from "lucide-react";
+import { Compass, Camera, BookOpen, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -67,13 +67,6 @@ const Hero = () => {
               <BookOpen className="mr-2" />
               Magazine
             </Button>
-            <Button
-              onClick={() => navigate('/videos')}
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg shadow-lg"
-            >
-              Watch Video
-            </Button>
           </motion.div>
           
           <motion.div
@@ -89,7 +82,7 @@ const Hero = () => {
                 <p className="text-sm">Photos & Articles</p>
               </div>
               <div>
-                <Film className="h-6 w-6 mx-auto mb-2" />
+                <Camera className="h-6 w-6 mx-auto mb-2" />
                 <div className="font-bold text-2xl md:text-3xl mb-1">500+</div>
                 <p className="text-sm">Documentary Videos</p>
               </div>

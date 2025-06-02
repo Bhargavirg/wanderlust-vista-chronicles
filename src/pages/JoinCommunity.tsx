@@ -16,32 +16,79 @@ import {
 } from "@/components/ui/card";
 import { Users, Mail, MessageCircle, Globe, Share2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { submitCommunityJoinRequest } from "@/services/communityService";
+import { subscribeToNewsletter } from "@/services/newsletterService";
 
 const JoinCommunity = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [interests, setInterests] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [submittingApplication, setSubmittingApplication] = useState(false);
+  const [subscribingNewsletter, setSubscribingNewsletter] = useState(false);
 
-  const handleJoin = (e: React.FormEvent) => {
+  const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle community join logic here
-    toast({
-      title: "Welcome to our community!",
-      description: "Your application has been received. We'll be in touch soon.",
-    });
-    // Reset form fields
-    setEmail("");
-    setName("");
-    setInterests("");
+    setSubmittingApplication(true);
+    
+    try {
+      await submitCommunityJoinRequest(name, email, interests);
+      toast({
+        title: "Welcome to our community!",
+        description: "Your application has been received. We'll be in touch soon.",
+      });
+      // Reset form fields
+      setEmail("");
+      setName("");
+      setInterests("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error submitting your application. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingApplication(false);
+    }
   };
 
-  const handleSubscribe = () => {
-    setIsSubscribed(true);
-    toast({
-      title: "Subscribed!",
-      description: "You have successfully subscribed to our newsletter.",
-    });
+  const handleSubscribe = async () => {
+    if (!newsletterEmail) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubscribingNewsletter(true);
+    
+    try {
+      await subscribeToNewsletter(newsletterEmail);
+      setIsSubscribed(true);
+      toast({
+        title: "Subscribed!",
+        description: "You have successfully subscribed to our newsletter.",
+      });
+    } catch (error: any) {
+      if (error.code === '23505') {
+        toast({
+          title: "Already subscribed",
+          description: "This email is already subscribed to our newsletter.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "There was an error subscribing to the newsletter. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setSubscribingNewsletter(false);
+    }
   };
 
   return (
@@ -107,8 +154,12 @@ const JoinCommunity = () => {
                       className="min-h-[120px]"
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 text-white">
-                    Submit Application
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-sky-500 hover:bg-sky-600 text-white"
+                    disabled={submittingApplication}
+                  >
+                    {submittingApplication ? "Submitting..." : "Submit Application"}
                   </Button>
                 </form>
               </CardContent>
@@ -128,15 +179,17 @@ const JoinCommunity = () => {
                 <CardContent>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <Input 
-                      placeholder="Enter your email address" 
-                      disabled={isSubscribed}
+                      placeholder="Enter your email address"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      disabled={isSubscribed || subscribingNewsletter}
                     />
                     <Button 
                       onClick={handleSubscribe} 
-                      disabled={isSubscribed}
+                      disabled={isSubscribed || subscribingNewsletter}
                       className="bg-sky-500 hover:bg-sky-600 text-white"
                     >
-                      {isSubscribed ? "Subscribed" : "Subscribe"}
+                      {subscribingNewsletter ? "Subscribing..." : (isSubscribed ? "Subscribed" : "Subscribe")}
                     </Button>
                   </div>
                 </CardContent>

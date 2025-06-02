@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FeaturedSection from "@/components/home/FeaturedSection";
@@ -379,14 +378,6 @@ const Index = () => {
             featuredPost={mockData.featured} 
             recentPosts={mockData.recent} 
           />
-          
-          <div className="container my-6 flex justify-center">
-            <Link to="/category/videos">
-              <Button variant="secondary" size="lg">
-                WatchVideo
-              </Button>
-            </Link>
-          </div>
 
           <CategoriesList blogData={mockData} />
         </motion.div>
@@ -402,21 +393,30 @@ const Index = () => {
               <p className="text-lg mb-8">
                 Join our community of explorers, scientists, and storytellers. Share your knowledge and experiences with the world.
               </p>
-              {user ? (
-                <Link 
-                  to="/add-content"
-                  className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                {user ? (
+                  <Link 
+                    to="/add-content"
+                    className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg transition-colors"
+                  >
+                    Add Your Content
+                  </Link>
+                ) : (
+                  <Button 
+                    onClick={() => navigate('/login')}
+                    className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg"
+                  >
+                    Log In to Contribute
+                  </Button>
+                )}
+                <Button
+                  onClick={() => navigate('/videos')}
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg shadow-lg"
                 >
-                  Add Your Content
-                </Link>
-              ) : (
-                <Button 
-                  onClick={() => navigate('/login')}
-                  className="bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 font-semibold text-lg"
-                >
-                  Log In to Contribute
+                  Watch Videos
                 </Button>
-              )}
+              </div>
             </div>
           </div>
         </div>

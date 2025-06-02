@@ -168,6 +168,33 @@ export type Database = {
         }
         Relationships: []
       }
+      community_join_requests: {
+        Row: {
+          areas_of_interest: string | null
+          email: string
+          full_name: string
+          id: string
+          status: string | null
+          submitted_at: string
+        }
+        Insert: {
+          areas_of_interest?: string | null
+          email: string
+          full_name: string
+          id?: string
+          status?: string | null
+          submitted_at?: string
+        }
+        Update: {
+          areas_of_interest?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          status?: string | null
+          submitted_at?: string
+        }
+        Relationships: []
+      }
       content: {
         Row: {
           additional_images: string[] | null
@@ -282,6 +309,27 @@ export type Database = {
           shares_count?: number | null
           updated_at?: string
           views_count?: number | null
+        }
+        Relationships: []
+      }
+      newsletter_subscriptions: {
+        Row: {
+          email: string
+          id: string
+          is_active: boolean | null
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_active?: boolean | null
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          subscribed_at?: string
         }
         Relationships: []
       }
