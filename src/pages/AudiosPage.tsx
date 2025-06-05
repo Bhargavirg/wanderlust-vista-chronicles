@@ -1,50 +1,62 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Music, DownloadCloud } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+
+interface Audio {
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  file_url: string;
+  duration: string;
+  categories: string[];
+}
 
 const AudiosPage = () => {
-  // Sample audio data with royalty-free audio URLs
-  const audios = [
-    {
-      id: "a1",
-      title: "Forest Ambience",
-      author: "Nature Sounds",
-      description: "Relaxing forest sounds with birds chirping",
-      src: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
-      duration: "3:45",
-      categories: ["Nature", "Ambient", "Relaxing"]
-    },
-    {
-      id: "a2",
-      title: "Ocean Waves",
-      author: "Ocean Recordings",
-      description: "Peaceful ocean waves for meditation",
-      src: "https://file-examples.com/storage/fe68c982be66f447a9512b3/2017/11/file_example_MP3_700KB.mp3",
-      duration: "2:30",
-      categories: ["Ocean", "Meditation", "Peaceful"]
-    },
-    {
-      id: "a3",
-      title: "Rain Drops",
-      author: "Weather Sounds",
-      description: "Gentle rain falling on leaves",
-      src: "https://file-examples.com/storage/fe68c982be66f447a9512b3/2017/11/file_example_MP3_1MG.mp3",
-      duration: "4:12",
-      categories: ["Rain", "Nature", "Calming"]
-    },
-    {
-      id: "a4",
-      title: "Bird Songs",
-      author: "Wildlife Audio",
-      description: "Morning bird songs in the wilderness",
-      src: "https://file-examples.com/storage/fe68c982be66f447a9512b3/2017/11/file_example_MP3_2MG.mp3",
-      duration: "5:20",
-      categories: ["Birds", "Wildlife", "Morning"]
+  const [audios, setAudios] = useState<Audio[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAudios();
+  }, []);
+
+  const fetchAudios = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('audios')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setAudios(data || []);
+    } catch (error) {
+      console.error('Error fetching audios:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load audio files",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">Loading audio files...</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -87,15 +99,15 @@ const AudiosPage = () => {
 
               <div className="flex items-center space-x-6">
                 <audio controls preload="none" className="w-48">
-                  <source src={audio.src} type="audio/mpeg" />
-                  <source src={audio.src} type="audio/wav" />
+                  <source src={audio.file_url} type="audio/mpeg" />
+                  <source src={audio.file_url} type="audio/wav" />
                   Your browser does not support the audio element.
                 </audio>
                 <div className="text-xs text-gray-500 dark:text-gray-400 text-right min-w-[60px]">
                   {audio.duration}
                 </div>
                 <div className="flex space-x-1 min-w-[200px] overflow-hidden">
-                  {audio.categories.map((cat, idx) => (
+                  {audio.categories?.map((cat, idx) => (
                     <span
                       key={idx}
                       className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full truncate"
@@ -111,7 +123,7 @@ const AudiosPage = () => {
                   onClick={() => {
                     // Trigger download
                     const link = document.createElement('a');
-                    link.href = audio.src;
+                    link.href = audio.file_url;
                     link.download = audio.title + '.mp3';
                     document.body.appendChild(link);
                     link.click();

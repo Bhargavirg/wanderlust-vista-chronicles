@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
@@ -231,111 +230,123 @@ const ShareYourThought = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-      <Navbar />
-      <main className="flex-1 container mx-auto p-6 max-w-3xl">
-        <h1 className="text-3xl font-bold mb-6 text-center">Share Your Thoughts</h1>
+    <div className="min-h-screen flex flex-col relative">
+      {/* Background image with overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(https://i.pinimg.com/736x/0a/8b/4f/0a8b4f8c4b4a2e8c9f7e5d3a1b2c3d4e.jpg)'
+        }}
+      />
+      <div className="absolute inset-0 bg-black/40" />
+      
+      {/* Content */}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-1 container mx-auto p-6 max-w-3xl">
+          <h1 className="text-3xl font-bold mb-6 text-center text-white">Share Your Thoughts</h1>
 
-        <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
-          <textarea
-            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-sky-500 text-lg bg-transparent"
-            rows={4}
-            placeholder="What's on your mind?"
-            value={newThoughtContent}
-            onChange={(e) => setNewThoughtContent(e.target.value)}
-          />
-          <button
-            onClick={handleAddThought}
-            className="mt-3 px-6 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 transition font-semibold"
-          >
-            Share Thought
-          </button>
-        </div>
+          <div className="mb-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 shadow">
+            <textarea
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-sky-500 text-lg bg-transparent"
+              rows={4}
+              placeholder="What's on your mind?"
+              value={newThoughtContent}
+              onChange={(e) => setNewThoughtContent(e.target.value)}
+            />
+            <button
+              onClick={handleAddThought}
+              className="mt-3 px-6 py-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 transition font-semibold"
+            >
+              Share Thought
+            </button>
+          </div>
 
-        <div>
-          {thoughts.length === 0 && (
-            <p className="text-center text-gray-500">No thoughts yet. Be the first to share your thoughts!</p>
-          )}
+          <div>
+            {thoughts.length === 0 && (
+              <p className="text-center text-white">No thoughts yet. Be the first to share your thoughts!</p>
+            )}
 
-          {thoughts.map(thought => (
-            <div key={thought.id} className="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-2xl shadow hover:shadow-lg bg-white dark:bg-gray-800 transition">
-              <div className="flex items-start space-x-4">
-                <img src={thought.avatar_url} alt={thought.username} className="w-12 h-12 rounded-full" />
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-gray-900 dark:text-gray-100">@{thought.username}</span>
-                    <span className="text-gray-500 text-sm">· {formatTimeAgo(thought.created_at)}</span>
-                  </div>
-                  <p className="mt-1 mb-3 whitespace-pre-wrap text-gray-800 dark:text-gray-200 text-lg">{thought.content}</p>
-
-                  <div className="flex items-center space-x-6 text-gray-500">
-                    <button
-                      onClick={() => toggleLike(thought.id, thought.user_liked || false)}
-                      className={`flex items-center space-x-1 hover:text-red-500 transition ${thought.user_liked ? 'text-red-500' : ''}`}
-                      aria-label="Like"
-                    >
-                      <Heart className={`w-5 h-5 ${thought.user_liked ? 'fill-current' : ''}`} />
-                      <span>{thought.likes_count}</span>
-                    </button>
-                    <div className="flex items-center space-x-1">
-                      <MessageCircle className="w-5 h-5" />
-                      <span>{thought.comments?.length || 0}</span>
+            {thoughts.map(thought => (
+              <div key={thought.id} className="mb-6 p-4 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow hover:shadow-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm transition">
+                <div className="flex items-start space-x-4">
+                  <img src={thought.avatar_url} alt={thought.username} className="w-12 h-12 rounded-full" />
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-gray-900 dark:text-gray-100">@{thought.username}</span>
+                      <span className="text-gray-500 text-sm">· {formatTimeAgo(thought.created_at)}</span>
                     </div>
-                    <button className="flex items-center space-x-1 hover:text-green-500 transition">
-                      <Share2 className="w-5 h-5" />
-                      <span>Share</span>
-                    </button>
-                  </div>
+                    <p className="mt-1 mb-3 whitespace-pre-wrap text-gray-800 dark:text-gray-200 text-lg">{thought.content}</p>
 
-                  <div className="mt-4">
-                    <h4 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">Comments</h4>
-                    {(!thought.comments || thought.comments.length === 0) && (
-                      <p className="text-gray-400 text-sm">No comments yet.</p>
-                    )}
-                    {thought.comments?.map(comment => (
-                      <div key={comment.id} className="mb-2 flex items-start space-x-3">
-                        <img src={comment.avatar_url} alt={comment.username} className="w-8 h-8 rounded-full" />
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-gray-900 dark:text-gray-100">@{comment.username}</span>
-                            <span className="text-gray-500 text-xs">· {formatTimeAgo(comment.created_at)}</span>
-                          </div>
-                          <p className="text-gray-700 dark:text-gray-300">{comment.comment_text}</p>
-                        </div>
+                    <div className="flex items-center space-x-6 text-gray-500">
+                      <button
+                        onClick={() => toggleLike(thought.id, thought.user_liked || false)}
+                        className={`flex items-center space-x-1 hover:text-red-500 transition ${thought.user_liked ? 'text-red-500' : ''}`}
+                        aria-label="Like"
+                      >
+                        <Heart className={`w-5 h-5 ${thought.user_liked ? 'fill-current' : ''}`} />
+                        <span>{thought.likes_count}</span>
+                      </button>
+                      <div className="flex items-center space-x-1">
+                        <MessageCircle className="w-5 h-5" />
+                        <span>{thought.comments?.length || 0}</span>
                       </div>
-                    ))}
-                  </div>
+                      <button className="flex items-center space-x-1 hover:text-green-500 transition">
+                        <Share2 className="w-5 h-5" />
+                        <span>Share</span>
+                      </button>
+                    </div>
 
-                  <div className="flex space-x-2 mt-3">
-                    <input
-                      type="text"
-                      placeholder="Add a comment..."
-                      className="flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-500 bg-transparent"
-                      value={commentInputs[thought.id] || ''}
-                      onChange={(e) =>
-                        setCommentInputs({ ...commentInputs, [thought.id]: e.target.value })
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddComment(thought.id);
+                    <div className="mt-4">
+                      <h4 className="font-semibold mb-2 text-gray-700 dark:text-gray-300">Comments</h4>
+                      {(!thought.comments || thought.comments.length === 0) && (
+                        <p className="text-gray-400 text-sm">No comments yet.</p>
+                      )}
+                      {thought.comments?.map(comment => (
+                        <div key={comment.id} className="mb-2 flex items-start space-x-3">
+                          <img src={comment.avatar_url} alt={comment.username} className="w-8 h-8 rounded-full" />
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <span className="font-semibold text-gray-900 dark:text-gray-100">@{comment.username}</span>
+                              <span className="text-gray-500 text-xs">· {formatTimeAgo(comment.created_at)}</span>
+                            </div>
+                            <p className="text-gray-700 dark:text-gray-300">{comment.comment_text}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex space-x-2 mt-3">
+                      <input
+                        type="text"
+                        placeholder="Add a comment..."
+                        className="flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-sky-500 bg-transparent"
+                        value={commentInputs[thought.id] || ''}
+                        onChange={(e) =>
+                          setCommentInputs({ ...commentInputs, [thought.id]: e.target.value })
                         }
-                      }}
-                    />
-                    <button
-                      onClick={() => handleAddComment(thought.id)}
-                      className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
-                    >
-                      Comment
-                    </button>
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddComment(thought.id);
+                          }
+                        }}
+                      />
+                      <button
+                        onClick={() => handleAddComment(thought.id)}
+                        className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
+                      >
+                        Comment
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </main>
-      <Footer />
+            ))}
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -100,6 +100,45 @@ export type Database = {
           },
         ]
       }
+      audios: {
+        Row: {
+          author: string
+          categories: string[] | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          file_url: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          categories?: string[] | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          file_url: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          categories?: string[] | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          file_url?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       author_profiles: {
         Row: {
           created_at: string
