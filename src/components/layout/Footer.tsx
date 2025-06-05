@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut, LogIn } from "lucide-react";
+import { LogOut, LogIn, MessageSquare } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/AuthContext";
 
@@ -33,6 +33,17 @@ const Footer = () => {
             <p className="text-sm text-black">
               A platform for sharing stories, experiences, and knowledge through beautiful blogs.
             </p>
+            <div className="mt-4">
+              <Link to="/share-thought">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2 bg-sky-500 text-white hover:bg-sky-600 border-sky-500"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Share Your Thought
+                </Button>
+              </Link>
+            </div>
           </div>
           <div>
             <h3 className="text-base font-medium mb-4">Categories</h3>

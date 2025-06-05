@@ -372,6 +372,106 @@ export type Database = {
         }
         Relationships: []
       }
+      thought_comments: {
+        Row: {
+          avatar_url: string | null
+          comment_text: string
+          created_at: string
+          id: string
+          thought_id: string | null
+          user_id: string | null
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          comment_text: string
+          created_at?: string
+          id?: string
+          thought_id?: string | null
+          user_id?: string | null
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          comment_text?: string
+          created_at?: string
+          id?: string
+          thought_id?: string | null
+          user_id?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thought_comments_thought_id_fkey"
+            columns: ["thought_id"]
+            isOneToOne: false
+            referencedRelation: "thoughts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thought_likes: {
+        Row: {
+          created_at: string
+          id: string
+          thought_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          thought_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          thought_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thought_likes_thought_id_fkey"
+            columns: ["thought_id"]
+            isOneToOne: false
+            referencedRelation: "thoughts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thoughts: {
+        Row: {
+          avatar_url: string | null
+          content: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          updated_at: string
+          user_id: string | null
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          updated_at?: string
+          user_id?: string | null
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          updated_at?: string
+          user_id?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
       videos: {
         Row: {
           category: string | null
