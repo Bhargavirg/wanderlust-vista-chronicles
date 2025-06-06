@@ -1,9 +1,8 @@
-
 export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
-  content: string; // Adding the missing content property
+  content?: string; // Making this optional to avoid breaking existing data
   description?: string;
   coverImage: string;
   screenSizeImage?: string;
@@ -19,6 +18,7 @@ export interface BlogPost {
   publishedAt: string;
   updatedAt?: string; // Adding this property to fix the TypeScript error
   mainContentData?: string; // Adding this to store the main content
+  readingTime?: string; // Adding this property for reading time
   educationalContent?: {
     difficulty: "beginner" | "intermediate" | "advanced";
     ageGroup?: string;
@@ -39,6 +39,7 @@ export const mockData: BlogData = {
     id: "1",
     title: "The Hidden Wonders of the Amazon Rainforest",
     excerpt: "Explore the incredible biodiversity and ecological importance of Earth's largest rainforest ecosystem.",
+    content: "The Amazon rainforest is one of the most biodiverse places on Earth...",
     coverImage: "https://images.unsplash.com/photo-1569097756865-19de5f64d335",
     category: "nature",
     subCategory: "ecosystems",
@@ -63,6 +64,7 @@ export const mockData: BlogData = {
       id: "2",
       title: "The Future of Quantum Computing Explained",
       excerpt: "How quantum computers work and why they'll revolutionize technology, medicine, and scientific discovery.",
+      content: "Quantum computing represents a paradigm shift in computational power...",
       coverImage: "https://images.unsplash.com/photo-1518770660439-4636190af475",
       category: "technology",
       author: {
@@ -76,6 +78,7 @@ export const mockData: BlogData = {
       id: "3",
       title: "Exploring Mars: The Latest Discoveries",
       excerpt: "What NASA's Perseverance rover and Ingenuity helicopter are teaching us about the red planet.",
+      content: "The red planet continues to reveal its secrets through advanced exploration missions...",
       coverImage: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9",
       category: "space",
       author: {
@@ -89,6 +92,7 @@ export const mockData: BlogData = {
       id: "4",
       title: "The Ancient Civilizations of Mesopotamia",
       excerpt: "Discover the cradle of civilization and the birth of writing, agriculture, and urban society.",
+      content: "Mesopotamia, often called the cradle of civilization, saw the birth of writing, agriculture, and urban society...",
       coverImage: "https://images.unsplash.com/photo-1473177104440-ffee2f376098",
       category: "history",
       author: {
@@ -105,6 +109,7 @@ export const mockData: BlogData = {
         id: "5",
         title: "The Building Blocks of Life: DNA Decoded",
         excerpt: "Understanding the genetic code that makes us who we are, and how CRISPR is changing our ability to modify it.",
+        content: "DNA is the fundamental building block of life, containing the instructions that make each organism unique...",
         coverImage: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69",
         category: "science",
         subCategory: "genetics",
@@ -119,6 +124,7 @@ export const mockData: BlogData = {
         id: "6",
         title: "The Fascinating World of Deep Sea Creatures",
         excerpt: "Exploring the bizarre and beautiful organisms that thrive in the ocean's darkest depths.",
+        content: "The deep ocean remains one of Earth's final frontiers, home to some of the most extraordinary creatures on our planet...",
         coverImage: "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10",
         category: "science",
         subCategory: "marine-biology",
@@ -133,6 +139,7 @@ export const mockData: BlogData = {
         id: "7",
         title: "Climate Change: Understanding the Science",
         excerpt: "The evidence, causes, and projected impacts of global climate change explained.",
+        content: "Climate change is one of the most pressing challenges of our time, with far-reaching implications for our planet...",
         coverImage: "https://images.unsplash.com/photo-1620321023374-d1a68fbc720d",
         category: "science",
         subCategory: "climate",
@@ -147,6 +154,7 @@ export const mockData: BlogData = {
         id: "8",
         title: "Inside the Human Brain: How Memory Works",
         excerpt: "The neuroscience behind how we form, store, and recall memories.",
+        content: "Memory is one of the most fascinating aspects of human cognition, involving complex neural networks and processes...",
         coverImage: "https://images.unsplash.com/photo-1559757175-5700dde675bc",
         category: "science",
         subCategory: "neuroscience",
@@ -163,6 +171,7 @@ export const mockData: BlogData = {
         id: "9",
         title: "Artificial Intelligence: Past, Present, and Future",
         excerpt: "The evolution of AI from early computing to modern machine learning and beyond.",
+        content: "Artificial Intelligence has evolved from a theoretical concept to a transformative technology that shapes our daily lives...",
         coverImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
         category: "technology",
         subCategory: "artificial-intelligence",
@@ -177,6 +186,7 @@ export const mockData: BlogData = {
         id: "10",
         title: "Sustainable Technology: Innovations for a Greener Future",
         excerpt: "How technology is helping address climate change and environmental challenges.",
+        content: "Sustainable technology is at the forefront of our fight against climate change, offering innovative solutions...",
         coverImage: "https://images.unsplash.com/photo-1473181488821-2d23949a045a",
         category: "technology",
         subCategory: "sustainable-tech",
@@ -191,6 +201,7 @@ export const mockData: BlogData = {
         id: "11",
         title: "The Internet of Things: Our Connected World",
         excerpt: "How smart devices are transforming our homes, cities, and daily lives.",
+        content: "The Internet of Things (IoT) is revolutionizing how we interact with our environment through connected devices...",
         coverImage: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
         category: "technology",
         subCategory: "iot",
@@ -207,6 +218,7 @@ export const mockData: BlogData = {
         id: "12",
         title: "The Rise and Fall of Ancient Rome",
         excerpt: "How a small Italian village became the center of the Western world, and why it eventually collapsed.",
+        content: "The Roman Empire's rise and fall is one of history's most fascinating stories of power, conquest, and ultimate decline...",
         coverImage: "https://images.unsplash.com/photo-1552832230-c0197dd311b5",
         category: "history",
         subCategory: "ancient-civilizations",
@@ -221,6 +233,7 @@ export const mockData: BlogData = {
         id: "13",
         title: "The Age of Exploration: When Europe Discovered the World",
         excerpt: "The voyages, technologies, and motivations behind history's greatest era of discovery.",
+        content: "The Age of Exploration marked a turning point in human history, connecting continents and cultures like never before...",
         coverImage: "https://images.unsplash.com/photo-1526259037230-f4f3e391cec9",
         category: "history",
         subCategory: "exploration",
@@ -235,6 +248,7 @@ export const mockData: BlogData = {
         id: "14",
         title: "World War II: Causes, Events, and Aftermath",
         excerpt: "Understanding the most destructive conflict in human history and its lasting impact.",
+        content: "World War II reshaped the global order and left lasting impacts that continue to influence our world today...",
         coverImage: "https://images.unsplash.com/photo-1580130379624-3a069adbf8bc",
         category: "history",
         subCategory: "modern-history",
@@ -251,6 +265,7 @@ export const mockData: BlogData = {
         id: "15",
         title: "The Art of Japanese Minimalism",
         excerpt: "How the philosophy of 'less is more' shapes Japanese design, architecture, and daily life.",
+        content: "Japanese minimalism reflects a deep philosophical approach to life, emphasizing simplicity, functionality, and beauty...",
         coverImage: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af",
         category: "culture",
         subCategory: "philosophy",
@@ -265,6 +280,7 @@ export const mockData: BlogData = {
         id: "16",
         title: "Indigenous Music Around the World",
         excerpt: "Exploring traditional musical forms and instruments from global indigenous cultures.",
+        content: "Indigenous music traditions offer unique insights into cultural heritage and spiritual practices across the globe...",
         coverImage: "https://images.unsplash.com/photo-1511379938547-c1f69419868d",
         category: "culture",
         subCategory: "music",
@@ -279,6 +295,7 @@ export const mockData: BlogData = {
         id: "17",
         title: "Food as Cultural Identity: What We Eat and Why",
         excerpt: "How culinary traditions reflect history, geography, and cultural values.",
+        content: "Food is more than sustenance; it's a window into cultural identity, history, and social structures...",
         coverImage: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
         category: "culture",
         subCategory: "food",
@@ -295,6 +312,7 @@ export const mockData: BlogData = {
         id: "12",
         title: "The Healing Power of Forest Bathing",
         excerpt: "How immersing yourself in nature can reduce stress and improve your health.",
+        content: "Forest bathing, or shinrin-yoku, is a Japanese practice that involves mindful immersion in nature...",
         coverImage: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d",
         category: "nature",
         author: {
@@ -307,6 +325,7 @@ export const mockData: BlogData = {
         id: "13",
         title: "Alpine Wildflowers: A Photographer's Guide",
         excerpt: "Tips for capturing the fleeting beauty of high mountain meadows in bloom.",
+        content: "Alpine wildflowers offer some of nature's most spectacular displays, blooming for brief periods at high altitudes...",
         coverImage: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b",
         category: "nature",
         author: {
@@ -319,6 +338,7 @@ export const mockData: BlogData = {
         id: "14",
         title: "The World's Most Spectacular Waterfalls",
         excerpt: "From Angel Falls to Victoria Falls, discovering the planet's most impressive cascades.",
+        content: "Waterfalls represent some of nature's most awe-inspiring displays of power and beauty...",
         coverImage: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9",
         category: "nature",
         author: {
@@ -333,6 +353,7 @@ export const mockData: BlogData = {
         id: "18",
         title: "Backyard Astronomy: Spotting Planets with Binoculars",
         excerpt: "How to observe Jupiter, Saturn, and Mars without expensive equipment.",
+        content: "Astronomy doesn't require expensive equipment; even basic binoculars can reveal the wonders of our solar system...",
         coverImage: "https://images.unsplash.com/photo-1543722530-d2c3201371e7",
         category: "space",
         author: {
@@ -345,6 +366,7 @@ export const mockData: BlogData = {
         id: "19",
         title: "The New Space Race: Private Companies Reaching for the Stars",
         excerpt: "How SpaceX, Blue Origin, and others are revolutionizing space exploration.",
+        content: "The commercial space industry is transforming how we access and explore space...",
         coverImage: "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2",
         category: "space",
         author: {
@@ -357,6 +379,7 @@ export const mockData: BlogData = {
         id: "20",
         title: "Incredible Images from the James Webb Space Telescope",
         excerpt: "The most breathtaking views of our universe captured by NASA's latest marvel.",
+        content: "The James Webb Space Telescope is revolutionizing our understanding of the cosmos with unprecedented detail...",
         coverImage: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564",
         category: "space",
         author: {
@@ -371,6 +394,7 @@ export const mockData: BlogData = {
         id: "21",
         title: "The Secret Life of Urban Foxes",
         excerpt: "How these adaptable predators are thriving in cities around the world.",
+        content: "Urban foxes have successfully adapted to city life, demonstrating remarkable intelligence and resilience...",
         coverImage: "https://cdn.pixabay.com/photo/2019/11/26/19/57/animal-4655388_1280.jpg",
         category: "wildlife",
         author: {
@@ -383,6 +407,7 @@ export const mockData: BlogData = {
         id: "22",
         title: "Conservation Success Stories: Species Brought Back from the Brink",
         excerpt: "How dedicated efforts have saved endangered animals around the globe.",
+        content: "Conservation efforts have achieved remarkable successes in bringing species back from near extinction...",
         coverImage: "https://images.unsplash.com/photo-1503656142023-618e7d1f435a",
         category: "wildlife",
         author: {
@@ -395,6 +420,7 @@ export const mockData: BlogData = {
         id: "23",
         title: "Animal kingdom hirarchy",
         excerpt: "Understanding the complex social structures of animal species.",
+        content: "Animal social hierarchies reveal fascinating insights into behavior, survival strategies, and evolution...",
         coverImage: "https://i.pinimg.com/736x/eb/83/70/eb8370e5c5e9b2b5c0247e4cf7155031.jpg",
         category: "wildlife",
         author: {
@@ -407,6 +433,7 @@ export const mockData: BlogData = {
         id: "23",
         title: "Snake Island: A Hidden Gem of Biodiversity",
         excerpt: "Discover the unique wildlife and ecosystems of this remote island.",
+        content: "Snake Island represents a unique ecosystem where endemic species have evolved in isolation...",
         coverImage: "https://cdn.pixabay.com/photo/2021/10/28/10/49/red-bellied-black-snake-6749361_1280.jpg",
         category: "wildlife",
         author: {
@@ -419,6 +446,7 @@ export const mockData: BlogData = {
         id: "23",
         title: "Elephant Migration: Nature's Great Journey",
         excerpt: "Witnessing the majestic migration of elephants across the African savannah.",
+        content: "Elephant migrations are among nature's most spectacular displays of endurance and family bonds...",
         coverImage: "https://cdn.pixabay.com/photo/2020/01/02/14/53/elephant-4736008_1280.jpg",
         category: "wildlife",
         author: {
@@ -431,6 +459,7 @@ export const mockData: BlogData = {
         id: "23",
         title: "Loin king of the jungle",
         excerpt: "Forests are home to many species of wildlife, including lions, tigers, and bears.",
+        content: "The lion's reign as king of the jungle is a testament to nature's complex social structures and survival strategies...",
         coverImage: "https://i.pinimg.com/736x/43/c2/c1/43c2c16d57298b41196c4562cb52f384.jpg",
         category: "wildlife",
         author: {
@@ -445,6 +474,7 @@ export const mockData: BlogData = {
         id: "24",
         title: "Impressionism: The Art Movement That Changed the World",
         excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        content: "Impressionism revolutionized art by challenging traditional techniques and embracing light, color, and spontaneity...",
         coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
         category: "art",
         author: {
@@ -458,6 +488,7 @@ export const mockData: BlogData = {
         id: "24",
         title: "Impressionism: The Art Movement That Changed the World",
         excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        content: "Impressionism revolutionized art by challenging traditional techniques and embracing light, color, and spontaneity...",
         coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
         category: "art",
         author: {
@@ -471,6 +502,7 @@ export const mockData: BlogData = {
         id: "24",
         title: "Impressionism: The Art Movement That Changed the World",
         excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        content: "Impressionism revolutionized art by challenging traditional techniques and embracing light, color, and spontaneity...",
         coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
         category: "art",
         author: {
@@ -484,6 +516,7 @@ export const mockData: BlogData = {
         id: "24",
         title: "Impressionism: The Art Movement That Changed the World",
         excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        content: "Impressionism revolutionized art by challenging traditional techniques and embracing light, color, and spontaneity...",
         coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
         category: "art",
         author: {
@@ -497,6 +530,7 @@ export const mockData: BlogData = {
         id: "24",
         title: "Impressionism: The Art Movement That Changed the World",
         excerpt: "Explore the origins and impact of Impressionism in the art world.",
+        content: "Impressionism revolutionized art by challenging traditional techniques and embracing light, color, and spontaneity...",
         coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
         category: "art",
         author: {
@@ -512,6 +546,7 @@ export const mockData: BlogData = {
         id: "25",
         title: "The Language of Flowers: Meanings and Symbolism",
         excerpt: "Discover the hidden meanings behind popular flowers.",
+        content: "The language of flowers, or floriography, was a symbolic communication method using floral arrangements...",
         coverImage: "https://i.pinimg.com/736x/c6/e8/c8/c6e8c8621642ebb22c0372fe3ee9f53c.jpg",
         category: "flowers",
         author: {
@@ -527,6 +562,7 @@ export const mockData: BlogData = {
         id: "26",
         title: "The Evolution of Anime: From Classic to Modern",
         excerpt: "A look at how anime has changed over the decades.",
+        content: "Anime has evolved from simple animated stories to complex narratives that captivate global audiences...",
         coverImage: "https://i.pinimg.com/736x/40/21/e0/4021e0512ac11ea228bacdc4e19f933d.jpg",
         category: "anime",
         author: {
@@ -542,6 +578,7 @@ export const mockData: BlogData = {
         id: "27",
         title: "The Role of Democracy in Modern Society",
         excerpt: "Understanding the importance and challenges of democracy today.",
+        content: "Democracy faces unprecedented challenges in the modern era, requiring constant vigilance and adaptation...",
         coverImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf",
         category: "politics",
         author: {
@@ -557,6 +594,7 @@ export const mockData: BlogData = {
         id: "28",
         title: "The Greatest Moments in Olympic History",
         excerpt: "Relive some of the most memorable Olympic events.",
+        content: "The Olympics have provided countless moments of triumph, determination, and human achievement...",
         coverImage: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf",
         category: "sports",
         author: {
@@ -572,6 +610,7 @@ export const mockData: BlogData = {
         id: "29",
         title: "Folk Tales from Around the World",
         excerpt: "Explore traditional stories passed down through generations.",
+        content: "Folk tales preserve cultural wisdom and values, passing important lessons through engaging narratives...",
         coverImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15",
         category: "stories",
         author: {
@@ -587,6 +626,7 @@ export const mockData: BlogData = {
         id: "30",
         title: "Top Destinations for Adventure Travel",
         excerpt: "Discover exciting places for your next adventure.",
+        content: "Adventure travel opens up new perspectives and challenges that transform how we see the world...",
         coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
         category: "travel",
         author: {
@@ -602,6 +642,7 @@ export const mockData: BlogData = {
         id: "31",
         title: "Exploring World Cuisines: A Culinary Journey",
         excerpt: "Taste the flavors of different cultures.",
+        content: "World cuisines offer a delicious window into different cultures, histories, and traditions...",
         coverImage: "https://images.unsplash.com/photo-1490645935967-10de6ba17061",
         category: "food",
         author: {
@@ -617,6 +658,7 @@ export const mockData: BlogData = {
         id: "32",
         title: "The Most Iconic Monuments Around the World",
         excerpt: "Discover the history behind famous landmarks.",
+        content: "Iconic monuments tell the stories of civilizations, commemorating important events and cultural achievements...",
         coverImage: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29",
         category: "monuments",
         author: {
@@ -632,6 +674,7 @@ export const mockData: BlogData = {
         id: "33",
         title: "Coral Reefs: The Rainforests of the Sea",
         excerpt: "Explore the vibrant ecosystems of coral reefs.",
+        content: "Coral reefs are among the most biodiverse ecosystems on Earth, supporting countless marine species...",
         coverImage: "https://i.pinimg.com/736x/e6/a7/87/e6a78748d900c1fa121f69829299ec21.jpg",
         category: "marinelife",
         author: {
@@ -647,6 +690,7 @@ export const mockData: BlogData = {
         id: "34",
         title: "Classic Literature That Shaped the World",
         excerpt: "A look at timeless literary masterpieces.",
+        content: "Classic literature continues to influence modern thought, culture, and artistic expression...",
         coverImage: "https://i.pinimg.com/736x/4c/be/72/4cbe72bd4c75c1fa36fd416d1601c816.jpg",
         category: "literature",
         author: {
@@ -662,6 +706,7 @@ export const mockData: BlogData = {
         id: "35",
         title: "Exploring Earth's Core: What Lies Beneath",
         excerpt: "A journey into the layers of our planet and the forces that shape it.",
+        content: "Earth's geological layers reveal billions of years of planetary history and ongoing processes...",
         coverImage: "https://cdn.pixabay.com/photo/2016/11/21/17/46/craters-1846775_1280.jpg",
         category: "deep-earth-geology",
         author: {
@@ -677,6 +722,7 @@ export const mockData: BlogData = {
         id: "36",
         title: "Lost Cities: Rediscovering Ancient Wonders",
         excerpt: "Archaeological discoveries revealing secrets of long-forgotten human settlements.",
+        content: "Archaeological discoveries continue to reshape our understanding of ancient civilizations and human development...",
         coverImage: "https://cdn.pixabay.com/photo/2016/11/19/14/11/ancient-1839467_1280.jpg",
         category: "ancient-civilization",
         author: {
@@ -692,6 +738,7 @@ export const mockData: BlogData = {
         id: "37",
         title: "Understanding Climate Systems and Weather Patterns",
         excerpt: "How global atmospheric circulation shapes our regional weather experiences.",
+        content: "Climate systems operate on multiple scales, from local weather patterns to global atmospheric circulation...",
         coverImage: "https://cdn.pixabay.com/photo/2017/02/27/08/50/cyclone-2102397_1280.jpg",
         category: "climate",
         author: {
@@ -707,7 +754,8 @@ export const mockData: BlogData = {
         id: "38",
         title: "The Science of Happiness: Positive Psychology Explained",
         excerpt: "Research-backed approaches to improving wellbeing and life satisfaction.",
-        coverImage: "https://cdn.pixabay.com/photo/2018/01/27/10/09/perception-3110812_1280.jpg",
+        content: "Positive psychology focuses on what makes life worth living, studying happiness, resilience, and human flourishing...",
+        coverImage: "https://cdn.pixabay.com/photo-2018/01/27/10/09/perception-3110812_1280.jpg",
         category: "psychology",
         author: {
           name: "Dr. David Kim",
@@ -722,7 +770,8 @@ export const mockData: BlogData = {
         id: "39",
         title: "Modern Methods in Archaeological Excavation",
         excerpt: "How technology is revolutionizing the discovery and preservation of historical sites.",
-        coverImage: "https://cdn.pixabay.com/photo/2017/05/19/15/08/stonehenge-2326750_1280.jpg",
+        content: "Modern archaeological methods combine traditional excavation techniques with cutting-edge technology...",
+        coverImage: "https://cdn.pixabay.com/photo-2017/05/19/15/08/stonehenge-2326750_1280.jpg",
         category: "archaeology",
         author: {
           name: "Dr. Emily Carter",
@@ -737,7 +786,8 @@ export const mockData: BlogData = {
         id: "40",
         title: "Gods and Heroes: Comparative Mythology Across Cultures",
         excerpt: "Exploring common themes in mythological narratives from around the world.",
-        coverImage: "https://cdn.pixabay.com/photo/2016/08/26/01/32/poseidon-1621062_1280.jpg",
+        content: "Comparative mythology reveals universal themes in human storytelling across different cultures and time periods...",
+        coverImage: "https://cdn.pixabay.com/photo-2016/08/26/01/32/poseidon-1621062_1280.jpg",
         category: "mythology",
         author: {
           name: "Dr. Thomas Williams",
@@ -752,7 +802,8 @@ export const mockData: BlogData = {
         id: "41",
         title: "Sustainable Business Practices in a Changing Economy",
         excerpt: "How companies are adapting to environmental challenges while maintaining profitability.",
-        coverImage: "https://cdn.pixabay.com/photo/2018/02/08/10/22/desk-3139127_1280.jpg",
+        content: "Sustainable business practices are becoming essential for long-term success in an environmentally conscious world...",
+        coverImage: "https://cdn.pixabay.com/photo-2018/02/08/10/22/desk-3139127_1280.jpg",
         category: "business-economics",
         author: {
           name: "Dr. Rebecca Lee",
@@ -767,7 +818,8 @@ export const mockData: BlogData = {
         id: "42",
         title: "The Evolution of Musical Instruments Through History",
         excerpt: "From ancient flutes to digital synthesizers, exploring how we make music.",
-        coverImage: "https://cdn.pixabay.com/photo/2022/08/31/20/47/concert-7424190_1280.jpg",
+        content: "Musical instruments have evolved alongside human civilization, reflecting technological and cultural developments...",
+        coverImage: "https://cdn.pixabay.com/photo-2022/08/31/20/47/concert-7424190_1280.jpg",
         category: "music",
         author: {
           name: "Dr. James Wilson",
@@ -782,7 +834,8 @@ export const mockData: BlogData = {
         id: "43",
         title: "Global Cooperation in an Age of Challenge",
         excerpt: "How nations are working together to address shared problems across borders.",
-        coverImage: "https://cdn.pixabay.com/photo/2016/11/14/04/45/audience-1822866_1280.jpg",
+        content: "International cooperation is essential for addressing global challenges like climate change, pandemics, and economic inequality...",
+        coverImage: "https://cdn.pixabay.com/photo-2016/11/14/04/45/audience-1822866_1280.jpg",
         category: "current-affairs",
         author: {
           name: "Dr. Amina Hassan",

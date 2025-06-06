@@ -16,7 +16,6 @@ const mockFeaturedPost: BlogPost = {
   },
   category: "science",
   publishedAt: "2024-01-15",
-  readingTime: "8 min read"
 };
 
 const mockRecentPosts: BlogPost[] = [
@@ -32,7 +31,6 @@ const mockRecentPosts: BlogPost[] = [
     },
     category: "nature",
     publishedAt: "2024-01-12",
-    readingTime: "6 min read"
   },
   {
     id: "3",
@@ -46,7 +44,6 @@ const mockRecentPosts: BlogPost[] = [
     },
     category: "space",
     publishedAt: "2024-01-10",
-    readingTime: "5 min read"
   },
   {
     id: "4",
@@ -60,7 +57,6 @@ const mockRecentPosts: BlogPost[] = [
     },
     category: "history",
     publishedAt: "2024-01-08",
-    readingTime: "7 min read"
   }
 ];
 
