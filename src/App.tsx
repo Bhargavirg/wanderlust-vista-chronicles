@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -38,6 +37,7 @@ function App() {
           <div className="min-h-screen bg-background font-sans antialiased">
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/home" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/about" element={<Index />} />
