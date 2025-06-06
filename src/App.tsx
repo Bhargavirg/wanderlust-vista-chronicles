@@ -28,6 +28,8 @@ import KidsStoryView from "@/pages/KidsStoryView";
 const queryClient = new QueryClient();
 
 function App() {
+  console.log("App component rendering");
+  
   return (
     <Router>
       <QueryClientProvider client={queryClient}>
