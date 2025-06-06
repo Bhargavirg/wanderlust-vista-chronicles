@@ -8,7 +8,13 @@ import { motion } from "framer-motion";
 import { ChevronRight, Atom, Rocket, History, Globe, Leaf, BookOpen, Camera, Palette, Flower2, Film, Flag, Trophy, 
   Book, CloudRain, Brain, Shovel, Mountain, ScrollText, LineChart, Music, Globe2 } from "lucide-react";
 
-// Mock data for science category
+interface CategorySectionProps {
+  title?: string;
+  category?: string;
+  posts?: BlogPost[];
+}
+
+// Mock data for science category (fallback)
 const mockSciencePosts: BlogPost[] = [
   {
     id: "5",
@@ -22,7 +28,6 @@ const mockSciencePosts: BlogPost[] = [
     },
     category: "science",
     publishedAt: "2024-01-14",
-    readingTime: "4 min read"
   },
   {
     id: "6",
@@ -36,7 +41,6 @@ const mockSciencePosts: BlogPost[] = [
     },
     category: "science",
     publishedAt: "2024-01-11",
-    readingTime: "6 min read"
   },
   {
     id: "7",
@@ -50,18 +54,19 @@ const mockSciencePosts: BlogPost[] = [
     },
     category: "science",
     publishedAt: "2024-01-09",
-    readingTime: "5 min read"
   }
 ];
 
-const CategorySection = () => {
+const CategorySection = ({ title, category, posts }: CategorySectionProps) => {
   const [visiblePosts, setVisiblePosts] = useState(3);
-  const title = "Science & Discovery";
-  const category = "science";
-  const posts = mockSciencePosts;
+  
+  // Use props or fallback to defaults
+  const sectionTitle = title || "Science & Discovery";
+  const sectionCategory = category || "science";
+  const sectionPosts = posts || mockSciencePosts;
   
   const showMorePosts = () => {
-    setVisiblePosts((prev) => Math.min(prev + 3, posts.length));
+    setVisiblePosts((prev) => Math.min(prev + 3, sectionPosts.length));
   };
 
   const getCategoryIcon = () => {
@@ -93,18 +98,18 @@ const CategorySection = () => {
           <div className="absolute inset-0 flex items-center p-8">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className={`p-2 rounded-full bg-gradient-to-r ${categoryColors[category]} text-white`}>
+                <div className={`p-2 rounded-full bg-gradient-to-r ${categoryColors[sectionCategory]} text-white`}>
                   {getCategoryIcon()}
                 </div>
                 <h2 className="text-2xl font-bold text-white">
-                  {title}
+                  {sectionTitle}
                 </h2>
               </div>
               <p className="text-white/80 max-w-2xl">
                 Explore the latest discoveries and scientific breakthroughs.
               </p>
               <Link 
-                to={`/category/${category}`}
+                to={`/category/${sectionCategory}`}
                 className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-white border-b border-sky-500 hover:border-white transition-colors"
               >
                 View all articles
@@ -115,7 +120,7 @@ const CategorySection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.slice(0, visiblePosts).map((post, index) => (
+          {sectionPosts.slice(0, visiblePosts).map((post, index) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
@@ -127,7 +132,7 @@ const CategorySection = () => {
           ))}
         </div>
         
-        {visiblePosts < posts.length && (
+        {visiblePosts < sectionPosts.length && (
           <div className="flex justify-center mt-8">
             <Button 
               variant="outline" 

@@ -3,6 +3,7 @@ export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
+  content: string; // Adding the missing content property
   description?: string;
   coverImage: string;
   screenSizeImage?: string;
