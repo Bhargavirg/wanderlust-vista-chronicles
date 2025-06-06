@@ -1,368 +1,261 @@
 
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Search, User, Menu, X, LogOut, LogIn, ChevronDown } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { 
+  Menu, 
+  Search, 
+  User, 
+  LogOut, 
+  Settings, 
+  BookOpen, 
+  Video, 
+  Music, 
+  ImageIcon,
+  Baby
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { ScrollArea } from "@/components/ui/scroll-area"; 
-import { supabase } from "@/integrations/supabase/client";
-import { searchContent } from "@/services/contentService";
-import { toast } from "@/hooks/use-toast";
-import { getAllCategories } from "@/services/categoryService";
+import { toast } from "@/components/ui/use-toast";
 
 const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
-  const { user, signOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const { user, signOut } = useAuth();
 
-  // Fetch categories on component mount
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        setLoading(true);
-        // Using the getAllCategories function from categoryService for consistency
-        const categoriesData = await getAllCategories();
-        setCategories(categoriesData || []);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchCategories();
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      try {
-        // Check if search term matches a category name or slug
-        const matchingCategory = categories.find(cat => 
-          cat.name.toLowerCase() === searchTerm.toLowerCase() ||
-          cat.slug.toLowerCase() === searchTerm.toLowerCase()
-        );
-        
-        if (matchingCategory) {
-          // If it matches a category, navigate to that category page
-          navigate(`/category/${matchingCategory.slug}`);
-          setSearchTerm(""); // Clear search after navigating
-          setCategoryDropdownOpen(false); // Close dropdown after search
-        } else {
-          // Otherwise, navigate to search results page
-          navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-        }
-      } catch (error) {
-        console.error('Search error:', error);
-        toast({
-          title: "Search Error",
-          description: "An error occurred while searching",
-          variant: "destructive",
-        });
-      }
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
     }
   };
 
-  // Sort categories alphabetically
-  const sortedCategories = [...categories].sort((a, b) => a.name.localeCompare(b.name));
+  const handleLogout = async () => {
+    await signOut();
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of your account.",
+    });
+    navigate("/");
+  };
 
-  // Filter categories that match the search term for the dropdown
-  const filteredCategories = sortedCategories.filter(category => {
-    if (!searchTerm) return true;
-    return !category.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-           !category.slug.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const isActive = (path: string) => location.pathname === path;
 
-  // Featured categories to show in the main navigation
-  const featuredCategories = ["nature", "science", "history", "technology", "culture"];
+  const navItems = [
+    { href: "/", label: "Home", icon: null },
+    { href: "/kids", label: "Kids Zone", icon: Baby },
+    { href: "/videos", label: "Videos", icon: Video },
+    { href: "/audios", label: "Audio", icon: Music },
+    { href: "/images", label: "Images", icon: ImageIcon },
+  ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-950 shadow-sm border-b border-gray-200 dark:border-gray-800">
-      <div className="container flex h-16 items-center justify-between">
-        {/* Logo and site name */}
-        <div className="flex items-center">
-          <Link to="/home" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-sky-500 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">EL</span>
-            </div>
-            <span className="text-xl font-bold hidden md:inline-block dark:text-white">
-              Earth Lens
-            </span>
+    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <BookOpen className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">BlogVista</span>
           </Link>
-        </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link to="/home" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
-            Home
-          </Link>
-          <Link to="/dashboard" className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white">
-            Dashboard
-          </Link>
-          
-          {/* Categories dropdown */}
-          <div className="relative">
-            <button 
-              className="flex items-center gap-1 text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-              aria-expanded={categoryDropdownOpen}
-              aria-controls="categories-dropdown"
-            >
-              Categories
-              <ChevronDown className={`h-3 w-3 transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {categoryDropdownOpen && (
-              <div 
-                id="categories-dropdown"
-                className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50"
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary ${
+                  isActive(item.href) ? "text-primary" : "text-muted-foreground"
+                }`}
               >
-                <ScrollArea className="h-64">
-                  <div className="py-1">
-                    {loading ? (
-                      <div className="flex justify-center py-4">
-                        <div className="animate-pulse h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      </div>
-                    ) : filteredCategories.length > 0 ? (
-                      filteredCategories.map(category => (
-                        <Link 
-                          key={category.id} 
-                          to={`/category/${category.slug}`}
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          onClick={() => setCategoryDropdownOpen(false)}
-                        >
-                          {category.name}
-                        </Link>
-                      ))
-                    ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                        No categories found
-                      </div>
-                    )}
+                {item.icon && <item.icon className="h-4 w-4" />}
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="hidden md:flex items-center space-x-2 flex-1 max-w-md mx-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search articles..."
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </form>
+
+          {/* User Menu / Auth Buttons */}
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+                      <AvatarFallback>
+                        {user.email?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{user.user_metadata?.full_name || user.email}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
                   </div>
-                </ScrollArea>
+                  <Separator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/add-content" className="cursor-pointer">
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Create Content
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <Separator />
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex items-center space-x-2">
+                <Button variant="ghost" asChild>
+                  <Link to="/login">Sign in</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/register">Sign up</Link>
+                </Button>
               </div>
             )}
-          </div>
-          
-          {/* Featured categories in main nav */}
-          {featuredCategories.map(slug => {
-            const category = categories.find(cat => cat.slug === slug);
-            if (!category) return null;
-            
-            return (
-              <Link 
-                key={slug} 
-                to={`/category/${slug}`} 
-                className="text-sm font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-              >
-                {category.name}
-              </Link>
-            );
-          })}
-        </div>
 
-        {/* Right side actions */}
-        <div className="flex items-center gap-2">
-          {/* Search form */}
-          <form onSubmit={handleSearch} className="hidden md:flex items-center relative mr-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="py-1 pl-8 pr-3 rounded-full text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
-            />
-            <Search className="h-4 w-4 absolute left-2 text-gray-400" />
-          </form>
-          
-          {/* Join Community button */}
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => navigate('/join-community')}
-            className="hidden md:flex"
-          >
-            Join Community
-          </Button>
-
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="relative h-10 w-10 rounded-full"
-                  aria-label="User menu"
-                >
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User" />
-                    <AvatarFallback>
-                      <User className="h-6 w-6" />
-                    </AvatarFallback>
-                  </Avatar>
+            {/* Mobile Menu */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="md:hidden">
+                  <Menu className="h-5 w-5" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link to="/dashboard">Dashboard</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/add-content">Add Content</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut} className="text-red-500 cursor-pointer">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button onClick={() => navigate('/login')} variant="outline" size="sm">
-              <LogIn className="mr-2 h-4 w-4" />
-              Log In
-            </Button>
-          )}
-          
-          {/* Mobile menu button */}
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="md:hidden"
-            onClick={toggleMobileMenu}
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <div className="flex flex-col space-y-4 mt-6">
+                  {/* Mobile Search */}
+                  <form onSubmit={handleSearch} className="relative">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="search"
+                      placeholder="Search articles..."
+                      className="pl-9"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </form>
+
+                  <Separator />
+
+                  {/* Mobile Navigation */}
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      className={`flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary ${
+                        isActive(item.href) ? "text-primary" : "text-muted-foreground"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+
+                  <Separator />
+
+                  {/* Mobile Auth */}
+                  {user ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2 p-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+                          <AvatarFallback>
+                            {user.email?.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <p className="text-sm font-medium">{user.user_metadata?.full_name || user.email}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                        </div>
+                      </div>
+                      <Link
+                        to="/dashboard"
+                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <User className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <Link
+                        to="/add-content"
+                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        <span>Create Content</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary w-full text-left"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Log out</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Button variant="ghost" asChild className="w-full justify-start">
+                        <Link to="/login" onClick={() => setIsOpen(false)}>
+                          Sign in
+                        </Link>
+                      </Button>
+                      <Button asChild className="w-full">
+                        <Link to="/register" onClick={() => setIsOpen(false)}>
+                          Sign up
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
-      
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden py-4 px-4 space-y-4 border-t border-gray-200 dark:border-gray-800">
-          {/* Mobile search */}
-          <form onSubmit={handleSearch} className="flex items-center relative mb-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-9 pr-3 rounded-md text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-800"
-            />
-            <Search className="h-4 w-4 absolute left-3 text-gray-400" />
-          </form>
-          
-          <Link 
-            to="/home" 
-            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Home
-          </Link>
-          <Link 
-            to="/dashboard" 
-            className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Dashboard
-          </Link>
-          
-          {/* Mobile categories accordion */}
-          <div className="py-2">
-            <button 
-              className="flex items-center justify-between w-full text-left text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-              aria-expanded={categoryDropdownOpen}
-            >
-              <span>Categories</span>
-              <ChevronDown className={`h-4 w-4 transform ${categoryDropdownOpen ? 'rotate-180' : ''} transition-transform`} />
-            </button>
-            
-            {categoryDropdownOpen && (
-              <div className="mt-2 pl-4 space-y-1 max-h-48 overflow-y-auto">
-                {loading ? (
-                  <div className="flex justify-center py-2">
-                    <div className="animate-pulse h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  </div>
-                ) : categories.length > 0 ? (
-                  sortedCategories.map(category => (
-                    <Link 
-                      key={category.id}
-                      to={`/category/${category.slug}`}
-                      className="block py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-sky-500 dark:hover:text-white"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {category.name}
-                    </Link>
-                  ))
-                ) : (
-                  <div className="py-1 text-sm text-gray-500 dark:text-gray-400">
-                    No categories found
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          
-          {/* Featured categories in mobile menu */}
-          {featuredCategories.map(slug => {
-            const category = categories.find(cat => cat.slug === slug);
-            if (!category) return null;
-            
-            return (
-              <Link 
-                key={slug}
-                to={`/category/${category.slug}`} 
-                className="block py-2 text-base font-medium hover:text-sky-500 dark:text-gray-300 dark:hover:text-white"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {category.name}
-              </Link>
-            );
-          })}
-          
-          <div className="flex flex-col space-y-2 pt-2">
-            <Button 
-              variant="outline"
-              onClick={() => {
-                navigate('/join-community');
-                setMobileMenuOpen(false);
-              }}
-            >
-              Join Community
-            </Button>
-            
-            {!user && (
-              <Link 
-                to="/login" 
-                className="block py-2 text-base font-medium text-sky-500 hover:text-sky-600"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Log In
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

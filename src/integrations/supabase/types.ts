@@ -351,6 +351,63 @@ export type Database = {
         }
         Relationships: []
       }
+      kids_stories: {
+        Row: {
+          age_group: string
+          author_id: string
+          category: string
+          content: string | null
+          created_at: string
+          description: string
+          duration: string
+          featured: boolean | null
+          id: string
+          likes_count: number | null
+          published: boolean | null
+          thumbnail_url: string
+          title: string
+          updated_at: string
+          video_url: string | null
+          views_count: number | null
+        }
+        Insert: {
+          age_group: string
+          author_id: string
+          category: string
+          content?: string | null
+          created_at?: string
+          description: string
+          duration: string
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          published?: boolean | null
+          thumbnail_url: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          age_group?: string
+          author_id?: string
+          category?: string
+          content?: string | null
+          created_at?: string
+          description?: string
+          duration?: string
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          published?: boolean | null
+          thumbnail_url?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       newsletter_subscriptions: {
         Row: {
           email: string

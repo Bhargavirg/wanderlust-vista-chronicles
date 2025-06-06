@@ -1,49 +1,54 @@
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "@/pages/Index";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import SearchPage from "@/pages/SearchPage";
+import ImageSearchPage from "@/pages/ImageSearchPage";
+import VideosPage from "@/pages/VideosPage";
+import AudiosPage from "@/pages/AudiosPage";
+import CategoryPage from "@/pages/CategoryPage";
+import PostDetail from "@/pages/PostDetail";
+import NotFound from "@/pages/NotFound";
+import Dashboard from "@/pages/Dashboard";
+import AddContent from "@/pages/AddContent";
+import AddPost from "@/pages/AddPost";
+import NewPost from "@/pages/NewPost";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { AuthProvider } from "@/context/AuthContext";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import AddContent from "./pages/AddContent";
-import PostDetail from "./pages/PostDetail";
-import CategoryPage from "./pages/CategoryPage";
-import SearchPage from "./pages/SearchPage";
-import ImageSearchPage from "./pages/ImageSearchPage";
-import VideosPage from "./pages/VideosPage";
-import AudiosPage from "./pages/AudiosPage";
-import ShareYourThought from "./pages/ShareYourThought";
-import MagazinePage from "./pages/MagazinePage";
-import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-
-const queryClient = new QueryClient();
+import { QueryClient } from "react-query";
+import MagazinePage from "@/pages/MagazinePage";
+import ShareYourThought from "@/pages/ShareYourThought";
+import JoinCommunity from "@/pages/JoinCommunity";
+import KidsZone from "@/pages/KidsZone";
+import CreateKidsStory from "@/pages/CreateKidsStory";
+import KidsStoryView from "@/pages/KidsStoryView";
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
+    <Router>
+      <QueryClient>
+        <AuthProvider>
+          <Toaster />
+          <div className="min-h-screen bg-background font-sans antialiased">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/home" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/image-search" element={<ImageSearchPage />} />
+              <Route path="/about" element={<Index />} />
+              <Route path="/contact" element={<Index />} />
+              <Route path="/privacy" element={<Index />} />
+              <Route path="/terms" element={<Index />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/images" element={<ImageSearchPage />} />
               <Route path="/videos" element={<VideosPage />} />
               <Route path="/audios" element={<AudiosPage />} />
-              <Route path="/share-thought" element={<ShareYourThought />} />
+              <Route path="/kids" element={<KidsZone />} />
+              <Route path="/kids/create" element={<CreateKidsStory />} />
+              <Route path="/kids/story/:storyId" element={<KidsStoryView />} />
               <Route path="/magazine" element={<MagazinePage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/category/:categorySlug" element={<CategoryPage />} />
-              <Route path="/post/:postId" element={<PostDetail />} />
+              <Route path="/share-thought" element={<ShareYourThought />} />
+              <Route path="/join-community" element={<JoinCommunity />} />
               <Route 
                 path="/dashboard" 
                 element={
@@ -60,12 +65,30 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
+              <Route 
+                path="/add-post" 
+                element={
+                  <ProtectedRoute>
+                    <AddPost />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/new-post" 
+                element={
+                  <ProtectedRoute>
+                    <NewPost />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="/category/:categorySlug" element={<CategoryPage />} />
+              <Route path="/post/:slug" element={<PostDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+          </div>
+        </AuthProvider>
+      </QueryClient>
+    </Router>
   );
 }
 
