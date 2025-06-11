@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
@@ -144,7 +145,39 @@ const PostDetail = () => {
     return "No content available.";
   };
 
+  // Parse content into paragraphs
+  const parseContentToParagraphs = (content: string) => {
+    if (!content) return [];
+    
+    // Remove HTML tags and split by line breaks or paragraph markers
+    const cleanContent = content
+      .replace(/<[^>]*>/g, ' ') // Remove HTML tags
+      .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
+      .replace(/&amp;/g, '&') // Replace HTML entities
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+    
+    // Split by double line breaks, single line breaks, or sentences
+    const paragraphs = cleanContent
+      .split(/\n\s*\n|\r\n\s*\r\n/) // Split by double line breaks
+      .map(p => p.trim())
+      .filter(p => p.length > 0);
+    
+    // If no double line breaks found, try splitting by single line breaks
+    if (paragraphs.length === 1) {
+      return cleanContent
+        .split(/\n|\r\n/)
+        .map(p => p.trim())
+        .filter(p => p.length > 0);
+    }
+    
+    return paragraphs;
+  };
+
   const postContent = formatPostContent(post);
+  const contentParagraphs = parseContentToParagraphs(postContent);
   
   // Calculate reading time
   const { minutes, seconds } = calculateReadingTime(postContent);
@@ -273,8 +306,26 @@ const PostDetail = () => {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="prose dark:prose-invert max-w-none"
         >
-          {/* Display post content */}
-          <div dangerouslySetInnerHTML={{ __html: postContent }} />
+          {/* Display post content paragraph by paragraph */}
+          <div className="space-y-4">
+            {contentParagraphs.length > 0 ? (
+              contentParagraphs.map((paragraph, index) => (
+                <motion.p 
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index, duration: 0.3 }}
+                  className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg mb-4"
+                >
+                  {paragraph}
+                </motion.p>
+              ))
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 italic">
+                No content available for this article.
+              </p>
+            )}
+          </div>
           
           {/* Video embed if available */}
           {post.video_url && (
