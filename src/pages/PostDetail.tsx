@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dialog";
 
 const PostDetail = () => {
-  const { postId } = useParams<{ postId: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const { user } = useAuth();
   const [focusModeActive, setFocusModeActive] = useState(false);
   const [post, setPost] = useState<any>(null);
@@ -41,12 +41,12 @@ const PostDetail = () => {
     window.scrollTo(0, 0);
     
     async function loadPost() {
-      if (!postId) return;
+      if (!slug) return;
       
       setLoading(true);
       try {
-        console.log("Fetching post with ID:", postId);
-        const contentData = await getContentById(postId);
+        console.log("Fetching post with slug:", slug);
+        const contentData = await getContentById(slug);
         console.log("Fetched post content:", contentData);
         
         if (contentData) {
@@ -55,13 +55,13 @@ const PostDetail = () => {
           // Load related content
           const allContent = await getAllPublishedContent();
           const related = allContent
-            .filter(item => item.id !== postId && item.category_id === contentData.category_id)
+            .filter(item => item.id !== slug && item.category_id === contentData.category_id)
             .slice(0, 3);
             
           setRelatedPosts(related);
         } else {
           // Fall back to mock data - adjusted to improve error handling
-          console.warn("No content found with ID:", postId);
+          console.warn("No content found with slug:", slug);
           toast({
             title: "Content Not Found",
             description: "The requested article could not be found",
@@ -81,7 +81,7 @@ const PostDetail = () => {
     }
     
     loadPost();
-  }, [postId]);
+  }, [slug]);
 
   if (loading) {
     return (
