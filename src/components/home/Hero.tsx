@@ -42,7 +42,7 @@ const Hero = () => {
             className="flex flex-col sm:flex-row justify-center gap-4 mt-8"
           >
             <Button
-              onClick={() => navigate('/image-search')}
+              onClick={() => navigate('/images')}
               variant="outline"
               size="lg"
               className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white px-8 py-6 text-lg"
