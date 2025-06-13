@@ -288,12 +288,13 @@ const Navbar = () => {
                         <BookOpen className="h-4 w-4" />
                         <span>Create Content</span>
                       </Link>
-                      <button
+                      <Button
+                        variant="ghost"
                         onClick={() => {
                           handleLogout();
                           setIsOpen(false);
                         }}
-                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary w-full text-left"
+                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary w-full justify-start"
                       >
                         <LogOut className="h-4 w-4" />
                         <span>Log out</span>
