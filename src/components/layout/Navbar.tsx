@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,17 +17,34 @@ import {
   Video, 
   Music, 
   ImageIcon,
-  Baby
+  Baby,
+  ChevronDown,
+  Grid3X3
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/components/ui/use-toast";
+import { getAllCategories, Category } from "@/services/categoryService";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await getAllCategories();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +97,32 @@ const Navbar = () => {
                 <span>{item.label}</span>
               </Link>
             ))}
+            
+            {/* Categories Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+                >
+                  <Grid3X3 className="h-4 w-4" />
+                  <span>Categories</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 max-h-96 overflow-y-auto bg-background border shadow-lg">
+                {categories.map((category) => (
+                  <DropdownMenuItem key={category.slug} asChild>
+                    <Link
+                      to={`/category/${category.slug}`}
+                      className="cursor-pointer w-full"
+                    >
+                      {category.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Search Bar */}
@@ -192,6 +235,26 @@ const Navbar = () => {
                     </Link>
                   ))}
 
+                  {/* Mobile Categories */}
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 text-sm font-medium text-muted-foreground">
+                      <Grid3X3 className="h-4 w-4" />
+                      <span>Categories</span>
+                    </div>
+                    <div className="pl-6 space-y-2 max-h-48 overflow-y-auto">
+                      {categories.map((category) => (
+                        <Link
+                          key={category.slug}
+                          to={`/category/${category.slug}`}
+                          className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {category.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
                   <Separator />
 
                   {/* Mobile Auth */}
@@ -234,7 +297,7 @@ const Navbar = () => {
                       >
                         <LogOut className="h-4 w-4" />
                         <span>Log out</span>
-                      </button>
+                      </Button>
                     </div>
                   ) : (
                     <div className="space-y-2">
