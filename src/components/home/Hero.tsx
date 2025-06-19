@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { Compass, Camera, BookOpen, Plus } from "lucide-react";
+import { Compass, Camera, BookOpen, Plus, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -66,6 +65,16 @@ const Hero = () => {
             >
               <BookOpen className="mr-2" />
               Magazine
+            </Button>
+            
+            <Button 
+              onClick={() => navigate('/join-community')} 
+              variant="outline" 
+              size="lg"
+              className="bg-purple-500/80 backdrop-blur-sm border-purple-300/20 hover:bg-purple-500 text-white px-8 py-6 text-lg shadow-lg"
+            >
+              <Users className="mr-2" />
+              Join Community
             </Button>
           </motion.div>
           

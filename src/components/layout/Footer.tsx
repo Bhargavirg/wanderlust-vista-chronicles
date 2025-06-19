@@ -1,7 +1,6 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut, LogIn, MessageSquare } from "lucide-react";
+import { LogOut, LogIn, MessageSquare, Mail, Users } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/AuthContext";
 
@@ -43,14 +42,23 @@ const Footer = () => {
             <p className="text-sm text-gray-200 mb-4">
               A platform for sharing stories, experiences, and knowledge through beautiful blogs.
             </p>
-            <div className="mt-4">
+            <div className="flex flex-col gap-2 mt-4">
               <Link to="/share-thought">
                 <Button 
                   variant="outline" 
-                  className="flex items-center gap-2 bg-sky-500 text-white hover:bg-sky-600 border-sky-500"
+                  className="flex items-center gap-2 bg-sky-500 text-white hover:bg-sky-600 border-sky-500 w-full justify-start"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Share Your Thought
+                </Button>
+              </Link>
+              <Link to="/newsletter">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2 bg-green-500 text-white hover:bg-green-600 border-green-500 w-full justify-start"
+                >
+                  <Mail className="w-4 h-4" />
+                  Subscribe to Newsletter
                 </Button>
               </Link>
             </div>
