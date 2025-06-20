@@ -22,7 +22,7 @@ interface Post {
   likes_count: number;
   tags: string[];
   categories?: { name: string; slug: string };
-  profiles?: { username: string; full_name: string; avatar_url: string };
+  author_profiles?: { username: string; full_name: string; avatar_url: string };
 }
 
 const AllPosts = () => {
@@ -30,15 +30,35 @@ const AllPosts = () => {
     queryKey: ['all-posts'],
     queryFn: async () => {
       console.log("Fetching all posts...");
-      const { data, error } = await supabase
+      
+      // First, try to get posts with author_profiles relationship
+      let query = supabase
         .from('content')
         .select(`
           *,
           categories (name, slug),
-          profiles (username, full_name, avatar_url)
+          author_profiles (username, full_name, avatar_url)
         `)
         .eq('published', true)
         .order('created_at', { ascending: false });
+
+      let { data, error } = await query;
+
+      // If author_profiles doesn't work, fall back to a simpler query
+      if (error && error.message.includes("author_profiles")) {
+        console.log("Falling back to simpler query without author relationship");
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('content')
+          .select(`
+            *,
+            categories (name, slug)
+          `)
+          .eq('published', true)
+          .order('created_at', { ascending: false });
+        
+        data = fallbackData;
+        error = fallbackError;
+      }
 
       if (error) {
         console.error("Error fetching posts:", error);
@@ -50,10 +70,8 @@ const AllPosts = () => {
       // Transform the data to match our Post interface
       return data?.map(item => ({
         ...item,
-        // Handle profiles - Supabase returns an array but we want an object
-        profiles: Array.isArray(item.profiles) && item.profiles.length > 0 
-          ? item.profiles[0] 
-          : item.profiles || null,
+        // Handle author_profiles - could be null if relationship doesn't exist
+        author_profiles: item.author_profiles || null,
         // Handle categories - Supabase returns an array but we want an object  
         categories: Array.isArray(item.categories) && item.categories.length > 0
           ? item.categories[0]
@@ -118,8 +136,8 @@ const AllPosts = () => {
                     coverImage: post.cover_image || "/placeholder.svg",
                     category: post.categories?.name || "Uncategorized",
                     author: {
-                      name: post.profiles?.full_name || post.profiles?.username || "Anonymous",
-                      avatar: post.profiles?.avatar_url || "https://i.pravatar.cc/150?img=3"
+                      name: post.author_profiles?.full_name || post.author_profiles?.username || "Anonymous",
+                      avatar: post.author_profiles?.avatar_url || "https://i.pravatar.cc/150?img=3"
                     },
                     publishedAt: post.created_at,
                     readTime: "5 min read"
