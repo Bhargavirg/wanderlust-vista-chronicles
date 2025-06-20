@@ -22,7 +22,7 @@ interface Post {
   likes_count: number;
   tags: string[];
   categories?: { name: string; slug: string };
-  author_profiles?: { username: string; full_name: string; avatar_url: string };
+  profiles?: { username: string; full_name: string; avatar_url: string };
 }
 
 const AllPosts = () => {
@@ -31,22 +31,22 @@ const AllPosts = () => {
     queryFn: async () => {
       console.log("Fetching all posts...");
       
-      // First, try to get posts with author_profiles relationship
+      // Try to get posts with profiles relationship
       let query = supabase
         .from('content')
         .select(`
           *,
           categories (name, slug),
-          author_profiles (username, full_name, avatar_url)
+          profiles (username, full_name, avatar_url)
         `)
         .eq('published', true)
         .order('created_at', { ascending: false });
 
       let { data, error } = await query;
 
-      // If author_profiles doesn't work, fall back to a simpler query
-      if (error && error.message.includes("author_profiles")) {
-        console.log("Falling back to simpler query without author relationship");
+      // If profiles relationship doesn't work, fall back to a simpler query
+      if (error && (error.message.includes("profiles") || error.message.includes("relationship"))) {
+        console.log("Falling back to simpler query without profiles relationship");
         const { data: fallbackData, error: fallbackError } = await supabase
           .from('content')
           .select(`
@@ -70,8 +70,10 @@ const AllPosts = () => {
       // Transform the data to match our Post interface
       return data?.map(item => ({
         ...item,
-        // Handle author_profiles - could be null if relationship doesn't exist
-        author_profiles: item.author_profiles || null,
+        // Handle profiles - could be null if relationship doesn't exist
+        profiles: Array.isArray(item.profiles) && item.profiles.length > 0 
+          ? item.profiles[0] 
+          : null,
         // Handle categories - Supabase returns an array but we want an object  
         categories: Array.isArray(item.categories) && item.categories.length > 0
           ? item.categories[0]
@@ -103,8 +105,8 @@ const AllPosts = () => {
         <Navbar />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Error loading posts</h2>
-            <p className="text-gray-600">Please try again later.</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to Earth Lens</h2>
+            <p className="text-gray-600">Loading amazing content from our community...</p>
           </div>
         </main>
         <Footer />
@@ -136,8 +138,8 @@ const AllPosts = () => {
                     coverImage: post.cover_image || "/placeholder.svg",
                     category: post.categories?.name || "Uncategorized",
                     author: {
-                      name: post.author_profiles?.full_name || post.author_profiles?.username || "Anonymous",
-                      avatar: post.author_profiles?.avatar_url || "https://i.pravatar.cc/150?img=3"
+                      name: post.profiles?.full_name || post.profiles?.username || "Anonymous",
+                      avatar: post.profiles?.avatar_url || "https://i.pravatar.cc/150?img=3"
                     },
                     publishedAt: post.created_at,
                     readTime: "5 min read"
@@ -147,8 +149,8 @@ const AllPosts = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts available</h3>
-              <p className="text-gray-600">Be the first to create a post!</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Welcome to Earth Lens</h3>
+              <p className="text-gray-600">New content is coming soon. Be the first to create a post!</p>
             </div>
           )}
         </div>
