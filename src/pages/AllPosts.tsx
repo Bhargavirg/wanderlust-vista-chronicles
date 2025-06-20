@@ -56,7 +56,11 @@ const AllPosts = () => {
           .eq('published', true)
           .order('created_at', { ascending: false });
         
-        data = fallbackData;
+        // Add empty profiles property to maintain consistent structure
+        data = fallbackData?.map(item => ({
+          ...item,
+          profiles: null
+        })) || null;
         error = fallbackError;
       }
 
