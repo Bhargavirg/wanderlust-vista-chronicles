@@ -71,9 +71,9 @@ const AllPosts = () => {
       return data?.map(item => ({
         ...item,
         // Handle profiles - could be null if relationship doesn't exist
-        profiles: Array.isArray(item.profiles) && item.profiles.length > 0 
+        profiles: item.profiles ? (Array.isArray(item.profiles) && item.profiles.length > 0 
           ? item.profiles[0] 
-          : null,
+          : item.profiles) : null,
         // Handle categories - Supabase returns an array but we want an object  
         categories: Array.isArray(item.categories) && item.categories.length > 0
           ? item.categories[0]
