@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,6 +16,7 @@ import Dashboard from "@/pages/Dashboard";
 import AddContent from "@/pages/AddContent";
 import AddPost from "@/pages/AddPost";
 import NewPost from "@/pages/NewPost";
+import AllPosts from "@/pages/AllPosts";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { AuthProvider } from "@/context/AuthContext";
 import MagazinePage from "@/pages/MagazinePage";
@@ -48,6 +50,7 @@ function App() {
               <Route path="/images" element={<ImageSearchPage />} />
               <Route path="/videos" element={<VideosPage />} />
               <Route path="/audios" element={<AudiosPage />} />
+              <Route path="/all-posts" element={<AllPosts />} />
               <Route path="/kids" element={<KidsZone />} />
               <Route path="/kids/create" element={<CreateKidsStory />} />
               <Route path="/kids/story/:storyId" element={<KidsStoryView />} />

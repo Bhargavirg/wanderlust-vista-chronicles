@@ -67,6 +67,7 @@ const Navbar = () => {
 
   const navItems = [
     { href: "/", label: "Home", icon: null },
+    { href: "/all-posts", label: "All Posts", icon: BookOpen },
     { href: "/kids", label: "Kids Zone", icon: Baby },
     { href: "/videos", label: "Videos", icon: Video },
     { href: "/audios", label: "Audio", icon: Music },

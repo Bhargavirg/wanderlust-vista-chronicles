@@ -52,13 +52,13 @@ const Footer = () => {
                   Share Your Thought
                 </Button>
               </Link>
-              <Link to="/newsletter">
+              <Link to="/join-community">
                 <Button 
                   variant="outline" 
-                  className="flex items-center gap-2 bg-green-500 text-white hover:bg-green-600 border-green-500 w-full justify-start"
+                  className="flex items-center gap-2 bg-purple-500 text-white hover:bg-purple-600 border-purple-500 w-full justify-start"
                 >
-                  <Mail className="w-4 h-4" />
-                  Subscribe to Newsletter
+                  <Users className="w-4 h-4" />
+                  Join Community
                 </Button>
               </Link>
             </div>
