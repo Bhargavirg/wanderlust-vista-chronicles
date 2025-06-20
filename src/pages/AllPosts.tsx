@@ -40,7 +40,15 @@ const AllPosts = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as Post[];
+      
+      // Transform the data to match our Post interface
+      return data?.map(item => ({
+        ...item,
+        // Handle profiles array - take the first profile if it exists
+        profiles: Array.isArray(item.profiles) && item.profiles.length > 0 
+          ? item.profiles[0] 
+          : item.profiles || null
+      })) as Post[];
     },
   });
 
@@ -92,21 +100,19 @@ const AllPosts = () => {
               {posts.map((post) => (
                 <BlogCard
                   key={post.id}
-                  id={post.id}
-                  title={post.title}
-                  description={post.description || ""}
-                  coverImage={post.cover_image || "/placeholder.svg"}
-                  category={post.categories?.name || "Uncategorized"}
-                  categorySlug={post.categories?.slug || "uncategorized"}
-                  author={post.profiles?.full_name || post.profiles?.username || "Anonymous"}
-                  authorAvatar={post.profiles?.avatar_url}
-                  date={new Date(post.created_at).toLocaleDateString()}
-                  readTime="5 min read"
-                  slug={post.slug}
-                  tags={post.tags || []}
-                  featured={post.featured}
-                  viewsCount={post.views_count}
-                  likesCount={post.likes_count}
+                  post={{
+                    id: post.id,
+                    title: post.title,
+                    excerpt: post.description || "",
+                    coverImage: post.cover_image || "/placeholder.svg",
+                    category: post.categories?.name || "Uncategorized",
+                    author: {
+                      name: post.profiles?.full_name || post.profiles?.username || "Anonymous",
+                      avatar: post.profiles?.avatar_url || "https://i.pravatar.cc/150?img=3"
+                    },
+                    publishedAt: post.created_at,
+                    readTime: "5 min read"
+                  }}
                 />
               ))}
             </div>
