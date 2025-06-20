@@ -29,6 +29,7 @@ const AllPosts = () => {
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ['all-posts'],
     queryFn: async () => {
+      console.log("Fetching all posts...");
       const { data, error } = await supabase
         .from('content')
         .select(`
@@ -39,15 +40,24 @@ const AllPosts = () => {
         .eq('published', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching posts:", error);
+        throw error;
+      }
+      
+      console.log("Fetched posts data:", data);
       
       // Transform the data to match our Post interface
       return data?.map(item => ({
         ...item,
-        // Handle profiles array - take the first profile if it exists
+        // Handle profiles - Supabase returns an array but we want an object
         profiles: Array.isArray(item.profiles) && item.profiles.length > 0 
           ? item.profiles[0] 
-          : item.profiles || null
+          : item.profiles || null,
+        // Handle categories - Supabase returns an array but we want an object  
+        categories: Array.isArray(item.categories) && item.categories.length > 0
+          ? item.categories[0]
+          : item.categories || null
       })) as Post[];
     },
   });
@@ -69,6 +79,7 @@ const AllPosts = () => {
   }
 
   if (error) {
+    console.error("AllPosts error:", error);
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />

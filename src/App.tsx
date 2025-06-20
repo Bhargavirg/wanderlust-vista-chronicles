@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import ForgotPassword from "@/pages/ForgotPassword";
 import SearchPage from "@/pages/SearchPage";
 import ImageSearchPage from "@/pages/ImageSearchPage";
 import VideosPage from "@/pages/VideosPage";
@@ -42,6 +43,7 @@ function App() {
               <Route path="/home" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/about" element={<Index />} />
               <Route path="/contact" element={<Index />} />
               <Route path="/privacy" element={<Index />} />

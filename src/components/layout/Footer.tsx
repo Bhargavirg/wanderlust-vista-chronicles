@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut, LogIn, MessageSquare, Mail, Users } from "lucide-react";
@@ -37,7 +38,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <span className="text-xl font-bold text-white">BlogVista</span>
+              <span className="text-xl font-bold text-white">Earth Lens</span>
             </Link>
             <p className="text-sm text-gray-200 mb-4">
               A platform for sharing stories, experiences, and knowledge through beautiful blogs.
@@ -126,7 +127,7 @@ const Footer = () => {
         </div>
         <div className="border-t border-gray-600 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-200">
-            © {new Date().getFullYear()} BlogVista. All rights reserved.
+            © {new Date().getFullYear()} Earth Lens. All rights reserved.
           </p>
           <div className="flex gap-2 mt-4 md:mt-0">
             {user ? (
