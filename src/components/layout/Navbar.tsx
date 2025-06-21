@@ -18,33 +18,17 @@ import {
   Music, 
   ImageIcon,
   Baby,
-  ChevronDown,
-  Grid3X3
+  Heart
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/components/ui/use-toast";
-import { getAllCategories, Category } from "@/services/categoryService";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesData = await getAllCategories();
-        setCategories(categoriesData);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +53,7 @@ const Navbar = () => {
     { href: "/", label: "Home", icon: null },
     { href: "/all-posts", label: "All Posts", icon: BookOpen },
     { href: "/kids", label: "Kids Zone", icon: Baby },
+    { href: "/echoes-faces", label: "Echoes & Faces", icon: Heart },
     { href: "/videos", label: "Videos", icon: Video },
     { href: "/audios", label: "Audio", icon: Music },
     { href: "/images", label: "Images", icon: ImageIcon },
@@ -98,32 +83,6 @@ const Navbar = () => {
                 <span>{item.label}</span>
               </Link>
             ))}
-            
-            {/* Categories Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
-                >
-                  <Grid3X3 className="h-4 w-4" />
-                  <span>Categories</span>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 max-h-96 overflow-y-auto bg-background border shadow-lg">
-                {categories.map((category) => (
-                  <DropdownMenuItem key={category.slug} asChild>
-                    <Link
-                      to={`/category/${category.slug}`}
-                      className="cursor-pointer w-full"
-                    >
-                      {category.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
 
           {/* Search Bar */}
@@ -174,6 +133,12 @@ const Navbar = () => {
                     <Link to="/add-content" className="cursor-pointer">
                       <BookOpen className="mr-2 h-4 w-4" />
                       Create Content
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/add-story" className="cursor-pointer">
+                      <Heart className="mr-2 h-4 w-4" />
+                      Share Your Story
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
@@ -236,26 +201,6 @@ const Navbar = () => {
                     </Link>
                   ))}
 
-                  {/* Mobile Categories */}
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2 text-sm font-medium text-muted-foreground">
-                      <Grid3X3 className="h-4 w-4" />
-                      <span>Categories</span>
-                    </div>
-                    <div className="pl-6 space-y-2 max-h-48 overflow-y-auto">
-                      {categories.map((category) => (
-                        <Link
-                          key={category.slug}
-                          to={`/category/${category.slug}`}
-                          className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
                   <Separator />
 
                   {/* Mobile Auth */}
@@ -288,6 +233,14 @@ const Navbar = () => {
                       >
                         <BookOpen className="h-4 w-4" />
                         <span>Create Content</span>
+                      </Link>
+                      <Link
+                        to="/add-story"
+                        className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Heart className="h-4 w-4" />
+                        <span>Share Your Story</span>
                       </Link>
                       <Button
                         variant="ghost"

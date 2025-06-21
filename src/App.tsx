@@ -18,6 +18,9 @@ import AddContent from "@/pages/AddContent";
 import AddPost from "@/pages/AddPost";
 import NewPost from "@/pages/NewPost";
 import AllPosts from "@/pages/AllPosts";
+import EchoesAndFaces from "@/pages/EchoesAndFaces";
+import AddStory from "@/pages/AddStory";
+import StoryDetail from "@/pages/StoryDetail";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { AuthProvider } from "@/context/AuthContext";
 import MagazinePage from "@/pages/MagazinePage";
@@ -53,6 +56,8 @@ function App() {
               <Route path="/videos" element={<VideosPage />} />
               <Route path="/audios" element={<AudiosPage />} />
               <Route path="/all-posts" element={<AllPosts />} />
+              <Route path="/echoes-faces" element={<EchoesAndFaces />} />
+              <Route path="/echoes-faces/:storyId" element={<StoryDetail />} />
               <Route path="/kids" element={<KidsZone />} />
               <Route path="/kids/create" element={<CreateKidsStory />} />
               <Route path="/kids/story/:storyId" element={<KidsStoryView />} />
@@ -80,6 +85,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AddPost />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/add-story" 
+                element={
+                  <ProtectedRoute>
+                    <AddStory />
                   </ProtectedRoute>
                 } 
               />

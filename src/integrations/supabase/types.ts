@@ -318,6 +318,57 @@ export type Database = {
           },
         ]
       }
+      echoes_faces: {
+        Row: {
+          author_id: string | null
+          author_location: string | null
+          author_name: string
+          cover_image: string | null
+          created_at: string
+          description: string
+          featured: boolean | null
+          id: string
+          likes_count: number | null
+          published: boolean | null
+          story_content: string
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          author_location?: string | null
+          author_name: string
+          cover_image?: string | null
+          created_at?: string
+          description: string
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          published?: boolean | null
+          story_content: string
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          author_location?: string | null
+          author_name?: string
+          cover_image?: string | null
+          created_at?: string
+          description?: string
+          featured?: boolean | null
+          id?: string
+          likes_count?: number | null
+          published?: boolean | null
+          story_content?: string
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       interaction_counts: {
         Row: {
           content_id: string
